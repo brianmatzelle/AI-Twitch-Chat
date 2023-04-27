@@ -3,7 +3,6 @@ import openai
 import random
 import math
 from bots import Bots
-from termcolor import colored
 from PyQt5.QtWidgets import QApplication, QTextEdit, QVBoxLayout, QWidget
 from PyQt5.QtWidgets import QHBoxLayout, QLabel, QPushButton, QSizePolicy
 from PyQt5.QtCore import Qt, QThread, pyqtSignal, QSize
@@ -14,7 +13,7 @@ import os
 config = {
     'streamer_name': 'Streamer', # Your username on Twitch or YouTube or whatever
     'num_bots': 5,              # Number of bots in your chat
-    'bot_update_interval': 2,  # Time in seconds between bot updates (2 seconds)
+    'bot_update_interval': 10,  # Time in seconds between bot updates (2 seconds)
     'font_size': '15px',
     'text_color': 'white',
     'border_color': 'gray', 
@@ -49,7 +48,7 @@ def speech_to_text():
         # Here, timeout is set to 10 seconds, which means the function will wait up to 10 seconds for speech input to begin. 
         # phrase_time_limit is also set to 10 seconds, which means the function will stop listening after 10 seconds of continuous speech input. 
         # You can adjust these values based on your requirements.
-        audio = recognizer.listen(source, timeout=10, phrase_time_limit=10)  # Set the timeout and phrase time limit
+        audio = recognizer.listen(source, timeout={config["bot_update_interval"]}, phrase_time_limit={config["bot_update_interval"]})  # Set the timeout and phrase time limit
 
     try:
         print("Recognizing...")
@@ -77,11 +76,6 @@ def generate_bot_responses(input_text, botsArr):
         response = chatgpt_query(prompt)
         responses.append((bot, response))
     return responses
-
-# # Display bot responses
-# def display_bot_responses(responses):
-#     for bot, response in responses:
-#         print(f'{colored(bot.name, bot.color)}: {response}')
         
 class SpeechRecognitionThread(QThread):
     new_response = pyqtSignal(object)
