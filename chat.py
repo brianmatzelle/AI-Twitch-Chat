@@ -10,9 +10,9 @@ from PyQt5.QtCore import Qt, QTimer, QThread, pyqtSignal
 from dotenv import load_dotenv
 import os
 
-# Replace 'your_openai_api_key' with your actual OpenAI API key
+# Load environment variables
 load_dotenv()
-openai.api_key = os.environ['OPENAI_API_KEY']
+openai.api_key = os.environ['openai_api_key']
 
 # Default configuration
 config = {
