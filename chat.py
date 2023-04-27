@@ -110,11 +110,25 @@ class TransparentChatWindow(QWidget):
         self.setWindowTitle("Transparent Chat Window")
         self.setGeometry(100, 100, 400, 600)
 
+        self.oldPos = None  # Add this line to store the old position of the window
+
     def update_chat(self, bot_name, bot_message, bot_color):
         colored_name = f'<span style="color: {bot_color};">{bot_name}: </span>'
         colored_message = f'<span>{bot_message}</span><br>'
         self.chat_label.insertHtml(colored_name + colored_message)
         self.chat_label.ensureCursorVisible()
+
+    # Add these methods to handle the mouse press and mouse move events
+    def mousePressEvent(self, event):
+        if event.button() == Qt.LeftButton:
+            self.oldPos = event.globalPos()
+
+    def mouseMoveEvent(self, event):
+        if event.buttons() == Qt.LeftButton and self.oldPos is not None:
+            delta = event.globalPos() - self.oldPos
+            self.move(self.x() + delta.x(), self.y() + delta.y())
+            self.oldPos = event.globalPos()
+
 
 def user_interface():
     app = QApplication([])
