@@ -9,7 +9,7 @@ from PyQt5.QtWidgets import QApplication, QTextEdit, QVBoxLayout, QWidget
 from PyQt5.QtCore import Qt, QTimer, QThread, pyqtSignal
 
 # Replace 'your_openai_api_key' with your actual OpenAI API key
-openai.api_key = "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"
+openai.api_key = "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"
 
 # Default configuration
 config = {
