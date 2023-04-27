@@ -42,7 +42,10 @@ def speech_to_text():
     recognizer = sr.Recognizer()
     with sr.Microphone() as source:
         print("Listening...")
-        audio = recognizer.listen(source)
+        # Here, timeout is set to 10 seconds, which means the function will wait up to 10 seconds for speech input to begin. 
+        # phrase_time_limit is also set to 10 seconds, which means the function will stop listening after 10 seconds of continuous speech input. 
+        # You can adjust these values based on your requirements.
+        audio = recognizer.listen(source, timeout=10, phrase_time_limit=10)  # Set the timeout and phrase time limit
 
     try:
         print("Recognizing...")
@@ -110,25 +113,11 @@ class TransparentChatWindow(QWidget):
         self.setWindowTitle("Transparent Chat Window")
         self.setGeometry(100, 100, 400, 600)
 
-        self.oldPos = None  # Add this line to store the old position of the window
-
     def update_chat(self, bot_name, bot_message, bot_color):
         colored_name = f'<span style="color: {bot_color};">{bot_name}: </span>'
         colored_message = f'<span>{bot_message}</span><br>'
         self.chat_label.insertHtml(colored_name + colored_message)
         self.chat_label.ensureCursorVisible()
-
-    # Add these methods to handle the mouse press and mouse move events
-    def mousePressEvent(self, event):
-        if event.button() == Qt.LeftButton:
-            self.oldPos = event.globalPos()
-
-    def mouseMoveEvent(self, event):
-        if event.buttons() == Qt.LeftButton and self.oldPos is not None:
-            delta = event.globalPos() - self.oldPos
-            self.move(self.x() + delta.x(), self.y() + delta.y())
-            self.oldPos = event.globalPos()
-
 
 def user_interface():
     app = QApplication([])
