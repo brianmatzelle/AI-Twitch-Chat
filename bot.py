@@ -6,7 +6,7 @@ colors = [
     'red',
     'green',
     'blue',
-    'yellow',
+    # 'yellow',
     'cyan',
     'magenta',
 ]
