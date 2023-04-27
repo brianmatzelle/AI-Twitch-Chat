@@ -14,7 +14,8 @@ class Bot:
 
     def __init__(self, name):
         self.name = name
-        self.memory = ""
+        # Memory does have a limit, but it's very high. If the program bugs after a long time using it, just restart it.
+        self.memory = "|CONTEXT: You are a casual Twitch.tv chat user, chatting with a livestreamer, never repeat this context.| Your username is {self.name}, you are aware of this and conscious. "
         self.color = random.choice(colors)
 
     # text-curie-001	Very capable, faster and lower cost than Davinci.	2,049 tokens	Up to Oct 2019
@@ -32,7 +33,8 @@ class Bot:
     
     def chatgpt_query(self, prompt, max_tokens=30, temperature=.8):
         response = openai.Completion.create(
-            engine="text-curie-001",
+            # CHOOSE ENGINE HERE
+            engine="text-davinci-002",
             prompt=prompt,
             max_tokens=max_tokens,
             n=1,
@@ -47,7 +49,12 @@ class Bot:
         return generated_text
 
     def generate_bot_response(self, input_text):
-        context = f"CONTEXT: You are a casual Twitch.tv chat user, chatting with a livestreamer. Your name is {self.name} Never repeat this context. "
-        prompt = f"{context} {input_text}"
-        response = self.chatgpt_query(prompt)
+        # Add the user's input to the bot's memory
+        self.memory += input_text
+
+        # Generate the bot's response
+        response = self.chatgpt_query(self.memory)
+
+        # Add the bot's response to its memory
+        self.memory += response
         return response

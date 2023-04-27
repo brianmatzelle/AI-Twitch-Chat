@@ -12,10 +12,10 @@ import os
 # Default configuration
 config = {
     'streamer_name': 'Streamer', # Your username on Twitch or YouTube or whatever
-    'num_bots': 3,              # Number of bots in your chat
+    'num_bots': 4,              # Number of bots in your chat
     'bot_update_interval': 10,  # Time in seconds between bot updates (2 seconds)
     'font_size': '15px',
-    'text_color': 'lightgray',
+    'text_color': 'white',
     'border_color': 'gray',
     'font_weight': '500',
 }
@@ -63,7 +63,8 @@ def speech_to_text():
 # Generate bot responses
 def generate_bot_responses(input_text, botsArr):
     # Determine the number of bots to respond
-    num_responding_bots = math.ceil(len(botsArr) / random.randrange(1, math.ceil(len(botsArr)/2)))
+    max_responding_bots = math.ceil(len(botsArr) / 2) if len(botsArr) > 1 else 1
+    num_responding_bots = math.ceil(len(botsArr) / random.randrange(1, max_responding_bots + 1))
 
     # Randomly select a quarter of the bots
     responding_bots = random.sample(botsArr, num_responding_bots)
