@@ -1,4 +1,5 @@
 from bot import Bot
+import random
 
 class Bots:
     def __init__(self, size):
@@ -16,5 +17,5 @@ class Bots:
         ]
         self.arr = []
         for i in range(size):
-            bot = Bot(self.names[i])
+            bot = Bot(random.choice(self.names))
             self.arr.append(bot)

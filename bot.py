@@ -18,7 +18,7 @@ class Bot:
         self.color = random.choice(colors)
 
 
-    def chatgpt_query(self, prompt, max_tokens=50, temperature=0.8):
+    def chatgpt_query(self, prompt, max_tokens=30, temperature=1):
         response = openai.Completion.create(
             engine="text-davinci-002",
             prompt=prompt,

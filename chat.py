@@ -15,8 +15,9 @@ config = {
     'num_bots': 5,              # Number of bots in your chat
     'bot_update_interval': 10,  # Time in seconds between bot updates (2 seconds)
     'font_size': '15px',
-    'text_color': 'white',
-    'border_color': 'gray', 
+    'text_color': 'lightgray',
+    'border_color': 'gray',
+    'font_weight': '500',
 }
 
 # Load environment variables
@@ -62,18 +63,15 @@ def speech_to_text():
 # Generate bot responses
 def generate_bot_responses(input_text, botsArr):
     # Determine the number of bots to respond
-    num_responding_bots = math.ceil(len(botsArr) / 4)
+    num_responding_bots = math.ceil(len(botsArr) / random.randrange(1, math.ceil(len(botsArr)/2)))
 
     # Randomly select a quarter of the bots
     responding_bots = random.sample(botsArr, num_responding_bots)
 
-    # Add a context for casual Twitch chat
-    context = "You are a casual zoomer Twitch chat user, chatting with a zoomer streamer. "
-
     responses = []
     for bot in responding_bots:
-        prompt = f"{context} {input_text}"
-        response = chatgpt_query(prompt)
+        prompt = f"{input_text}"
+        response = bot.chatgpt_query(prompt)
         responses.append((bot, response))
     return responses
         
@@ -121,7 +119,7 @@ class TransparentChatWindow(QWidget):
         self.chat_label = QTextEdit(self)
         self.chat_label.setReadOnly(True)
         self.chat_label.setFrameStyle(0)
-        self.chat_label.setStyleSheet(f"background-color: transparent; color: {config['text_color']}; font-size: {config['font_size']};")
+        self.chat_label.setStyleSheet(f"background-color: transparent; font-weight: {config['font_weight']}; color: {config['text_color']}; font-size: {config['font_size']};")
         # Create header bar with minimize, maximize, and exit buttons
         self.header_bar = HeaderBar(self)
         self.header_layout = QHBoxLayout()
