@@ -4,8 +4,9 @@ import random
 import math
 from bots import Bots
 from PyQt5.QtWidgets import QApplication, QTextEdit, QVBoxLayout, QWidget
-from PyQt5.QtWidgets import QHBoxLayout, QLabel, QPushButton, QSizePolicy
+from PyQt5.QtWidgets import QHBoxLayout, QPushButton, QSizePolicy, QLabel
 from PyQt5.QtCore import Qt, QThread, pyqtSignal, QSize
+from PyQt5.QtGui import QPainter
 from dotenv import load_dotenv
 import os
 
@@ -113,6 +114,22 @@ class HeaderBar(QWidget):
         if event.button() == Qt.LeftButton:
             self.parent.oldPos = None
 
+class ResizeHandle(QWidget):
+    def __init__(self, parent):
+        super().__init__(parent)
+        self.parent = parent
+        self.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
+
+    def sizeHint(self):
+        return QSize(12, 12)
+
+    def paintEvent(self, event):
+        painter = QPainter(self)
+        painter.setRenderHint(QPainter.Antialiasing)
+        painter.setBrush(Qt.white)
+        painter.drawRect(0, 0, self.width(), self.height())
+
+
 class TransparentChatWindow(QWidget):
     def __init__(self):
         super().__init__()
@@ -150,7 +167,7 @@ class TransparentChatWindow(QWidget):
 
         self.setAttribute(Qt.WA_TranslucentBackground, True)
         self.setWindowFlags(Qt.FramelessWindowHint | Qt.WindowStaysOnTopHint)
-        self.setStyleSheet(f"padding: 5px; color: black; border: 3px solid {config['border_color']}; border-radius: 5px;")
+        self.setStyleSheet(f"padding: 5px; color: black; border: 3px solid {config['border_color']}; border-top: 5px solid {config['border_color']}; border-radius: 5px;")
         self.setWindowTitle(config['streamer_name'] + "'s Chat")
         self.setGeometry(100, 100, 400, 600)
 
@@ -159,12 +176,16 @@ class TransparentChatWindow(QWidget):
         self.setMouseTracking(True)
         self.resizing = False
         self.resize_border_size = 40  # Increase this value to make the border larger
-        # Set the border for the TransparentChatWindow
+
+        # Add resize handle
+        self.resize_handle = ResizeHandle(self)
+        layout.addWidget(self.resize_handle, 0, Qt.AlignBottom | Qt.AlignRight)
+        layout.setContentsMargins(0, 0, 0, 0)  # Add a bottom margin to move the handle up
 
     def mousePressEvent(self, event):
         if event.button() == Qt.LeftButton:
             self.oldPos = event.globalPos()
-            if (self.rect().bottomRight() - event.pos()).manhattanLength() < self.resize_border_size:
+            if self.resize_handle.geometry().contains(event.pos()):
                 self.resizing = True
 
     def mouseMoveEvent(self, event):
