@@ -15,7 +15,6 @@ class Bot:
     def __init__(self, name):
         self.name = name
         self.memory = ""
-        # self.color = self.generate_random_color()
         self.color = random.choice(colors)
 
 

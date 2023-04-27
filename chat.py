@@ -5,15 +5,19 @@ import math
 from bots import Bots
 from termcolor import colored
 from PyQt5.QtWidgets import QApplication, QTextEdit, QVBoxLayout, QWidget
-from PyQt5.QtCore import Qt, QThread, pyqtSignal
+from PyQt5.QtWidgets import QHBoxLayout, QLabel, QPushButton, QSizePolicy
+from PyQt5.QtCore import Qt, QThread, pyqtSignal, QSize
 from dotenv import load_dotenv
 import os
 
 # Default configuration
 config = {
-    'num_bots': 5,
+    'streamer_name': 'Streamer', # Your username on Twitch or YouTube or whatever
+    'num_bots': 5,              # Number of bots in your chat
     'bot_update_interval': 2,  # Time in seconds between bot updates (2 seconds)
-    # Add other settings here as needed
+    'font_size': '15px',
+    'text_color': 'white',
+    'border_color': 'gray', 
 }
 
 # Load environment variables
@@ -74,10 +78,10 @@ def generate_bot_responses(input_text, botsArr):
         responses.append((bot, response))
     return responses
 
-# Display bot responses
-def display_bot_responses(responses):
-    for bot, response in responses:
-        print(f'{colored(bot.name, bot.color)}: {response}')
+# # Display bot responses
+# def display_bot_responses(responses):
+#     for bot, response in responses:
+#         print(f'{colored(bot.name, bot.color)}: {response}')
         
 class SpeechRecognitionThread(QThread):
     new_response = pyqtSignal(object)
@@ -97,26 +101,107 @@ class SpeechRecognitionThread(QThread):
                 for bot, response in bot_responses:
                     self.new_response.emit((bot, response))
 
+class HeaderBar(QWidget):
+    def __init__(self, parent):
+        super().__init__(parent)
+        self.parent = parent
+
+    def mousePressEvent(self, event):
+        if event.button() == Qt.LeftButton:
+            self.parent.oldPos = event.globalPos()
+
+    def mouseMoveEvent(self, event):
+        if event.buttons() == Qt.LeftButton and self.parent.oldPos:
+            delta = event.globalPos() - self.parent.oldPos
+            self.parent.move(self.parent.x() + delta.x(), self.parent.y() + delta.y())
+            self.parent.oldPos = event.globalPos()
+
+    def mouseReleaseEvent(self, event):
+        if event.button() == Qt.LeftButton:
+            self.parent.oldPos = None
+
 class TransparentChatWindow(QWidget):
     def __init__(self):
         super().__init__()
 
         self.chat_label = QTextEdit(self)
         self.chat_label.setReadOnly(True)
+        self.chat_label.setFrameStyle(0)
+        self.chat_label.setStyleSheet(f"background-color: transparent; color: {config['text_color']}; font-size: {config['font_size']};")
+        # Create header bar with minimize, maximize, and exit buttons
+        self.header_bar = HeaderBar(self)
+        self.header_layout = QHBoxLayout()
 
+        # Set the background color of the header bar
+        self.header_bar.setStyleSheet("background-color: lightgray; text-align: center; border: none; font-size: 12px; font-weight: bold; padding: 2px;")
+
+        self.minimize_button = QPushButton("_")
+        self.maximize_button = QPushButton("[]")
+        self.exit_button = QPushButton("X")
+
+        self.minimize_button.clicked.connect(self.showMinimized)
+        self.maximize_button.clicked.connect(self.toggleMaximized)
+        self.exit_button.clicked.connect(self.close)
+        self.exit_button.setStyleSheet("background-color: #ff0000;")
+
+        self.header_layout.addWidget(self.minimize_button)
+        self.header_layout.addWidget(self.maximize_button)
+        self.header_layout.addWidget(self.exit_button)
+
+        self.header_bar.setLayout(self.header_layout)
+
+        # Main layout
         layout = QVBoxLayout()
+        layout.addWidget(self.header_bar)
         layout.addWidget(self.chat_label)
         self.setLayout(layout)
 
+        self.setAttribute(Qt.WA_TranslucentBackground, True)
         self.setWindowFlags(Qt.FramelessWindowHint | Qt.WindowStaysOnTopHint)
-        self.setAttribute(Qt.WA_TranslucentBackground)
-        self.setWindowTitle("Transparent Chat Window")
+        self.setStyleSheet(f"padding: 5px; color: black; border: 3px solid {config['border_color']}; border-radius: 5px;")
+        self.setWindowTitle(config['streamer_name'] + "'s Chat")
         self.setGeometry(100, 100, 400, 600)
+
+        self.oldPos = None
+
+        self.setMouseTracking(True)
+        self.resizing = False
+        self.resize_border_size = 40  # Increase this value to make the border larger
+        # Set the border for the TransparentChatWindow
+
+    def mousePressEvent(self, event):
+        if event.button() == Qt.LeftButton:
+            self.oldPos = event.globalPos()
+            if (self.rect().bottomRight() - event.pos()).manhattanLength() < self.resize_border_size:
+                self.resizing = True
+
+    def mouseMoveEvent(self, event):
+        if event.buttons() == Qt.LeftButton and self.oldPos:
+            if not self.resizing:
+                delta = event.globalPos() - self.oldPos
+                self.move(self.x() + delta.x(), self.y() + delta.y())
+                self.oldPos = event.globalPos()
+            else:
+                new_size = QSize(event.pos().x(), event.pos().y())
+                self.resize(new_size)
+
+    def mouseReleaseEvent(self, event):
+        if event.button() == Qt.LeftButton:
+            self.oldPos = None
+            self.resizing = False
+
+    def toggleMaximized(self):
+        if self.isMaximized():
+            self.showNormal()
+        else:
+            self.showMaximized()
 
     def update_chat(self, bot_name, bot_message, bot_color):
         colored_name = f'<span style="color: {bot_color};">{bot_name}: </span>'
         colored_message = f'<span>{bot_message}</span><br>'
-        self.chat_label.insertHtml(colored_name + colored_message)
+        # padding = '<br>&nbsp;'  # Add this line to create padding between messages
+        # self.chat_label.insertHtml(colored_name + colored_message + padding)  # Add the padding here
+        self.chat_label.insertHtml(colored_name + colored_message)  # Add the padding here
         self.chat_label.ensureCursorVisible()
 
 def user_interface():
