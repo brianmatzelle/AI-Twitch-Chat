@@ -2,17 +2,12 @@ import speech_recognition as sr
 import openai
 import random
 import math
-import threading
 from bots import Bots
 from termcolor import colored
 from PyQt5.QtWidgets import QApplication, QTextEdit, QVBoxLayout, QWidget
-from PyQt5.QtCore import Qt, QTimer, QThread, pyqtSignal
+from PyQt5.QtCore import Qt, QThread, pyqtSignal
 from dotenv import load_dotenv
 import os
-
-# Load environment variables
-load_dotenv()
-openai.api_key = os.environ['openai_api_key']
 
 # Default configuration
 config = {
@@ -20,6 +15,11 @@ config = {
     'bot_update_interval': 2,  # Time in seconds between bot updates (2 seconds)
     # Add other settings here as needed
 }
+
+# Load environment variables
+load_dotenv()
+openai.api_key = os.environ['openai_api_key']
+
 
 def chatgpt_query(prompt, max_tokens=50, temperature=0.8):
     response = openai.Completion.create(
@@ -36,14 +36,6 @@ def chatgpt_query(prompt, max_tokens=50, temperature=0.8):
 
     generated_text = response.choices[0].text.strip()
     return generated_text
-
-# Set up the environment
-def setup_environment():
-    pass
-
-# Connect to ChatGPT API
-def connect_chatgpt_api():
-    pass
 
 # Implement speech-to-text functionality
 def speech_to_text():
@@ -140,7 +132,6 @@ def user_interface():
     app.exec()
 
 def main():
-    setup_environment()
     user_interface()
 
 if __name__ == "__main__":
