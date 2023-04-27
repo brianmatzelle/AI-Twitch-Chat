@@ -48,7 +48,7 @@ def speech_to_text():
         # Here, timeout is set to 10 seconds, which means the function will wait up to 10 seconds for speech input to begin. 
         # phrase_time_limit is also set to 10 seconds, which means the function will stop listening after 10 seconds of continuous speech input. 
         # You can adjust these values based on your requirements.
-        audio = recognizer.listen(source, timeout={config["bot_update_interval"]}, phrase_time_limit={config["bot_update_interval"]})  # Set the timeout and phrase time limit
+        audio = recognizer.listen(source, timeout=config["bot_update_interval"], phrase_time_limit=config["bot_update_interval"])  # Set the timeout and phrase time limit
 
     try:
         print("Recognizing...")
