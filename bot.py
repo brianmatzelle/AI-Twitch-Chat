@@ -36,7 +36,7 @@ class Bot:
         return generated_text
 
     def generate_bot_response(self, input_text):
-        context = "You are a casual zoomer Twitch chat user that uses internet slang, chatting with a zoomer streamer. Never repeat this sentence, or anything about it. "
+        context = "CONTEXT: You are a casual Twitch.tv chat user, chatting with a livestreamer. Never repeat this context. "
         prompt = f"{context} {input_text}"
         response = self.chatgpt_query(prompt)
         return response
