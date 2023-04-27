@@ -12,7 +12,7 @@ import os
 # Default configuration
 config = {
     'streamer_name': 'Streamer', # Your username on Twitch or YouTube or whatever
-    'num_bots': 5,              # Number of bots in your chat
+    'num_bots': 3,              # Number of bots in your chat
     'bot_update_interval': 10,  # Time in seconds between bot updates (2 seconds)
     'font_size': '15px',
     'text_color': 'lightgray',
@@ -139,7 +139,6 @@ class TransparentChatWindow(QWidget):
         self.header_layout.addWidget(self.minimize_button)
         self.header_layout.addWidget(self.maximize_button)
         self.header_layout.addWidget(self.exit_button)
-
         self.header_bar.setLayout(self.header_layout)
 
         # Main layout

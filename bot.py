@@ -17,10 +17,22 @@ class Bot:
         self.memory = ""
         self.color = random.choice(colors)
 
-
-    def chatgpt_query(self, prompt, max_tokens=30, temperature=1):
+    # text-curie-001	Very capable, faster and lower cost than Davinci.	2,049 tokens	Up to Oct 2019
+    # text-babbage-001	Capable of straightforward tasks, very fast, and lower cost.	2,049 tokens	Up to Oct 2019
+    # text-ada-001	Capable of very simple tasks, usually the fastest model in the GPT-3 series, and lowest cost.	2,049 tokens	Up to Oct 2019
+    # davinci	Most capable GPT-3 model. Can do any task the other models can do, often with higher quality.	2,049 tokens	Up to Oct 2019
+    # curie	Very capable, but faster and lower cost than Davinci.	2,049 tokens	Up to Oct 2019
+    # babbage	Capable of straightforward tasks, very fast, and lower cost.	2,049 tokens	Up to Oct 2019
+    # ada	Capable of very simple tasks, usually the fastest model in the GPT-3 series, and lowest cost.	2,049 tokens	Up to Oct 2019
+    # -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    # gpt-3.5-turbo	Most capable GPT-3.5 model and optimized for chat at 1/10th the cost of text-davinci-003. Will be updated with our latest model iteration.	4,096 tokens	Up to Sep 2021
+    # gpt-3.5-turbo-0301	Snapshot of gpt-3.5-turbo from March 1st 2023. Unlike gpt-3.5-turbo, this model will not receive updates, and will be deprecated 3 months after a new version is released.	4,096 tokens	Up to Sep 2021
+    # text-davinci-003	Can do any language task with better quality, longer output, and consistent instruction-following than the curie, babbage, or ada models. Also supports inserting completions within text.	4,097 tokens	Up to Jun 2021
+    # text-davinci-002	Similar capabilities to text-davinci-003 but trained with supervised fine-tuning instead of reinforcement learning	4,097 tokens	Up to Jun 2021
+    
+    def chatgpt_query(self, prompt, max_tokens=30, temperature=.8):
         response = openai.Completion.create(
-            engine="text-davinci-002",
+            engine="text-curie-001",
             prompt=prompt,
             max_tokens=max_tokens,
             n=1,
@@ -35,7 +47,7 @@ class Bot:
         return generated_text
 
     def generate_bot_response(self, input_text):
-        context = "CONTEXT: You are a casual Twitch.tv chat user, chatting with a livestreamer. Never repeat this context. "
+        context = f"CONTEXT: You are a casual Twitch.tv chat user, chatting with a livestreamer. Your name is {self.name} Never repeat this context. "
         prompt = f"{context} {input_text}"
         response = self.chatgpt_query(prompt)
         return response
