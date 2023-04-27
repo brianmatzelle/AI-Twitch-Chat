@@ -80,48 +80,36 @@ def generate_bot_responses(input_text, botsArr):
 def display_bot_responses(responses):
     for bot, response in responses:
         print(f'{colored(bot.name, bot.color)}: {response}')
+        
+class SpeechRecognitionThread(QThread):
+    new_response = pyqtSignal(object)
 
-### CLI version of the user interface ###
-# # Implement user interface
-# def user_interface():
-#     bots = Bots(config['num_bots'])
+    def __init__(self, bots):
+        super().__init__()
+        self.bots = bots
 
-#     print("Chat.tv started. Start talking or type 'exit' to quit.")
+    def run(self):
+        while True:
+            input_text = speech_to_text()
+            if input_text.lower() == 'exit':
+                break
 
-#     while True:
-#         input_text = speech_to_text()
-#         if input_text.lower() == 'exit':
-#             break
-
-#         # Only process input and generate bot responses if input_text is not empty
-#         if input_text.strip():
-#             bot_responses = generate_bot_responses(input_text, bots.arr)
-#             display_bot_responses(bot_responses)
-
-# def main():
-#     # Set up environment and run the user interface
-#     setup_environment()
-#     user_interface()
-
-# if __name__ == "__main__":
-#     main()
-### CLI version of the user interface ###
-
+            if input_text.strip():
+                bot_responses = generate_bot_responses(input_text, self.bots.arr)
+                for bot, response in bot_responses:
+                    self.new_response.emit((bot, response))
 
 class TransparentChatWindow(QWidget):
     def __init__(self):
         super().__init__()
 
-        # Create a QTextEdit widget for the chat
         self.chat_label = QTextEdit(self)
         self.chat_label.setReadOnly(True)
 
-        # Set up the layout and add the chat_label widget
         layout = QVBoxLayout()
         layout.addWidget(self.chat_label)
         self.setLayout(layout)
 
-        # Configure the window appearance
         self.setWindowFlags(Qt.FramelessWindowHint | Qt.WindowStaysOnTopHint)
         self.setAttribute(Qt.WA_TranslucentBackground)
         self.setWindowTitle("Transparent Chat Window")
@@ -133,7 +121,6 @@ class TransparentChatWindow(QWidget):
         self.chat_label.insertHtml(colored_name + colored_message)
         self.chat_label.ensureCursorVisible()
 
-# Replace the user_interface(chat_window) function with this updated version
 def user_interface():
     app = QApplication([])
 
@@ -143,27 +130,13 @@ def user_interface():
     chat_window = TransparentChatWindow()
     chat_window.show()
 
-    def update_ui():
-        input_text = speech_to_text()
-        if input_text.lower() == 'exit':
-            chat_window.close()  # Close the chat window when exiting
-            return
+    speech_recognition_thread = SpeechRecognitionThread(bots)
+    speech_recognition_thread.new_response.connect(lambda response: chat_window.update_chat(response[0].name, response[1], response[0].color))
+    speech_recognition_thread.start()
 
-        # Only process input and generate bot responses if input_text is not empty
-        if input_text.strip():
-            bot_responses = generate_bot_responses(input_text, bots.arr)
-            for bot, response in bot_responses:
-                chat_window.update_chat(bot.name, response, bot.color)
-                print(f'{colored(bot.name, bot.color)}: {response}')
-
-        QTimer.singleShot(config['bot_update_interval'] * 1000, update_ui)
-
-    update_ui()
     app.exec()
 
-# Replace the main() function with this updated version
 def main():
-    # Set up environment and run the user interface
     setup_environment()
     user_interface()
 
