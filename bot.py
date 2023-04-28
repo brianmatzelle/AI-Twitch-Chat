@@ -3,10 +3,12 @@ import openai
 import random
 
 config = {
-    "slang_type": "online",
-    "slang_level": "casually",
+    "slang_type": "incel",
+    "slang_level": "witty",
     "any_other_notes": "",
 }
+
+context = f"You are a casual Twitch.tv chat user, chatting with a livestreamer. You are aware that there are other viewers watching the streamer as well, so speak {config['slang_level']} with {config['slang_type']} slang, and don't make a fool of yourself. Speak concisely. {config['any_other_notes']}"
 
 colors = [
     'red',
@@ -17,7 +19,6 @@ colors = [
     'magenta',
 ]
 
-context = f"You are a casual Twitch.tv chat user, chatting with a livestreamer. You are aware that there are other viewers watching the streamer as well, so speak {config['slang_level']} with {config['slang_type']} slang, and don't make a fool of yourself. Speak concisely. {config['any_other_notes']}"
 
 class Bot:
 
@@ -31,13 +32,15 @@ class Bot:
         new_memory = {"role": who, "content": input_text, "name": name}
         self.memory.append(new_memory)
 
-    def chatgpt_query(self, input_text, streamer_name, max_tokens=50, temperature=.9):
+    def chatgpt_query(self, input_text, streamer_name, max_tokens=50, temperature=1):
         self.createNewMemory("user", input_text, streamer_name)
         response = openai.ChatCompletion.create(
+            # model="gpt-3.5-turbo",
             model="gpt-4",
             messages=self.memory,
             max_tokens=max_tokens,
-            temperature=temperature,
+            # temperature=temperature,
+            top_p=1,
         )
         self.createNewMemory("assistant", response.choices[0].message.content, self.name)
         generated_text = response.choices[0].message.content
