@@ -12,7 +12,7 @@ import os
 
 # Default configuration
 config = {
-    'streamer_name': 'Streamer', # Your username on Twitch or YouTube or whatever
+    'streamer_name': '', # Your username on Twitch or YouTube or whatever
     'num_bots': 10,              # Number of bots in your chat
     'bot_update_interval': 10,  # Time in seconds between bot updates (2 seconds)
     'font_size': '15px',
@@ -26,7 +26,7 @@ load_dotenv()
 openai.api_key = os.environ['openai_api_key']
 
 
-def chatgpt_query(prompt, max_tokens=50, temperature=0.8):
+def chatgpt_query(prompt, max_tokens=50, temperature=0.9):
     response = openai.Completion.create(
         engine="gpt-4",
         prompt=prompt,
@@ -65,7 +65,7 @@ def speech_to_text():
 # Generate bot responses
 def generate_bot_responses(input_text, botsArr):
     # Determine the number of bots to respond
-    max_responding_bots = math.ceil(len(botsArr) / 2) if len(botsArr) > 1 else 1
+    max_responding_bots = math.ceil(len(botsArr) / 3) if len(botsArr) > 1 else 1
     num_responding_bots = random.randrange(0, max_responding_bots)
 
     # Randomly select a quarter of the bots
@@ -74,7 +74,7 @@ def generate_bot_responses(input_text, botsArr):
     responses = []
     for bot in responding_bots:
         prompt = f"{input_text}"
-        response = bot.chatgpt_query(prompt)
+        response = bot.chatgpt_query(prompt, config["streamer_name"])
         responses.append((bot, response))
     return responses
         
@@ -239,8 +239,6 @@ class TransparentChatWindow(QWidget):
     def update_chat(self, bot_name, bot_message, bot_color):
         colored_name = f'<span style="color: {bot_color};">{bot_name}: </span>'
         colored_message = f'<span>{bot_message}</span><br>'
-        # padding = '<br>&nbsp;'  # Add this line to create padding between messages
-        # self.chat_label.insertHtml(colored_name + colored_message + padding)  # Add the padding here
         self.chat_label.insertHtml(colored_name + colored_message)  # Add the padding here
         self.chat_label.ensureCursorVisible()
 

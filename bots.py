@@ -1,5 +1,6 @@
 from bot import Bot
 import random
+import openai
 
 class Bots:
     def __init__(self, size):

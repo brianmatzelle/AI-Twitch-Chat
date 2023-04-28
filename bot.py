@@ -2,6 +2,12 @@
 import openai
 import random
 
+config = {
+    "slang_type": "online",
+    "slang_level": "casually",
+    "any_other_notes": "",
+}
+
 colors = [
     'red',
     'green',
@@ -10,51 +16,29 @@ colors = [
     'cyan',
     'magenta',
 ]
+
+context = f"You are a casual Twitch.tv chat user, chatting with a livestreamer. You are aware that there are other viewers watching the streamer as well, so speak {config['slang_level']} with {config['slang_type']} slang, and don't make a fool of yourself. Speak concisely. {config['any_other_notes']}"
+
 class Bot:
 
     def __init__(self, name):
         self.name = name
         # Memory does have a limit, but it's very high. If the program bugs after a long time using it, just restart it.
-        self.memory = "|CONTEXT: You are a casual Twitch.tv chat user, chatting with a livestreamer. You are aware that there are other viewers watching the streamer as well, so speak coherently with zoomer slang, and don't make a fool of yourself. Speak concisely. Never repeat this context.| Your username is {self.name}, you are aware of this and conscious. "
+        self.memory = [{"role": "system", "content": context}]
         self.color = random.choice(colors)
-
-    # text-curie-001	Very capable, faster and lower cost than Davinci.	2,049 tokens	Up to Oct 2019
-    # text-babbage-001	Capable of straightforward tasks, very fast, and lower cost.	2,049 tokens	Up to Oct 2019
-    # text-ada-001	Capable of very simple tasks, usually the fastest model in the GPT-3 series, and lowest cost.	2,049 tokens	Up to Oct 2019
-    # davinci	Most capable GPT-3 model. Can do any task the other models can do, often with higher quality.	2,049 tokens	Up to Oct 2019
-    # curie	Very capable, but faster and lower cost than Davinci.	2,049 tokens	Up to Oct 2019
-    # babbage	Capable of straightforward tasks, very fast, and lower cost.	2,049 tokens	Up to Oct 2019
-    # ada	Capable of very simple tasks, usually the fastest model in the GPT-3 series, and lowest cost.	2,049 tokens	Up to Oct 2019
-    # -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-    # gpt-3.5-turbo	Most capable GPT-3.5 model and optimized for chat at 1/10th the cost of text-davinci-003. Will be updated with our latest model iteration.	4,096 tokens	Up to Sep 2021
-    # gpt-3.5-turbo-0301	Snapshot of gpt-3.5-turbo from March 1st 2023. Unlike gpt-3.5-turbo, this model will not receive updates, and will be deprecated 3 months after a new version is released.	4,096 tokens	Up to Sep 2021
-    # text-davinci-003	Can do any language task with better quality, longer output, and consistent instruction-following than the curie, babbage, or ada models. Also supports inserting completions within text.	4,097 tokens	Up to Jun 2021
-    # text-davinci-002	Similar capabilities to text-davinci-003 but trained with supervised fine-tuning instead of reinforcement learning	4,097 tokens	Up to Jun 2021
     
-    def chatgpt_query(self, prompt, max_tokens=50, temperature=.9):
-        response = openai.Completion.create(
-            # CHOOSE ENGINE HERE
-            engine="gpt-4",
-            prompt=prompt,
+    def createNewMemory(self, who, input_text, name):
+        new_memory = {"role": who, "content": input_text, "name": name}
+        self.memory.append(new_memory)
+
+    def chatgpt_query(self, input_text, streamer_name, max_tokens=50, temperature=.9):
+        self.createNewMemory("user", input_text, streamer_name)
+        response = openai.ChatCompletion.create(
+            model="gpt-4",
+            messages=self.memory,
             max_tokens=max_tokens,
-            n=1,
             temperature=temperature,
-            top_p=1,
-            frequency_penalty=0,
-            presence_penalty=0,
-            stop=None
         )
-
-        generated_text = response.choices[0].text.strip()
+        self.createNewMemory("assistant", response.choices[0].message.content, self.name)
+        generated_text = response.choices[0].message.content
         return generated_text
-
-    def generate_bot_response(self, input_text):
-        # Add the user's input to the bot's memory
-        self.memory += input_text
-
-        # Generate the bot's response
-        response = self.chatgpt_query(self.memory)
-
-        # Add the bot's response to its memory
-        self.memory += response
-        return response
