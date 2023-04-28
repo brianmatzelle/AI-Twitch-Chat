@@ -13,7 +13,7 @@ import os
 # Default configuration
 config = {
     'streamer_name': 'Streamer', # Your username on Twitch or YouTube or whatever
-    'num_bots': 4,              # Number of bots in your chat
+    'num_bots': 10,              # Number of bots in your chat
     'bot_update_interval': 10,  # Time in seconds between bot updates (2 seconds)
     'font_size': '15px',
     'text_color': 'white',
@@ -28,7 +28,7 @@ openai.api_key = os.environ['openai_api_key']
 
 def chatgpt_query(prompt, max_tokens=50, temperature=0.8):
     response = openai.Completion.create(
-        engine="text-davinci-002",
+        engine="gpt-4",
         prompt=prompt,
         max_tokens=max_tokens,
         n=1,
@@ -47,10 +47,11 @@ def speech_to_text():
     recognizer = sr.Recognizer()
     with sr.Microphone() as source:
         print("Listening...")
-        # Here, timeout is set to 10 seconds, which means the function will wait up to 10 seconds for speech input to begin. 
-        # phrase_time_limit is also set to 10 seconds, which means the function will stop listening after 10 seconds of continuous speech input. 
-        # You can adjust these values based on your requirements.
-        audio = recognizer.listen(source, timeout=config["bot_update_interval"], phrase_time_limit=config["bot_update_interval"])  # Set the timeout and phrase time limit
+        try:
+            audio = recognizer.listen(source, timeout=config["bot_update_interval"], phrase_time_limit=config["bot_update_interval"])
+        except sr.WaitTimeoutError:
+            print("Timeout while waiting for user input. Listening again...")
+            return ""
 
     try:
         print("Recognizing...")
@@ -65,7 +66,7 @@ def speech_to_text():
 def generate_bot_responses(input_text, botsArr):
     # Determine the number of bots to respond
     max_responding_bots = math.ceil(len(botsArr) / 2) if len(botsArr) > 1 else 1
-    num_responding_bots = math.ceil(len(botsArr) / random.randrange(1, max_responding_bots + 1))
+    num_responding_bots = random.randrange(0, max_responding_bots)
 
     # Randomly select a quarter of the bots
     responding_bots = random.sample(botsArr, num_responding_bots)
