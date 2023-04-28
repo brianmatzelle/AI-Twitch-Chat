@@ -35,8 +35,8 @@ class Bot:
     def chatgpt_query(self, input_text, streamer_name, max_tokens=50, temperature=1):
         self.createNewMemory("user", input_text, streamer_name)
         response = openai.ChatCompletion.create(
-            # model="gpt-3.5-turbo",
-            model="gpt-4",
+            model="gpt-3.5-turbo",
+            # model="gpt-4",
             messages=self.memory,
             max_tokens=max_tokens,
             # temperature=temperature,

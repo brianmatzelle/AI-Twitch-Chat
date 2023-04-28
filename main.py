@@ -65,7 +65,7 @@ def speech_to_text():
 # Generate bot responses
 def generate_bot_responses(input_text, botsArr):
     # Determine the number of bots to respond
-    max_responding_bots = math.ceil(len(botsArr) / 3) if len(botsArr) > 1 else 1
+    max_responding_bots = math.ceil(len(botsArr) / 2) if len(botsArr) > 1 else 1
     num_responding_bots = random.randrange(0, max_responding_bots)
 
     # Randomly select a quarter of the bots
