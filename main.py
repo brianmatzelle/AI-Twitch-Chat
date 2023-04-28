@@ -130,6 +130,20 @@ class ResizeHandle(QWidget):
         painter.setBrush(Qt.white)
         painter.drawRect(0, 0, self.width(), self.height())
 
+class RemoveBorderButton(QWidget):
+    def __init__(self, parent):
+        super().__init__(parent)
+        self.parent = parent
+        self.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
+    
+    def sizeHint(self):
+        return QSize(12, 12)
+
+    def paintEvent(self, event):
+        painter = QPainter(self)
+        painter.setRenderHint(QPainter.Antialiasing)
+        painter.setBrush(Qt.gray)
+        painter.drawRect(0, 0, self.width(), self.height())
 
 class TransparentChatWindow(QWidget):
     def __init__(self):
@@ -181,14 +195,24 @@ class TransparentChatWindow(QWidget):
         # Add resize handle
         self.resize_handle = ResizeHandle(self)
         layout.addWidget(self.resize_handle, 0, Qt.AlignBottom | Qt.AlignRight)
-        layout.setContentsMargins(0, 0, 0, 0)  # Add a bottom margin to move the handle up
+        # layout.setContentsMargins(0, 0, 0, 0)  # Add a bottom margin to move the handle up
+
+        # Add remove border button
+        self.remove_border_button = RemoveBorderButton(self)
+        layout.addWidget(self.remove_border_button, 0, Qt.AlignBottom | Qt.AlignRight)
+        self.borderFlag = True
 
     def mousePressEvent(self, event):
         if event.button() == Qt.LeftButton:
             self.oldPos = event.globalPos()
             if self.resize_handle.geometry().contains(event.pos()):
                 self.resizing = True
-
+            if self.remove_border_button.geometry().contains(event.pos()):
+                if self.borderFlag:
+                    self.setStyleSheet("padding: 5px; background-color: transparent; border: none; border-radius: 5px")
+                else:
+                    self.setStyleSheet(f"padding: 5px; color: black; border: 3px solid {config['border_color']}; border-top: 5px solid {config['border_color']}; border-radius: 5px;")
+                self.borderFlag = not self.borderFlag
     def mouseMoveEvent(self, event):
         if event.buttons() == Qt.LeftButton and self.oldPos:
             if not self.resizing:
