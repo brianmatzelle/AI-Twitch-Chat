@@ -6,7 +6,7 @@ from bots import Bots
 from PyQt5.QtWidgets import QApplication, QTextEdit, QVBoxLayout, QWidget
 from PyQt5.QtWidgets import QHBoxLayout, QPushButton, QSizePolicy, QLabel
 from PyQt5.QtCore import Qt, QThread, pyqtSignal, QSize
-from PyQt5.QtGui import QPainter
+from PyQt5.QtGui import QPainter, QIcon
 from dotenv import load_dotenv
 import os
 
@@ -220,6 +220,10 @@ class TransparentChatWindow(QWidget):
 def user_interface():
     app = QApplication([])
 
+    # Set the application icon
+    app_icon = QIcon("./assets/blanc.png")
+    app.setWindowIcon(app_icon)
+
     bots = Bots(config['num_bots'])
 
     print("Chat.tv started. Start talking or type 'exit' to quit.")
@@ -231,6 +235,7 @@ def user_interface():
     speech_recognition_thread.start()
 
     app.exec()
+
 
 def main():
     user_interface()
