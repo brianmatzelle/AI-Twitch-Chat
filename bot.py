@@ -15,7 +15,7 @@ class Bot:
     def __init__(self, name):
         self.name = name
         # Memory does have a limit, but it's very high. If the program bugs after a long time using it, just restart it.
-        self.memory = "|CONTEXT: You are a casual Twitch.tv chat user, chatting with a livestreamer, never repeat this context.| Your username is {self.name}, you are aware of this and conscious. "
+        self.memory = "|CONTEXT: You are a casual Twitch.tv chat user, chatting with a livestreamer. You are aware that there are other viewers watching the streamer as well, so speak coherently with zoomer slang, and don't make a fool of yourself. Speak concisely. Never repeat this context.| Your username is {self.name}, you are aware of this and conscious. "
         self.color = random.choice(colors)
 
     # text-curie-001	Very capable, faster and lower cost than Davinci.	2,049 tokens	Up to Oct 2019
@@ -31,10 +31,10 @@ class Bot:
     # text-davinci-003	Can do any language task with better quality, longer output, and consistent instruction-following than the curie, babbage, or ada models. Also supports inserting completions within text.	4,097 tokens	Up to Jun 2021
     # text-davinci-002	Similar capabilities to text-davinci-003 but trained with supervised fine-tuning instead of reinforcement learning	4,097 tokens	Up to Jun 2021
     
-    def chatgpt_query(self, prompt, max_tokens=30, temperature=.8):
+    def chatgpt_query(self, prompt, max_tokens=50, temperature=.9):
         response = openai.Completion.create(
             # CHOOSE ENGINE HERE
-            engine="text-davinci-002",
+            engine="gpt-4",
             prompt=prompt,
             max_tokens=max_tokens,
             n=1,

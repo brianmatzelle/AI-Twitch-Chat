@@ -210,8 +210,10 @@ class TransparentChatWindow(QWidget):
             if self.remove_border_button.geometry().contains(event.pos()):
                 if self.borderFlag:
                     self.setStyleSheet("padding: 5px; background-color: transparent; border: none; border-radius: 5px")
+                    self.header_bar.hide()
                 else:
                     self.setStyleSheet(f"padding: 5px; color: black; border: 3px solid {config['border_color']}; border-top: 5px solid {config['border_color']}; border-radius: 5px;")
+                    self.header_bar.show()
                 self.borderFlag = not self.borderFlag
     def mouseMoveEvent(self, event):
         if event.buttons() == Qt.LeftButton and self.oldPos:
