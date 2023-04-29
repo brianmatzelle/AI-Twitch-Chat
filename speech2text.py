@@ -18,7 +18,7 @@ class SpeechRecognitionThread(QThread):
                 break
 
             if input_text.strip():
-                bot_responses = self.bots.generate_bot_responses(input_text, self.bots.arr)
+                bot_responses = self.bots.generate_bot_responses(input_text)
                 for bot, response in bot_responses:
                     self.new_response.emit((bot, response))
 

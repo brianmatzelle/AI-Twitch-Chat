@@ -19,19 +19,25 @@ class Bots:
             'WavyWalrus29', 'SavageShark42', 'HypeHippo58', 'BigMoodBear70', 'DopeDoggo61', 'VibeVulture79',
             'ChaosChicken47', 'SickSquid81', 'LittyLemur7', 'CrazyCrab2', 'MemeMoose13', 'SassySasquatch84'
         ]
+
+        # Array of bots
         self.arr = []
         for i in range(self.size):
             bot = Bot(random.choice(self.names), config['bot_config'])
             self.arr.append(bot)
 
+    # So bots[i] can be used to access the ith bot in bots.arr
+    def __getitem__(self, index):
+        return self.arr[index]
+
     # Generate bot responses
-    def generate_bot_responses(self, input_text, botsArr):
+    def generate_bot_responses(self, input_text):
         # Determine the number of bots to respond
-        max_responding_bots = math.ceil(len(botsArr) / 2) if len(botsArr) > 1 else 1
+        max_responding_bots = math.ceil(self.size) / 2 if self.size > 1 else 1
         num_responding_bots = random.randrange(0, max_responding_bots)
 
         # Randomly select a quarter of the bots
-        responding_bots = random.sample(botsArr, num_responding_bots)
+        responding_bots = random.sample(self.arr, num_responding_bots)
 
         responses = []
         for bot in responding_bots:
