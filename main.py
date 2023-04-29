@@ -9,18 +9,24 @@ from bots import Bots
 
 # Default configuration
 config = {
+    # Streamer configuration
     'streamer_name': 'jit', # Your username on Twitch or YouTube or whatever
     'num_bots': 10,              # Number of bots in your chat
     'bot_update_interval': 10,  # Time in seconds between bot updates (2 seconds)
+
+    # Chat window configuration
     'chat_font_size': '15px',
     'chat_text_color': 'white',
     'chat_border_color': 'gray',
     'chat_font_weight': '500',
+
+    # Bot configuration
     'bot_config': {
         # Bot configuration
         'streamer_current_action': 'Coding a fake live streamer chat in Python', # What you're currently doing (chatting, playing Rocket League, etc.)
-        "slang_level": "witty",
-        "any_other_notes": "",
+        "slang_level": "witty", # The attitude the bots will have (witty, casual, formal)
+        "any_other_notes": "", # Any other notes you want to add to the context
+        # Each bot will have a random slang type from this list
         'slang_types': [
             "incel",
             "normie",

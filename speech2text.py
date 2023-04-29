@@ -1,3 +1,5 @@
+# Description: This file contains the SpeechRecognitionThread class which is a 
+# thread that listens for user input and converts it to text.
 import speech_recognition as sr
 from PyQt5.QtCore import QThread, pyqtSignal
 
