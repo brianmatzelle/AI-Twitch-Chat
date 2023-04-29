@@ -9,7 +9,7 @@ class ConfigWindow(QDialog):
         self.config = config
         self.setWindowTitle("Chat.tv Configuration")
         self.setWindowIcon(QIcon("./assets/blanc.png"))
-        self.resize(300, 650)
+        self.resize(300, 700)
         layout = QVBoxLayout()
 
         # Load saved settings
@@ -20,6 +20,7 @@ class ConfigWindow(QDialog):
         saved_bot_update_interval = settings.value("bot_update_interval", config['bot_update_interval'], type=int)
         saved_slang_level = settings.value("slang_level", config['bot_config']['slang_level'])
         saved_slang_types = settings.value("slang_types", [])
+        saved_streamer_current_action = settings.value("streamer_current_action", config['bot_config']['streamer_current_action'])
         
         # OpenAI API Key input
         form_layout = QFormLayout()
@@ -32,6 +33,11 @@ class ConfigWindow(QDialog):
         self.streamer_name_input = QLineEdit(config['streamer_name'])
         layout.addWidget(QLabel("Streamer Name:"))
         layout.addWidget(self.streamer_name_input)
+
+        # Streamer current action input
+        self.streamer_current_action_input = QLineEdit(config['bot_config']['streamer_current_action'])
+        layout.addWidget(QLabel("Streamer's Current Action:"))
+        layout.addWidget(self.streamer_current_action_input)
 
         # Number of bots input
         self.num_bots_input = QSpinBox()
@@ -98,6 +104,7 @@ class ConfigWindow(QDialog):
         self.num_bots_input.setValue(saved_num_bots)
         self.bot_update_interval_input.setValue(saved_bot_update_interval)
         self.slang_level_input.setCurrentText(saved_slang_level)
+        self.streamer_current_action_input.setText(saved_streamer_current_action)
 
     def save_and_close(self):
         settings = QSettings("blanc_savant", "Chat.tv")
@@ -107,12 +114,14 @@ class ConfigWindow(QDialog):
         settings.setValue("bot_update_interval", self.bot_update_interval_input.value())
         settings.setValue("slang_level", self.slang_level_input.currentText())
         settings.setValue("slang_types", [checkbox.text() for checkbox in self.slang_type_checkboxes if checkbox.isChecked()])
-        
+        settings.setValue("streamer_current_action", self.streamer_current_action_input.text())
+
         self.config['streamer_name'] = self.streamer_name_input.text()
         self.config['num_bots'] = self.num_bots_input.value()
         self.config['bot_update_interval'] = self.bot_update_interval_input.value()
         self.config['bot_config']['slang_level'] = self.slang_level_input.currentText()
         self.config['bot_config']['slang_types'] = [checkbox.text() for checkbox in self.slang_type_checkboxes if checkbox.isChecked()]
+        self.config['bot_config']['streamer_current_action'] = self.streamer_current_action_input.text()
 
         self.accept()
 
