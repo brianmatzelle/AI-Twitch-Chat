@@ -12,7 +12,7 @@ from config_window import ConfigWindow
 # Default configuration
 config = {
     # Streamer configuration
-    'streamer_name': 'jit', # Your username on Twitch or YouTube or whatever
+    'streamer_name': '', # Your username on Twitch or YouTube or whatever
     'num_bots': 10,              # Number of bots in your chat
     'bot_update_interval': 10,  # Time in seconds between bot updates (2 seconds)
 

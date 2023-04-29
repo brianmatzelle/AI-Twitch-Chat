@@ -12,19 +12,21 @@ class ConfigWindow(QDialog):
         self.resize(300, 650)
         layout = QVBoxLayout()
 
+        # Load saved settings
         settings = QSettings("blanc_savant", "Chat.tv")
         saved_api_key = settings.value("openai_api_key", "")
-
+        saved_streamer_name = settings.value("streamer_name", config['streamer_name'])
+        saved_num_bots = settings.value("num_bots", config['num_bots'], type=int)
+        saved_bot_update_interval = settings.value("bot_update_interval", config['bot_update_interval'], type=int)
+        saved_slang_level = settings.value("slang_level", config['bot_config']['slang_level'])
+        saved_slang_types = settings.value("slang_types", [])
+        
+        # OpenAI API Key input
         form_layout = QFormLayout()
         self.api_key_input = QLineEdit(saved_api_key)
         self.api_key_input.setEchoMode(QLineEdit.Password)
         form_layout.addRow("OpenAI API Key:", self.api_key_input)
         layout.addLayout(form_layout)
-
-        # Delete API Key button
-        delete_key_button = QPushButton("Delete API Key")
-        delete_key_button.clicked.connect(self.delete_api_key)
-        layout.addWidget(delete_key_button)
 
         # Streamer name input
         self.streamer_name_input = QLineEdit(config['streamer_name'])
@@ -58,9 +60,13 @@ class ConfigWindow(QDialog):
         row = 0
         col = 0
 
+        # Load the saved slang types from QSettings
+        saved_slang_types = settings.value("slang_types", [])
+
         for slang_type in config['bot_config']['slang_types']:
             checkbox = QCheckBox(slang_type)
-            checkbox.setChecked(True)
+            if slang_type in saved_slang_types:
+                checkbox.setChecked(True)
             grid_layout.addWidget(checkbox, row, col)
             self.slang_type_checkboxes.append(checkbox)
 
@@ -75,6 +81,11 @@ class ConfigWindow(QDialog):
 
         layout.addWidget(QLabel("Slang Types:"))
         layout.addWidget(scroll_area)
+        
+        # Clear All Settings button
+        clear_settings_button = QPushButton("Clear All Settings")
+        clear_settings_button.clicked.connect(self.clear_all_settings)
+        layout.addWidget(clear_settings_button)
 
         self.save_button = QPushButton("Save and Start")
         self.save_button.clicked.connect(self.save_and_close)
@@ -82,19 +93,45 @@ class ConfigWindow(QDialog):
 
         self.setLayout(layout)
 
+        # Set loaded values to widgets
+        self.streamer_name_input.setText(saved_streamer_name)
+        self.num_bots_input.setValue(saved_num_bots)
+        self.bot_update_interval_input.setValue(saved_bot_update_interval)
+        self.slang_level_input.setCurrentText(saved_slang_level)
+
     def save_and_close(self):
+        settings = QSettings("blanc_savant", "Chat.tv")
+        settings.setValue("openai_api_key", self.api_key_input.text())
+        settings.setValue("streamer_name", self.streamer_name_input.text())
+        settings.setValue("num_bots", self.num_bots_input.value())
+        settings.setValue("bot_update_interval", self.bot_update_interval_input.value())
+        settings.setValue("slang_level", self.slang_level_input.currentText())
+        settings.setValue("slang_types", [checkbox.text() for checkbox in self.slang_type_checkboxes if checkbox.isChecked()])
+        
         self.config['streamer_name'] = self.streamer_name_input.text()
         self.config['num_bots'] = self.num_bots_input.value()
         self.config['bot_update_interval'] = self.bot_update_interval_input.value()
         self.config['bot_config']['slang_level'] = self.slang_level_input.currentText()
         self.config['bot_config']['slang_types'] = [checkbox.text() for checkbox in self.slang_type_checkboxes if checkbox.isChecked()]
-        
-        settings = QSettings("blanc_savant", "Chat.tv")
-        settings.setValue("openai_api_key", self.api_key_input.text())
 
         self.accept()
 
-    def delete_api_key(self):
+    def clear_all_settings(self):
         settings = QSettings("blanc_savant", "Chat.tv")
-        settings.remove("openai_api_key")
+        settings.clear()
+        
+        # Reset input fields to default values
+        self.reset_config_window()
+
+    def reset_config_window(self):
         self.api_key_input.clear()
+        self.streamer_name_input.setText(self.config['streamer_name'])
+        self.num_bots_input.setValue(self.config['num_bots'])
+        self.bot_update_interval_input.setValue(self.config['bot_update_interval'])
+        self.slang_level_input.setCurrentText(self.config['bot_config']['slang_level'])
+
+        for checkbox in self.slang_type_checkboxes:
+            checkbox.setChecked(False)
+
+        for checkbox in self.slang_type_checkboxes:
+            checkbox.setChecked(False)
