@@ -35,7 +35,8 @@ class Bots:
         # Determine the number of bots to respond
         max_responding_bots = math.ceil(self.size / 2) if self.size > 1 else 1
         num_responding_bots = random.randrange(0, max_responding_bots)
-
+        print(f"Number of bots responding: {num_responding_bots}")
+        
         # Randomly select a quarter of the bots
         responding_bots = random.sample(self.arr, num_responding_bots)
 

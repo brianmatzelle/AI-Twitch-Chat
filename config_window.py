@@ -9,6 +9,7 @@ class ConfigWindow(QDialog):
         self.config = config
         self.setWindowTitle("Chat.tv Configuration")
         self.setWindowIcon(QIcon("./assets/blanc.png"))
+        self.resize(300, 650)
         layout = QVBoxLayout()
 
         settings = QSettings("blanc_savant", "Chat.tv")
@@ -20,26 +21,31 @@ class ConfigWindow(QDialog):
         form_layout.addRow("OpenAI API Key:", self.api_key_input)
         layout.addLayout(form_layout)
 
+        # Delete API Key button
         delete_key_button = QPushButton("Delete API Key")
         delete_key_button.clicked.connect(self.delete_api_key)
         layout.addWidget(delete_key_button)
 
+        # Streamer name input
         self.streamer_name_input = QLineEdit(config['streamer_name'])
         layout.addWidget(QLabel("Streamer Name:"))
         layout.addWidget(self.streamer_name_input)
 
+        # Number of bots input
         self.num_bots_input = QSpinBox()
         self.num_bots_input.setValue(config['num_bots'])
         layout.addWidget(QLabel("Number of Bots:"))
         layout.addWidget(self.num_bots_input)
 
+        # Bot update interval input
         self.bot_update_interval_input = QSpinBox()
         self.bot_update_interval_input.setValue(config['bot_update_interval'])
         layout.addWidget(QLabel("Bot Update Interval (seconds):"))
         layout.addWidget(self.bot_update_interval_input)
 
+        # Bot configuration
         self.slang_level_input = QComboBox()
-        self.slang_level_input.addItems(["witty", "casual", "formal"])
+        self.slang_level_input.addItems(["witty", "casual", "formal", "funny"])
         self.slang_level_input.setCurrentText(config['bot_config']['slang_level'])
         layout.addWidget(QLabel("Slang Level:"))
         layout.addWidget(self.slang_level_input)
