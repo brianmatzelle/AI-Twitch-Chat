@@ -4,6 +4,7 @@ import os
 from chat import ChatWindow
 from PyQt5.QtWidgets import QApplication, QDialog
 from PyQt5.QtGui import QIcon
+from PyQt5.QtCore import QSettings
 from speech2text import SpeechRecognitionThread
 from bots import Bots
 from config_window import ConfigWindow
@@ -20,6 +21,9 @@ config = {
     'chat_text_color': 'white',
     'chat_border_color': 'gray',
     'chat_font_weight': '500',
+
+    # OpenAI API configuration
+    'openai_api_key': '',
 
     # Bot configuration
     'bot_config': {
@@ -76,8 +80,9 @@ config = {
 }
 
 # Load environment variables
-load_dotenv()
-openai.api_key = os.environ['OPENAI_API_KEY']
+# load_dotenv()
+# openai.api_key = os.environ['OPENAI_API_KEY']
+openai.api_key = config['openai_api_key']
 
 def user_interface(config, app):
     # Set the application icon
@@ -101,6 +106,8 @@ def main():
 
     config_window = ConfigWindow(config)
     if config_window.exec() == QDialog.Accepted:
+        settings = QSettings("blanc_savant", "Chat.tv")
+        openai.api_key = settings.value("openai_api_key", "")
         user_interface(config, app)
         
 

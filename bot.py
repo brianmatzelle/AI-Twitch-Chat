@@ -1,6 +1,7 @@
 # bot.py
 import openai
 import random
+from PyQt5.QtWidgets import QMessageBox, QApplication
 
 class Bot:
 
@@ -17,14 +18,26 @@ class Bot:
 
     def chatgpt_query(self, input_text, streamer_name, max_tokens=50, temperature=1, top_p=1):
         self.createNewMemory("user", input_text, streamer_name)
-        response = openai.ChatCompletion.create(
-            model="gpt-3.5-turbo",
-            # model="gpt-4",
-            messages=self.memory,
-            max_tokens=max_tokens,
-            # temperature=temperature,
-            top_p=top_p,
-        )
+        try:
+            response = openai.ChatCompletion.create(
+                model="gpt-3.5-turbo",
+                # model="gpt-4",
+                messages=self.memory,
+                max_tokens=max_tokens,
+                # temperature=temperature,
+                top_p=top_p,
+            )
+        except openai.error.AuthenticationError as e:
+            error_dialog = QMessageBox()
+            error_dialog.setIcon(QMessageBox.Critical)
+            error_dialog.setWindowTitle("Error")
+            error_dialog.setText("Error: Invalid API Key")
+            error_dialog.setInformativeText("Your API key is incorrect, or you didn't provide one. You can obtain an API key from https://platform.openai.com/account/api-keys.")
+            error_dialog.setStandardButtons(QMessageBox.Ok)
+            error_dialog.exec_()
+            QApplication.instance().quit()
+            return
+
         self.createNewMemory("assistant", response.choices[0].message.content, self.name)
         generated_text = response.choices[0].message.content
         return generated_text

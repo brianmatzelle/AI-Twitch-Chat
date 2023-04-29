@@ -1,6 +1,7 @@
-from PyQt5.QtWidgets import QDialog, QVBoxLayout, QLabel, QLineEdit, QSpinBox, QComboBox, QPushButton
+from PyQt5.QtWidgets import QDialog, QVBoxLayout, QLabel, QLineEdit, QSpinBox, QComboBox, QPushButton, QFormLayout
 from PyQt5.QtWidgets import QCheckBox, QScrollArea, QFrame, QGridLayout
 from PyQt5.QtGui import QIcon
+from PyQt5.QtCore import QSettings
 
 class ConfigWindow(QDialog):
     def __init__(self, config, parent=None):
@@ -9,6 +10,19 @@ class ConfigWindow(QDialog):
         self.setWindowTitle("Chat.tv Configuration")
         self.setWindowIcon(QIcon("./assets/blanc.png"))
         layout = QVBoxLayout()
+
+        settings = QSettings("blanc_savant", "Chat.tv")
+        saved_api_key = settings.value("openai_api_key", "")
+
+        form_layout = QFormLayout()
+        self.api_key_input = QLineEdit(saved_api_key)
+        self.api_key_input.setEchoMode(QLineEdit.Password)
+        form_layout.addRow("OpenAI API Key:", self.api_key_input)
+        layout.addLayout(form_layout)
+
+        delete_key_button = QPushButton("Delete API Key")
+        delete_key_button.clicked.connect(self.delete_api_key)
+        layout.addWidget(delete_key_button)
 
         self.streamer_name_input = QLineEdit(config['streamer_name'])
         layout.addWidget(QLabel("Streamer Name:"))
@@ -69,4 +83,12 @@ class ConfigWindow(QDialog):
         self.config['bot_config']['slang_level'] = self.slang_level_input.currentText()
         self.config['bot_config']['slang_types'] = [checkbox.text() for checkbox in self.slang_type_checkboxes if checkbox.isChecked()]
         
+        settings = QSettings("blanc_savant", "Chat.tv")
+        settings.setValue("openai_api_key", self.api_key_input.text())
+
         self.accept()
+
+    def delete_api_key(self):
+        settings = QSettings("blanc_savant", "Chat.tv")
+        settings.remove("openai_api_key")
+        self.api_key_input.clear()
