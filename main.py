@@ -2,10 +2,11 @@ import openai
 from dotenv import load_dotenv
 import os
 from chat import ChatWindow
-from PyQt5.QtWidgets import QApplication
+from PyQt5.QtWidgets import QApplication, QDialog
 from PyQt5.QtGui import QIcon
 from speech2text import SpeechRecognitionThread
 from bots import Bots
+from config_window import ConfigWindow
 
 # Default configuration
 config = {
@@ -28,9 +29,6 @@ config = {
         "any_other_notes": "", # Any other notes you want to add to the context
         # Each bot will have a random slang type from this list
         'slang_types': [
-            "incel",
-            "normie",
-            "chad",
             "zoomer",
             "boomer",
             "millennial",
@@ -41,41 +39,38 @@ config = {
             "4chan",
             "twitch",
             "tiktok",
+            "incel",
+            "normie",
+            "chad",
             "goth",
             "emo",
             "hipster",
             "jock",
-            "emo",
             "weeb",
             "furry",
             "gamer",
             "programmer",
-            "developer",
-            "politician",
-            "businessman",
             "entrepreneur",
-            "influencer",
             "basketball",
             "football",
             "soccer",
             "baseball",
             "hockey",
             "golf",
-            "new york",
-            "los angeles",
-            "chicago",
-            "houston",
-            "philadelphia",
-            "atlanta",
-            "detroit",
-            "memphis",
-            "boston",
-            "baltimore",
-            "milwaukee",
+            "New York",
+            "Los Angeles",
+            "Chicago",
+            "Houston",
+            "Philadelphia",
+            "Atlanta",
+            "Detroit",
+            "Memphis",
+            "Boston",
+            "Baltimore",
+            "Milwaukee",
             "Canadian",
             "British",
             "Australian",
-            "French",
         ]
     }
 }
@@ -84,10 +79,7 @@ config = {
 load_dotenv()
 openai.api_key = os.environ['OPENAI_API_KEY']
 
-def user_interface(config):
-    # Create the application
-    app = QApplication([])
-
+def user_interface(config, app):
     # Set the application icon
     app_icon = QIcon("./assets/blanc.png")
     app.setWindowIcon(app_icon)
@@ -101,11 +93,16 @@ def user_interface(config):
     speech_recognition_thread = SpeechRecognitionThread(bots, config)
     speech_recognition_thread.new_response.connect(lambda response: chat_window.update_chat(response[0].name, response[1], response[0].color))
     speech_recognition_thread.start()
-
-    app.exec()
+    return app.exec()
 
 def main():
-    user_interface(config)
+    # Create the application
+    app = QApplication([])
+
+    config_window = ConfigWindow(config)
+    if config_window.exec() == QDialog.Accepted:
+        user_interface(config, app)
+        
 
 if __name__ == "__main__":
     main()
