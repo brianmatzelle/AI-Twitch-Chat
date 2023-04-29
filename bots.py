@@ -1,10 +1,11 @@
 from bot import Bot
 import random
-import openai
+import math
 
 class Bots:
-    def __init__(self, size):
-        self.size = size
+    def __init__(self, config):
+        self.config = config
+        self.size = config['num_bots']
         self.names = [
             'Yeetmaster42', 'VibinCool7', 'LitFam2022', 'SavageSquirrel99', 'KawaiiPenguin24', 'SlayinDragon10',
             'BaeWatch69', 'FunkyChicken77', 'SaltyPretzel3', 'BruhMoment88', 'NoCap11', 'YoloSwag2', 'GuacQueen55',
@@ -17,6 +18,22 @@ class Bots:
             'ChaosChicken47', 'SickSquid81', 'LittyLemur7', 'CrazyCrab2', 'MemeMoose13', 'SassySasquatch84'
         ]
         self.arr = []
-        for i in range(size):
-            bot = Bot(random.choice(self.names))
+        for i in range(self.size):
+            bot = Bot(random.choice(self.names), config['bot_config'])
             self.arr.append(bot)
+
+    # Generate bot responses
+    def generate_bot_responses(self, input_text, botsArr):
+        # Determine the number of bots to respond
+        max_responding_bots = math.ceil(len(botsArr) / 2) if len(botsArr) > 1 else 1
+        num_responding_bots = random.randrange(0, max_responding_bots)
+
+        # Randomly select a quarter of the bots
+        responding_bots = random.sample(botsArr, num_responding_bots)
+
+        responses = []
+        for bot in responding_bots:
+            prompt = f"{input_text}"
+            response = bot.chatgpt_query(prompt, self.config["streamer_name"])
+            responses.append((bot, response))
+        return responses

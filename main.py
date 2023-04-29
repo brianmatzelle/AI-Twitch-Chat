@@ -1,269 +1,104 @@
-import speech_recognition as sr
 import openai
-import random
-import math
-from bots import Bots
-from PyQt5.QtWidgets import QApplication, QTextEdit, QVBoxLayout, QWidget
-from PyQt5.QtWidgets import QHBoxLayout, QPushButton, QSizePolicy, QLabel
-from PyQt5.QtCore import Qt, QThread, pyqtSignal, QSize
-from PyQt5.QtGui import QPainter, QIcon
 from dotenv import load_dotenv
 import os
+from chat import ChatWindow
+from PyQt5.QtWidgets import QApplication
+from PyQt5.QtGui import QIcon
+from speech2text import SpeechRecognitionThread
+from bots import Bots
 
 # Default configuration
 config = {
     'streamer_name': 'jit', # Your username on Twitch or YouTube or whatever
     'num_bots': 10,              # Number of bots in your chat
     'bot_update_interval': 10,  # Time in seconds between bot updates (2 seconds)
-    'font_size': '15px',
-    'text_color': 'white',
-    'border_color': 'gray',
-    'font_weight': '500',
+    'chat_font_size': '15px',
+    'chat_text_color': 'white',
+    'chat_border_color': 'gray',
+    'chat_font_weight': '500',
+    'bot_config': {
+        # Bot configuration
+        'streamer_current_action': 'Coding a fake live streamer chat in Python', # What you're currently doing (chatting, playing Rocket League, etc.)
+        "slang_level": "witty",
+        "any_other_notes": "",
+        'slang_types': [
+            "incel",
+            "normie",
+            "chad",
+            "zoomer",
+            "boomer",
+            "millennial",
+            "gen-x",
+            "gen-z",
+            "gen-alpha",
+            "internet",
+            "4chan",
+            "twitch",
+            "tiktok",
+            "goth",
+            "emo",
+            "hipster",
+            "jock",
+            "emo",
+            "weeb",
+            "furry",
+            "gamer",
+            "programmer",
+            "developer",
+            "politician",
+            "businessman",
+            "entrepreneur",
+            "influencer",
+            "basketball",
+            "football",
+            "soccer",
+            "baseball",
+            "hockey",
+            "golf",
+            "new york",
+            "los angeles",
+            "chicago",
+            "houston",
+            "philadelphia",
+            "atlanta",
+            "detroit",
+            "memphis",
+            "boston",
+            "baltimore",
+            "milwaukee",
+            "Canadian",
+            "British",
+            "Australian",
+            "French",
+        ]
+    }
 }
 
 # Load environment variables
 load_dotenv()
-openai.api_key = os.environ['openai_api_key']
+openai.api_key = os.environ['OPENAI_API_KEY']
 
-
-def chatgpt_query(prompt, max_tokens=50, temperature=0.9):
-    response = openai.Completion.create(
-        engine="gpt-4",
-        prompt=prompt,
-        max_tokens=max_tokens,
-        n=1,
-        temperature=temperature,
-        top_p=1,
-        frequency_penalty=0,
-        presence_penalty=0,
-        stop=None
-    )
-
-    generated_text = response.choices[0].text.strip()
-    return generated_text
-
-# Implement speech-to-text functionality
-def speech_to_text():
-    recognizer = sr.Recognizer()
-    with sr.Microphone() as source:
-        print("Listening...")
-        try:
-            audio = recognizer.listen(source, timeout=config["bot_update_interval"], phrase_time_limit=config["bot_update_interval"])
-        except sr.WaitTimeoutError:
-            print("Timeout while waiting for user input. Listening again...")
-            return ""
-
-    try:
-        print("Recognizing...")
-        text = recognizer.recognize_google(audio)
-        print(f"You said: {text}")
-        return text
-    except Exception as e:
-        print("Error recognizing speech:", e)
-        return ""
-        
-# Generate bot responses
-def generate_bot_responses(input_text, botsArr):
-    # Determine the number of bots to respond
-    max_responding_bots = math.ceil(len(botsArr) / 2) if len(botsArr) > 1 else 1
-    num_responding_bots = random.randrange(0, max_responding_bots)
-
-    # Randomly select a quarter of the bots
-    responding_bots = random.sample(botsArr, num_responding_bots)
-
-    responses = []
-    for bot in responding_bots:
-        prompt = f"{input_text}"
-        response = bot.chatgpt_query(prompt, config["streamer_name"])
-        responses.append((bot, response))
-    return responses
-        
-class SpeechRecognitionThread(QThread):
-    new_response = pyqtSignal(object)
-
-    def __init__(self, bots):
-        super().__init__()
-        self.bots = bots
-
-    def run(self):
-        while True:
-            input_text = speech_to_text()
-            if input_text.lower() == 'exit':
-                break
-
-            if input_text.strip():
-                bot_responses = generate_bot_responses(input_text, self.bots.arr)
-                for bot, response in bot_responses:
-                    self.new_response.emit((bot, response))
-
-class HeaderBar(QWidget):
-    def __init__(self, parent):
-        super().__init__(parent)
-        self.parent = parent
-
-    def mousePressEvent(self, event):
-        if event.button() == Qt.LeftButton:
-            self.parent.oldPos = event.globalPos()
-
-    def mouseMoveEvent(self, event):
-        if event.buttons() == Qt.LeftButton and self.parent.oldPos:
-            delta = event.globalPos() - self.parent.oldPos
-            self.parent.move(self.parent.x() + delta.x(), self.parent.y() + delta.y())
-            self.parent.oldPos = event.globalPos()
-
-    def mouseReleaseEvent(self, event):
-        if event.button() == Qt.LeftButton:
-            self.parent.oldPos = None
-
-class ResizeHandle(QWidget):
-    def __init__(self, parent):
-        super().__init__(parent)
-        self.parent = parent
-        self.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
-
-    def sizeHint(self):
-        return QSize(12, 12)
-
-    def paintEvent(self, event):
-        painter = QPainter(self)
-        painter.setRenderHint(QPainter.Antialiasing)
-        painter.setBrush(Qt.white)
-        painter.drawRect(0, 0, self.width(), self.height())
-
-class RemoveBorderButton(QWidget):
-    def __init__(self, parent):
-        super().__init__(parent)
-        self.parent = parent
-        self.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
-    
-    def sizeHint(self):
-        return QSize(12, 12)
-
-    def paintEvent(self, event):
-        painter = QPainter(self)
-        painter.setRenderHint(QPainter.Antialiasing)
-        painter.setBrush(Qt.gray)
-        painter.drawRect(0, 0, self.width(), self.height())
-
-class TransparentChatWindow(QWidget):
-    def __init__(self):
-        super().__init__()
-
-        self.chat_label = QTextEdit(self)
-        self.chat_label.setReadOnly(True)
-        self.chat_label.setFrameStyle(0)
-        self.chat_label.setStyleSheet(f"background-color: transparent; font-weight: {config['font_weight']}; color: {config['text_color']}; font-size: {config['font_size']};")
-        # Create header bar with minimize, maximize, and exit buttons
-        self.header_bar = HeaderBar(self)
-        self.header_layout = QHBoxLayout()
-
-        # Set the background color of the header bar
-        self.header_bar.setStyleSheet("background-color: lightgray; text-align: center; border: none; font-size: 12px; font-weight: bold; padding: 2px;")
-
-        self.minimize_button = QPushButton("_")
-        self.maximize_button = QPushButton("[]")
-        self.exit_button = QPushButton("X")
-
-        self.minimize_button.clicked.connect(self.showMinimized)
-        self.maximize_button.clicked.connect(self.toggleMaximized)
-        self.exit_button.clicked.connect(self.close)
-        self.exit_button.setStyleSheet("background-color: #ff0000;")
-
-        self.header_layout.addWidget(self.minimize_button)
-        self.header_layout.addWidget(self.maximize_button)
-        self.header_layout.addWidget(self.exit_button)
-        self.header_bar.setLayout(self.header_layout)
-
-        # Main layout
-        layout = QVBoxLayout()
-        layout.addWidget(self.header_bar)
-        layout.addWidget(self.chat_label)
-        self.setLayout(layout)
-
-        self.setAttribute(Qt.WA_TranslucentBackground, True)
-        self.setWindowFlags(Qt.FramelessWindowHint | Qt.WindowStaysOnTopHint)
-        self.setStyleSheet(f"padding: 5px; color: black; border: 3px solid {config['border_color']}; border-top: 5px solid {config['border_color']}; border-radius: 5px;")
-        self.setWindowTitle(config['streamer_name'] + "'s Chat")
-        self.setGeometry(100, 100, 400, 600)
-
-        self.oldPos = None
-
-        self.setMouseTracking(True)
-        self.resizing = False
-        self.resize_border_size = 40  # Increase this value to make the border larger
-
-        # Add resize handle
-        self.resize_handle = ResizeHandle(self)
-        layout.addWidget(self.resize_handle, 0, Qt.AlignBottom | Qt.AlignRight)
-        # layout.setContentsMargins(0, 0, 0, 0)  # Add a bottom margin to move the handle up
-
-        # Add remove border button
-        self.remove_border_button = RemoveBorderButton(self)
-        layout.addWidget(self.remove_border_button, 0, Qt.AlignBottom | Qt.AlignRight)
-        self.borderFlag = True
-
-    def mousePressEvent(self, event):
-        if event.button() == Qt.LeftButton:
-            self.oldPos = event.globalPos()
-            if self.resize_handle.geometry().contains(event.pos()):
-                self.resizing = True
-            if self.remove_border_button.geometry().contains(event.pos()):
-                if self.borderFlag:
-                    self.setStyleSheet("padding: 5px; background-color: transparent; border: none; border-radius: 5px")
-                    self.header_bar.hide()
-                else:
-                    self.setStyleSheet(f"padding: 5px; color: black; border: 3px solid {config['border_color']}; border-top: 5px solid {config['border_color']}; border-radius: 5px;")
-                    self.header_bar.show()
-                self.borderFlag = not self.borderFlag
-    def mouseMoveEvent(self, event):
-        if event.buttons() == Qt.LeftButton and self.oldPos:
-            if not self.resizing:
-                delta = event.globalPos() - self.oldPos
-                self.move(self.x() + delta.x(), self.y() + delta.y())
-                self.oldPos = event.globalPos()
-            else:
-                new_size = QSize(event.pos().x(), event.pos().y())
-                self.resize(new_size)
-
-    def mouseReleaseEvent(self, event):
-        if event.button() == Qt.LeftButton:
-            self.oldPos = None
-            self.resizing = False
-
-    def toggleMaximized(self):
-        if self.isMaximized():
-            self.showNormal()
-        else:
-            self.showMaximized()
-
-    def update_chat(self, bot_name, bot_message, bot_color):
-        colored_name = f'<span style="color: {bot_color};">{bot_name}: </span>'
-        colored_message = f'<span>{bot_message}</span><br>'
-        self.chat_label.insertHtml(colored_name + colored_message)  # Add the padding here
-        self.chat_label.ensureCursorVisible()
-
-def user_interface():
+def user_interface(config):
     app = QApplication([])
 
     # Set the application icon
     app_icon = QIcon("./assets/blanc.png")
     app.setWindowIcon(app_icon)
 
-    bots = Bots(config['num_bots'])
+    bots = Bots(config)
 
     print("Chat.tv started. Start talking or type 'exit' to quit.")
-    chat_window = TransparentChatWindow()
+    chat_window = ChatWindow(config)
     chat_window.show()
 
-    speech_recognition_thread = SpeechRecognitionThread(bots)
+    speech_recognition_thread = SpeechRecognitionThread(bots, config)
     speech_recognition_thread.new_response.connect(lambda response: chat_window.update_chat(response[0].name, response[1], response[0].color))
     speech_recognition_thread.start()
 
     app.exec()
 
-
 def main():
-    user_interface()
+    user_interface(config)
 
 if __name__ == "__main__":
     main()

@@ -2,13 +2,32 @@
 import openai
 import random
 
-config = {
-    "slang_type": "incel",
-    "slang_level": "witty",
-    "any_other_notes": "",
-}
+class Bot:
 
-context = f"You are a casual Twitch.tv chat user, chatting with a livestreamer. You are aware that there are other viewers watching the streamer as well, so speak {config['slang_level']} with {config['slang_type']} slang, and don't make a fool of yourself. Speak concisely. {config['any_other_notes']}"
+    def __init__(self, name, bot_config):
+        self.name = name
+        self.context = f"You are a casual Twitch.tv chat user, chatting with a livestreamer, currently {bot_config['streamer_current_action']}. You are aware that there are other viewers watching the streamer as well, so speak {bot_config['slang_level']} with {random.sample(bot_config['slang_types'], 1)} slang, and don't make a fool of yourself. Most other viewers speak with different slang. Speak concisely. {bot_config['any_other_notes']}"
+        # Memory does have a limit, but it's very high. If the program bugs after a long time using it, just restart it.
+        self.memory = [{"role": "system", "content": self.context}]
+        self.color = random.choice(colors)
+    
+    def createNewMemory(self, who, input_text, name):
+        new_memory = {"role": who, "content": input_text, "name": name}
+        self.memory.append(new_memory)
+
+    def chatgpt_query(self, input_text, streamer_name, max_tokens=50, temperature=1, top_p=1):
+        self.createNewMemory("user", input_text, streamer_name)
+        response = openai.ChatCompletion.create(
+            model="gpt-3.5-turbo",
+            # model="gpt-4",
+            messages=self.memory,
+            max_tokens=max_tokens,
+            # temperature=temperature,
+            top_p=top_p,
+        )
+        self.createNewMemory("assistant", response.choices[0].message.content, self.name)
+        generated_text = response.choices[0].message.content
+        return generated_text
 
 colors = [
     'red',
@@ -18,30 +37,3 @@ colors = [
     'cyan',
     'magenta',
 ]
-
-
-class Bot:
-
-    def __init__(self, name):
-        self.name = name
-        # Memory does have a limit, but it's very high. If the program bugs after a long time using it, just restart it.
-        self.memory = [{"role": "system", "content": context}]
-        self.color = random.choice(colors)
-    
-    def createNewMemory(self, who, input_text, name):
-        new_memory = {"role": who, "content": input_text, "name": name}
-        self.memory.append(new_memory)
-
-    def chatgpt_query(self, input_text, streamer_name, max_tokens=50, temperature=1):
-        self.createNewMemory("user", input_text, streamer_name)
-        response = openai.ChatCompletion.create(
-            model="gpt-3.5-turbo",
-            # model="gpt-4",
-            messages=self.memory,
-            max_tokens=max_tokens,
-            # temperature=temperature,
-            top_p=1,
-        )
-        self.createNewMemory("assistant", response.choices[0].message.content, self.name)
-        generated_text = response.choices[0].message.content
-        return generated_text
