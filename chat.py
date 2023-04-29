@@ -1,7 +1,7 @@
 # will be for the chat window
 from PyQt5.QtWidgets import QTextEdit, QVBoxLayout, QWidget, QHBoxLayout, QPushButton
 from PyQt5.QtCore import Qt, QSize
-from components import ResizeHandle, RemoveBorderButton, HeaderBar
+from chat_components import ResizeHandle, RemoveBorderButton, HeaderBar
 
 class ChatWindow(QWidget):
     def __init__(self, config):
@@ -12,6 +12,7 @@ class ChatWindow(QWidget):
         self.chat_label.setReadOnly(True)
         self.chat_label.setFrameStyle(0)
         self.chat_label.setStyleSheet(f"background-color: transparent; font-weight: {self.config['chat_font_weight']}; color: {self.config['chat_text_color']}; font-size: {self.config['chat_font_size']};")
+        
         # Create header bar with minimize, maximize, and exit buttons
         self.header_bar = HeaderBar(self)
         self.header_layout = QHBoxLayout()

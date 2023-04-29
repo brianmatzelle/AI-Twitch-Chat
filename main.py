@@ -85,6 +85,7 @@ load_dotenv()
 openai.api_key = os.environ['OPENAI_API_KEY']
 
 def user_interface(config):
+    # Create the application
     app = QApplication([])
 
     # Set the application icon
