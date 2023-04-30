@@ -66,9 +66,8 @@ class ConfigWindow(QDialog):
         row = 0
         col = 0
 
-        # Load the saved slang types from QSettings
+        # slang types from QSettings
         saved_slang_types = settings.value("slang_types", [])
-
         for slang_type in config['bot_config']['slang_types']:
             checkbox = QCheckBox(slang_type)
             if slang_type in saved_slang_types:
@@ -128,7 +127,7 @@ class ConfigWindow(QDialog):
     def clear_all_settings(self):
         settings = QSettings("blanc_savant", "Chat.tv")
         settings.clear()
-        
+
         # Reset input fields to default values
         self.reset_config_window()
 

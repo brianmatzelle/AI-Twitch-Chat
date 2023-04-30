@@ -89,6 +89,7 @@ def user_interface(config, app):
     app_icon = QIcon("./assets/blanc.png")
     app.setWindowIcon(app_icon)
 
+    config['bot_config']['slang_types'].append('internet') # This line fixes a bug, making sure there is always an element in the list (otherwise random() doesn't work)
     bots = Bots(config)
 
     print("Chat.tv started. Start talking or type 'exit' to quit.")
