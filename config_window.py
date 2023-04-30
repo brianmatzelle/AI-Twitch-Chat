@@ -84,6 +84,7 @@ class ConfigWindow(QDialog):
         scroll_area.setWidget(slang_types_frame)
         scroll_area.setWidgetResizable(True)
 
+        # Slang types
         layout.addWidget(QLabel("Slang Types:"))
         layout.addWidget(scroll_area)
         
