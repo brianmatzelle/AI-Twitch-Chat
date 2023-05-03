@@ -15,7 +15,7 @@ config = {
     'streamer_name': '', # Your username on Twitch or YouTube or whatever
     'num_bots': 10,              # Number of bots in your chat
     'bot_update_interval': 10,  # Time in seconds between bot updates (2 seconds)
-    'max_num_of_responding_bots': 1, # Max number of bots that can respond to a message at once
+    'max_num_of_responding_bots': 4, # Max number of bots that can respond to a message at once
 
     # Chat window configuration
     'chat_font_size': '15px',
@@ -91,12 +91,12 @@ def user_interface(config, app):
     app.setWindowIcon(app_icon)
 
     config['bot_config']['slang_types'].append('internet') # This line fixes a bug, making sure there is always an element in the list (otherwise random() doesn't work)
-    bots = Bots(config)
 
     print("Chat.tv started. Start talking or type 'exit' to quit.")
     chat_window = ChatWindow(config)
     chat_window.show()
 
+    bots = Bots(config)
     speech_recognition_thread = SpeechRecognitionThread(bots, config)
     speech_recognition_thread.new_response.connect(lambda response: chat_window.update_chat(response[0].name, response[1], response[0].color))
     speech_recognition_thread.start()

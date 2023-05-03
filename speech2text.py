@@ -2,6 +2,7 @@
 # thread that listens for user input and converts it to text.
 import speech_recognition as sr
 from PyQt5.QtCore import QThread, pyqtSignal
+from time import sleep
 
 class SpeechRecognitionThread(QThread):
     new_response = pyqtSignal(object)
@@ -21,6 +22,7 @@ class SpeechRecognitionThread(QThread):
                 bot_responses = self.bots.generate_bot_responses(input_text)
                 for bot, response in bot_responses:
                     self.new_response.emit((bot, response))
+            sleep(.25) # while loops are CPU intensive, so sleep to reduce CPU usage
 
     # Implement speech-to-text functionality
     def speech_to_text(self):
