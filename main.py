@@ -1,6 +1,4 @@
 import openai
-from dotenv import load_dotenv
-import os
 from chat import ChatWindow
 from PyQt5.QtWidgets import QApplication, QDialog
 from PyQt5.QtGui import QIcon

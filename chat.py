@@ -2,7 +2,6 @@
 from PyQt5.QtWidgets import QTextEdit, QVBoxLayout, QWidget, QHBoxLayout, QPushButton, QLabel
 from PyQt5.QtCore import Qt, QSize
 from chat_components import ResizeHandle, RemoveBorderButton, HeaderBar
-from PyQt5.QtGui import QPixmap
 
 class ChatWindow(QWidget):
     def __init__(self, config):

@@ -3,5 +3,4 @@ PyAudio
 websocket-client
 openai
 PyQt5
-python-dotenv
 Faker

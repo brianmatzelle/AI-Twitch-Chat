@@ -1,6 +1,5 @@
 from bot import Bot
 import random
-import math
 
 class Bots:
     def __init__(self, config):
