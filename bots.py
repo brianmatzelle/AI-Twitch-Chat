@@ -5,7 +5,6 @@ import math
 class Bots:
     def __init__(self, config):
         self.config = config
-        self.size = config['num_bots']
 
         # # All possible names for bots
         # self.names = [
@@ -22,8 +21,9 @@ class Bots:
 
         # Array of bots
         self.arr = []
-        for i in range(self.size):
+        for i in range(config['num_bots']):
             bot = Bot(config['bot_config'])
+            print(f"{bot.name} has joined the chat!")
             self.arr.append(bot)
 
     # So bots[i] can be used to access the ith bot in bots.arr
@@ -33,8 +33,7 @@ class Bots:
     # Generate bot responses
     def generate_bot_responses(self, input_text):
         # Determine the number of bots to respond
-        max_responding_bots = math.ceil(self.size / 2) if self.size > 1 else 1
-        num_responding_bots = random.randrange(0, max_responding_bots)
+        num_responding_bots = random.randrange(0, self.config["max_num_of_responding_bots"])
         print(f"Number of bots responding: {num_responding_bots}")
         
         # Randomly select a quarter of the bots
