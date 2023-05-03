@@ -42,6 +42,6 @@ class Bots:
         responses = []
         for bot in responding_bots:
             prompt = f"{input_text}"
-            response = bot.chatgpt_query(prompt, self.config["streamer_name"])
+            response = bot.chatgpt_query(prompt, self.config["streamer_name"].replace(" ", "_"))
             responses.append((bot, response))
         return responses
