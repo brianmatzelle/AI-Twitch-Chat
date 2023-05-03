@@ -1,7 +1,8 @@
 # will be for the chat window
-from PyQt5.QtWidgets import QTextEdit, QVBoxLayout, QWidget, QHBoxLayout, QPushButton
+from PyQt5.QtWidgets import QTextEdit, QVBoxLayout, QWidget, QHBoxLayout, QPushButton, QLabel
 from PyQt5.QtCore import Qt, QSize
 from chat_components import ResizeHandle, RemoveBorderButton, HeaderBar
+from PyQt5.QtGui import QPixmap
 
 class ChatWindow(QWidget):
     def __init__(self, config):
@@ -13,26 +14,63 @@ class ChatWindow(QWidget):
         self.chat_label.setFrameStyle(0)
         self.chat_label.setStyleSheet(f"background-color: transparent; font-weight: {self.config['chat_font_weight']}; color: {self.config['chat_text_color']}; font-size: {self.config['chat_font_size']};")
         
-        # Create header bar with minimize, maximize, and exit buttons
+        ### HEADER BAR --------------------------------------------------------------- ###
+
+        # Create header bar with "Chat.tv" label, minimize, maximize, and exit buttons
         self.header_bar = HeaderBar(self)
         self.header_layout = QHBoxLayout()
 
         # Set the background color of the header bar
         self.header_bar.setStyleSheet("background-color: lightgray; text-align: center; border: none; font-size: 12px; font-weight: bold; padding: 2px;")
 
+        # Create QLabel for the icon with hyperlink
+        self.icon_label = QLabel()
+        self.icon_label.setFixedSize(32, 32)  # You can adjust the size of the icon
+        self.icon_label.setOpenExternalLinks(True)
+        self.icon_label.setStyleSheet("border: none; padding: 0px; margin: 0px;")
+        self.icon_label.setText('<a href="https://brianmatzelle.com"><img src="assets/blanc32x32.png" /></a>')
+        self.icon_label.setContentsMargins(0, 0, 0, 0)
+        
+        # Create QLabel for the "Chat.tv" label with hyperlink
+        self.chat_tv_label = QLabel()
+        self.chat_tv_label.setOpenExternalLinks(True)
+        # self.chat_tv_label.setText(f'<a href="https://wock.online" style="text-decoration:none; color:black; border-radius: 0px;">Chat.tv: {self.config["streamer_name"]}\'s chat</a>')
+        self.chat_tv_label.setText("Chat.tv: " + self.config["streamer_name"] + "'s chat")
+        self.chat_tv_label.setStyleSheet("padding-left: 5px;")
+        # self.chat_tv_label.setFixedSize(65, 24)  # You can adjust the size of the label
+
+        # Add icon_label and chat_tv_label to header_layout
+        self.header_layout.addWidget(self.icon_label, alignment=Qt.AlignLeft)
+        self.header_layout.addWidget(self.chat_tv_label, alignment=Qt.AlignLeft)
+
+        # Create a QHBoxLayout for the left side of the header
+        left_layout = QHBoxLayout()
+        left_layout.addWidget(self.icon_label)
+        left_layout.addWidget(self.chat_tv_label)
+
         self.minimize_button = QPushButton("_")
         self.maximize_button = QPushButton("[]")
         self.exit_button = QPushButton("X")
 
+        # Style the header buttons
+        self.minimize_button.setStyleSheet("QPushButton {width: 30px; background-color: lightgray;} QPushButton:hover {background-color: gray;}")
+        self.maximize_button.setStyleSheet("QPushButton {width: 30px; background-color: lightgray;} QPushButton:hover {background-color: gray;}")
+        self.exit_button.setStyleSheet("QPushButton {width: 30px; background-color: #ff0000;} QPushButton:hover {background-color: #e60000;}")
+
+        # Add functionality to the header buttons
         self.minimize_button.clicked.connect(self.showMinimized)
         self.maximize_button.clicked.connect(self.toggleMaximized)
         self.exit_button.clicked.connect(self.close)
-        self.exit_button.setStyleSheet("background-color: #ff0000;")
 
+        # Add left_layout to header_layout
+        self.header_layout.addLayout(left_layout)
+        self.header_layout.addStretch(1)  # Add stretch factor to push the buttons to the right
         self.header_layout.addWidget(self.minimize_button)
         self.header_layout.addWidget(self.maximize_button)
         self.header_layout.addWidget(self.exit_button)
         self.header_bar.setLayout(self.header_layout)
+
+        ### END HEADER BAR ------------------------------------------------------------ ###
 
         # Main layout
         layout = QVBoxLayout()
@@ -61,6 +99,7 @@ class ChatWindow(QWidget):
         layout.addWidget(self.remove_border_button, 0, Qt.AlignBottom | Qt.AlignRight)
 
         self.borderFlag = True  # Flag to keep track of whether the border is visible or not
+
 
     def mousePressEvent(self, event):
         if event.button() == Qt.LeftButton:
