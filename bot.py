@@ -2,14 +2,16 @@
 import openai
 import random
 from PyQt5.QtWidgets import QMessageBox, QApplication
-from faker import Faker
+# from faker import Faker
+from random_username.generate import generate_username
 
 class Bot:
 
     def __init__(self, bot_config):
         # generate random name
-        fake = Faker()
-        self.name = fake.user_name()
+        # fake = Faker()
+        # self.name = fake.user_name()
+        self.name = generate_username(1)[0]
         self.context = f"You are a casual Twitch.tv chat user, chatting with a livestreamer, currently {bot_config['streamer_current_action']}. You are aware that there are other viewers watching the streamer as well, so speak {bot_config['slang_level']} with {random.sample(bot_config['slang_types'], 1)} slang, and don't make a fool of yourself. Most other viewers speak with different slang. Speak concisely. {bot_config['any_other_notes']}"
         # Memory does have a limit, but it's very high. If the program bugs after a long time using it, just restart it.
         self.memory = [{"role": "system", "content": self.context}]
