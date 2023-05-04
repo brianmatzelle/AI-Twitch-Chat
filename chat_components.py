@@ -1,11 +1,26 @@
-from PyQt5.QtWidgets import QWidget, QSizePolicy
+from PyQt5.QtWidgets import QWidget, QSizePolicy, QHBoxLayout
 from PyQt5.QtCore import QSize, Qt
 from PyQt5.QtGui import QPainter
+from header_components import LogoIcon, ChatTvLabel, MinimizeButton, MaximizeButton, ExitButton
 
 class HeaderBar(QWidget):
     def __init__(self, parent):
         super().__init__(parent)
         self.parent = parent
+        self.setStyleSheet("background-color: lightgray; text-align: center; border: none; font-size: 12px; font-weight: bold;")
+        
+        # logo, "Chat.tv" label, minimize, maximize, and exit buttons
+        self.layout = QHBoxLayout()
+        self.left_layout = QHBoxLayout()
+        self.left_layout.addWidget(LogoIcon())
+        self.left_layout.addWidget(ChatTvLabel(self.parent.config))
+        self.layout.addLayout(self.left_layout)
+        self.layout.addStretch(1)
+        self.layout.addWidget(MinimizeButton(self))
+        self.layout.addWidget(MaximizeButton(self))
+        self.layout.addWidget(ExitButton(self))
+        self.layout.setContentsMargins(0, 0, 0, 0)
+        self.setLayout(self.layout)
 
     def mousePressEvent(self, event):
         if event.button() == Qt.LeftButton:

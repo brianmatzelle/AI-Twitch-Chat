@@ -4,12 +4,15 @@ import random
 from PyQt5.QtWidgets import QMessageBox, QApplication
 from random_username.generate import generate_username
 
+twitch_slang = "pog, poggers, L, W, 5head, dono, F, gas, jebaited, kappa, KEKW, mald, oppo, sadge, smh, smol, soy, sus, uwu, weeb, wtf, Andy, PogU, Pepega, PepeLaugh, WeirdChamp, OMEGALUL, monkaS"
+
 class Bot:
 
     def __init__(self, bot_config):
         # generate random name
         self.name = generate_username(1)[0]
-        self.context = f"You are a casual Twitch.tv chat user, chatting with a livestreamer, currently {bot_config['streamer_current_action']}. You are aware that there are other viewers watching the streamer as well, so speak {bot_config['slang_level']} with {random.sample(bot_config['slang_types'], 1)} slang, and don't make a fool of yourself. Most other viewers speak with different slang. Speak concisely. {bot_config['any_other_notes']}"
+        # self.context = f"You are a casual Twitch.tv chat user, chatting with a livestreamer, currently {bot_config['streamer_current_action']}. You are aware that there are other viewers watching the streamer as well, so speak {bot_config['slang_level']} with {random.sample(bot_config['slang_types'], 1)} slang, and don't make a fool of yourself. Most other viewers speak with different slang. Speak concisely. {bot_config['any_other_notes']}"
+        self.context = f"You are a Twitch.tv chat user, chatting with a livestreamer who is {bot_config['streamer_current_action']}. You are aware that there are other viewers watching the streamer as well. Refer to this list of slang for most of your messages: {twitch_slang}. Spam the chat with emotes and slang provided, if the streamer says something overtly good or bad."
         # Memory does have a limit, but it's very high. If the program bugs after a long time using it, just restart it.
         self.memory = [{"role": "system", "content": self.context}]
         self.color = random.choice(colors)
