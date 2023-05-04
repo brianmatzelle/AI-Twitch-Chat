@@ -48,7 +48,7 @@ class Bots:
         chance = random.randrange(0, 100)
         if chance < 10:
             responses.append(self.add_random_bot())
-        elif chance > 90:
+        elif chance > 90 and len(self.arr) > 1:
             responses.append(self.remove_random_bot())
 
         return responses
