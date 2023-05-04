@@ -1,5 +1,5 @@
 import openai
-from chat import ChatWindow
+from chat_window import ChatWindow
 from PyQt5.QtWidgets import QApplication, QDialog
 from PyQt5.QtGui import QIcon
 from PyQt5.QtCore import QSettings
