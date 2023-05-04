@@ -134,7 +134,20 @@ class ChatWindow(QWidget):
             self.showMaximized()
 
     def update_chat(self, bot_name, bot_message, bot_color):
-        colored_name = f'<span style="color: {bot_color};">{bot_name}: </span>'
-        colored_message = f'<span>{bot_message}</span><br>'
-        self.chat_label.insertHtml(colored_name + colored_message)  # Add the padding here
-        self.chat_label.ensureCursorVisible()
+        if "has left the chat!" in bot_message:
+            colored_message = f'<span style="color: {bot_color};">{bot_name} {bot_message}</span><br>'
+            self.chat_label.insertHtml(colored_message)
+            self.chat_label.ensureCursorVisible()
+            return
+        elif 'has entered the chat!' in bot_message:
+            colored_message = f'<span style="color: {bot_color};">{bot_name} {bot_message}</span><br>'
+            self.chat_label.insertHtml(colored_message)
+            self.chat_label.ensureCursorVisible()
+            return
+        
+        else:
+            colored_name = f'<span style="color: {bot_color};">{bot_name}: </span>'
+            colored_message = f'<span>{bot_message}</span><br>'
+            self.chat_label.insertHtml(colored_name + colored_message)  # Add the padding here
+            self.chat_label.ensureCursorVisible()
+            return

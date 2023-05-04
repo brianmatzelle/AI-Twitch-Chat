@@ -43,4 +43,30 @@ class Bots:
             prompt = f"{input_text}"
             response = bot.chatgpt_query(prompt, self.config["streamer_name"].replace(" ", "_"))
             responses.append((bot, response))
+        
+        # Add/remove bots randomly
+        chance = random.randrange(0, 100)
+        if chance < 10:
+            responses.append(self.add_random_bot())
+        elif chance > 90:
+            responses.append(self.remove_random_bot())
+
         return responses
+
+    # Remove a random bot from the array
+    def remove_random_bot(self):
+        # Remove a random bot
+        index = random.randrange(0, len(self.arr))
+        bot = self.arr.pop(index)
+        msg = f"has left the chat!"
+        # print(msg)
+        return (bot, msg)
+    
+    # Add a random bot to the array
+    def add_random_bot(self):
+        # Add a random bot
+        bot = Bot(self.config['bot_config'])
+        self.arr.append(bot)
+        msg = f"has joined the chat!"
+        # print(msg)
+        return (bot, msg)
