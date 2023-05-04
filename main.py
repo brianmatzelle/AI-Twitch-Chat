@@ -40,7 +40,7 @@ config = {
             "leftist",
             "internet",
             "4chan",
-            "communist",
+            "twitch",
             "tiktok",
             "incel",
             "angry italian american from new jersey",
