@@ -67,6 +67,6 @@ class Bots:
         # Add a random bot
         bot = Bot(self.config['bot_config'])
         self.arr.append(bot)
-        msg = f"has joined the chat!"
+        msg = f"has entered the chat!"
         # print(msg)
         return (bot, msg)
