@@ -36,16 +36,15 @@ class ChatWindow(QWidget):
         self.resize_border_size = 40  # Increase this value to make the border larger
 
         # Add resize handle
-        self.resize_handle = ResizeHandle(self)
+        self.resize_handle = ResizeHandle()
         layout.addWidget(self.resize_handle, 0, Qt.AlignBottom | Qt.AlignRight)
 
         # Add remove border button
-        self.remove_border_button = RemoveBorderButton(self)
+        self.remove_border_button = RemoveBorderButton()
         layout.addWidget(self.remove_border_button, 0, Qt.AlignBottom | Qt.AlignRight)
 
         # Add clear memory button
-        self.clear_memory_button = ClearMemoryButton(self, self.bots)
-        layout.addWidget(self.clear_memory_button, 0, Qt.AlignBottom | Qt.AlignLeft)
+        layout.addWidget(ClearMemoryButton(self.bots), 0, Qt.AlignBottom | Qt.AlignLeft)
 
         self.borderFlag = True  # Flag to keep track of whether the border is visible or not
         self.setMinimumSize(300, 500)
