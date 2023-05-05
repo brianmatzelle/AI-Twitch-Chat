@@ -16,7 +16,7 @@ config = {
     'max_num_of_responding_bots': 4, # Max number of bots that can respond to a message at once
 
     # Chat window configuration
-    'chat_font_size': '15px',
+    'chat_font_size': '18px',
     'chat_text_color': 'white',
     'chat_border_color': 'gray',
     'chat_font_weight': '500',

@@ -1,9 +1,22 @@
-# Description: This file contains the SpeechRecognitionThread class which is a 
-# thread that listens for user input and converts it to text.
 import speech_recognition as sr
-from PyQt5.QtCore import QThread, pyqtSignal
+from PyQt5.QtCore import QThread, pyqtSignal, QObject, QThreadPool, QRunnable
 from time import sleep
 import random
+
+
+class GenerateResponsesWorker(QRunnable):
+    def __init__(self, bots, input_text, new_response):
+        super().__init__()
+        self.bots = bots
+        self.input_text = input_text
+        self.new_response = new_response
+
+    def run(self):
+        bot_responses = self.bots.generate_bot_responses(self.input_text)
+        for bot, response in bot_responses:
+            self.new_response.emit((bot, response))
+            sleep(random.uniform(0.25, 3))
+
 
 class SpeechRecognitionThread(QThread):
     new_response = pyqtSignal(object)
@@ -12,6 +25,7 @@ class SpeechRecognitionThread(QThread):
         super().__init__()
         self.bots = bots
         self.config = config
+        self.thread_pool = QThreadPool()
 
     def run(self):
         while True:
@@ -20,11 +34,11 @@ class SpeechRecognitionThread(QThread):
                 break
 
             if input_text.strip():
-                bot_responses = self.bots.generate_bot_responses(input_text)
-                for bot, response in bot_responses:
-                    self.new_response.emit((bot, response))
-                    sleep(random.uniform(0.25, 3)) 
-            sleep(.25)# infinite loops are CPU intensive, so sleep to reduce CPU usage
+                worker = GenerateResponsesWorker(self.bots, input_text, self.new_response)
+                self.thread_pool.start(worker)
+
+            sleep(.25)
+
     # Implement speech-to-text functionality
     def speech_to_text(self):
         recognizer = sr.Recognizer()

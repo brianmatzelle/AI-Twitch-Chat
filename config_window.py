@@ -64,7 +64,7 @@ class ConfigWindow(QDialog):
 
         # Bot configuration
         self.slang_level_input = QComboBox()
-        self.slang_level_input.addItems(["witty", "casual", "formal", "funny", "stupid"])
+        self.slang_level_input.addItems(["witty", "casual", "formal", "funny", "stupid", "random"])
         self.slang_level_input.setCurrentText(config['bot_config']['slang_level'])
         layout.addWidget(QLabel("Slang Level:"))
         layout.addWidget(self.slang_level_input)
