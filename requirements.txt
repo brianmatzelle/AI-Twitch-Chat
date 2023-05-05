@@ -4,3 +4,4 @@ websocket-client
 openai
 PyQt5
 random-username
+pyaudio
