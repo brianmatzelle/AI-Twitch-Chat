@@ -1,5 +1,5 @@
 import openai
-from chat import ChatWindow
+from chat_window import ChatWindow
 from PyQt5.QtWidgets import QApplication, QDialog
 from PyQt5.QtGui import QIcon
 from PyQt5.QtCore import QSettings
@@ -13,10 +13,10 @@ config = {
     'streamer_name': '', # Your username on Twitch or YouTube or whatever
     'num_bots': 10,              # Number of bots in your chat
     'bot_update_interval': 10,  # Time in seconds between bot updates (2 seconds)
-    'max_num_of_responding_bots': 4, # Max number of bots that can respond to a message at once
+    'max_num_of_responding_bots': 5, # Max number of bots that can respond to a message at once
 
     # Chat window configuration
-    'chat_font_size': '15px',
+    'chat_font_size': '16px',
     'chat_text_color': 'white',
     'chat_border_color': 'gray',
     'chat_font_weight': '500',
@@ -34,21 +34,21 @@ config = {
         'slang_types': [
             "zoomer",
             "boomer",
-            "millennial",
+            "overwatch",
             "gen-x",
             "gen-z",
-            "gen-alpha",
+            "leftist",
             "internet",
             "4chan",
             "twitch",
             "tiktok",
             "incel",
-            "normie",
+            "angry italian american from new jersey",
             "chad",
-            "goth",
-            "emo",
-            "hipster",
-            "jock",
+            "rocket leageue",
+            "drunk russian but in broken english",
+            "copium",
+            "frat",
             "weeb",
             "furry",
             "gamer",
@@ -91,10 +91,10 @@ def user_interface(config, app):
     config['bot_config']['slang_types'].append('internet') # This line fixes a bug, making sure there is always an element in the list (otherwise random() doesn't work)
 
     print("Chat.tv started. Start talking or type 'exit' to quit.")
-    chat_window = ChatWindow(config)
+    bots = Bots(config)
+    chat_window = ChatWindow(config, bots)
     chat_window.show()
 
-    bots = Bots(config)
     speech_recognition_thread = SpeechRecognitionThread(bots, config)
     speech_recognition_thread.new_response.connect(lambda response: chat_window.update_chat(response[0].name, response[1], response[0].color))
     speech_recognition_thread.start()
