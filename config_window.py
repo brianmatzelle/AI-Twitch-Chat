@@ -21,7 +21,8 @@ class ConfigWindow(QDialog):
         saved_slang_level = settings.value("slang_level", config['bot_config']['slang_level'])
         saved_slang_types = settings.value("slang_types", [])
         saved_streamer_current_action = settings.value("streamer_current_action", config['bot_config']['streamer_current_action'])
-        
+        saved_max_num_of_responding_bots = settings.value("max_num_of_responding_bots", config['max_num_of_responding_bots'], type=int)
+
         # OpenAI API Key input
         form_layout = QFormLayout()
         self.api_key_input = QLineEdit(saved_api_key)
@@ -116,6 +117,7 @@ class ConfigWindow(QDialog):
         self.bot_update_interval_input.setValue(saved_bot_update_interval)
         self.slang_level_input.setCurrentText(saved_slang_level)
         self.streamer_current_action_input.setText(saved_streamer_current_action)
+        self.max_num_of_responding_bots_input.setValue(saved_max_num_of_responding_bots)
 
     def save_and_close(self):
         # Save to QSettings (saves settings to local storage)

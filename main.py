@@ -13,7 +13,7 @@ config = {
     'streamer_name': '', # Your username on Twitch or YouTube or whatever
     'num_bots': 10,              # Number of bots in your chat
     'bot_update_interval': 10,  # Time in seconds between bot updates (2 seconds)
-    'max_num_of_responding_bots': 4, # Max number of bots that can respond to a message at once
+    'max_num_of_responding_bots': 5, # Max number of bots that can respond to a message at once
 
     # Chat window configuration
     'chat_font_size': '18px',
