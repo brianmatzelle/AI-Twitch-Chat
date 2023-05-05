@@ -1,6 +1,6 @@
 from PyQt5.QtWidgets import QWidget, QSizePolicy, QHBoxLayout, QPushButton
 from PyQt5.QtCore import QSize, Qt
-from PyQt5.QtGui import QPainter
+from PyQt5.QtGui import QPainter, QIcon
 from header_components import LogoIcon, ChatTvLabel, MinimizeButton, MaximizeButton, ExitButton
 
 class HeaderBar(QWidget):
@@ -37,9 +37,8 @@ class HeaderBar(QWidget):
             self.parent.oldPos = None
 
 class ResizeHandle(QWidget):
-    def __init__(self, parent):
-        super().__init__(parent)
-        self.parent = parent
+    def __init__(self):
+        super().__init__()
         self.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
 
     def sizeHint(self):
@@ -52,9 +51,8 @@ class ResizeHandle(QWidget):
         painter.drawRect(0, 0, self.width(), self.height())
 
 class RemoveBorderButton(QWidget):
-    def __init__(self, parent):
-        super().__init__(parent)
-        self.parent = parent
+    def __init__(self):
+        super().__init__()
         self.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
     
     def sizeHint(self):
@@ -66,13 +64,9 @@ class RemoveBorderButton(QWidget):
         painter.setBrush(Qt.gray)
         painter.drawRect(0, 0, self.width(), self.height())
 
-class ClearMemoryButton(QPushButton):
-    def __init__(self, parent, bots):
-        super().__init__(parent)
-        self.parent = parent
-        self.bots = bots
-        self.setText("Clear Memory")
-        self.clicked.connect(self.on_click)
-
-    def on_click(self):
-        self.bots.clear_memory()
+def ClearMemoryButton(bots):
+    clear_memory_button = QPushButton('⟳')
+    clear_memory_button.clicked.connect(bots.clear_memory)
+    clear_memory_button.setStyleSheet("QPushButton {font-weight: bold; font-size: 18px; background-color: white; border: none;} QPushButton:hover {background-color: lightgray;}")
+    clear_memory_button.setContentsMargins(0, 0, 0, 0)
+    return clear_memory_button
