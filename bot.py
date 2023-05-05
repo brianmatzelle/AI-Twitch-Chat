@@ -21,6 +21,10 @@ class Bot:
         new_memory = {"role": who, "content": input_text, "name": name}
         self.memory.append(new_memory)
 
+    def clear_memory(self):
+        self.memory = [{"role": "system", "content": self.context}]
+        print(f"{self.name}'s memory has been cleared.")
+        
     def chatgpt_query(self, input_text, streamer_name, max_tokens=25, temperature=1, top_p=1):
         self.createNewMemory("user", input_text, streamer_name)
         try:

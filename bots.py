@@ -32,7 +32,7 @@ class Bots:
     # Generate bot responses
     def generate_bot_responses(self, input_text):
         # Determine the number of bots to respond
-        num_responding_bots = random.randrange(0, self.config["max_num_of_responding_bots"])
+        num_responding_bots = random.randrange(0, self.config["max_num_of_responding_bots"]+1)
         print(f"Number of bots responding: {num_responding_bots}")
         
         # Randomly select a quarter of the bots
@@ -70,3 +70,7 @@ class Bots:
         msg = f"has entered the chat!"
         # print(msg)
         return (bot, msg)
+    
+    def clear_memory(self):
+        for bot in self.arr:
+            bot.clear_memory()

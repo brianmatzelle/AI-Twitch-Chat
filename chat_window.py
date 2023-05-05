@@ -1,14 +1,13 @@
 # will be for the chat window
 from PyQt5.QtWidgets import QTextEdit, QVBoxLayout, QWidget, QHBoxLayout, QPushButton, QLabel
 from PyQt5.QtCore import Qt, QSize
-from chat_components import ResizeHandle, RemoveBorderButton, HeaderBar
-from header_components import LogoIcon, ChatTvLabel, MinimizeButton, MaximizeButton, ExitButton
-
+from chat_components import ResizeHandle, RemoveBorderButton, HeaderBar, ClearMemoryButton
 
 class ChatWindow(QWidget):
-    def __init__(self, config):
+    def __init__(self, config, bots):
         super().__init__()
         self.config = config
+        self.bots = bots
 
         self.chat_label = QTextEdit(self)
         self.chat_label.setReadOnly(True)
@@ -43,6 +42,10 @@ class ChatWindow(QWidget):
         # Add remove border button
         self.remove_border_button = RemoveBorderButton(self)
         layout.addWidget(self.remove_border_button, 0, Qt.AlignBottom | Qt.AlignRight)
+
+        # Add clear memory button
+        self.clear_memory_button = ClearMemoryButton(self, self.bots)
+        layout.addWidget(self.clear_memory_button, 0, Qt.AlignBottom | Qt.AlignLeft)
 
         self.borderFlag = True  # Flag to keep track of whether the border is visible or not
         self.setMinimumSize(300, 500)

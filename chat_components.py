@@ -1,4 +1,4 @@
-from PyQt5.QtWidgets import QWidget, QSizePolicy, QHBoxLayout
+from PyQt5.QtWidgets import QWidget, QSizePolicy, QHBoxLayout, QPushButton
 from PyQt5.QtCore import QSize, Qt
 from PyQt5.QtGui import QPainter
 from header_components import LogoIcon, ChatTvLabel, MinimizeButton, MaximizeButton, ExitButton
@@ -65,3 +65,14 @@ class RemoveBorderButton(QWidget):
         painter.setRenderHint(QPainter.Antialiasing)
         painter.setBrush(Qt.gray)
         painter.drawRect(0, 0, self.width(), self.height())
+
+class ClearMemoryButton(QPushButton):
+    def __init__(self, parent, bots):
+        super().__init__(parent)
+        self.parent = parent
+        self.bots = bots
+        self.setText("Clear Memory")
+        self.clicked.connect(self.on_click)
+
+    def on_click(self):
+        self.bots.clear_memory()
