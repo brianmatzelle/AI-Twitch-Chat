@@ -3,7 +3,6 @@ from PyQt5.QtCore import QThread, pyqtSignal, QObject, QThreadPool, QRunnable
 from time import sleep
 import random
 
-
 class GenerateResponsesWorker(QRunnable):
     def __init__(self, bots, input_text, new_response):
         super().__init__()
