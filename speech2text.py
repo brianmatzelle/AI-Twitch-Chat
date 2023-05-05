@@ -26,6 +26,7 @@ class SpeechRecognitionThread(QThread):
         self.bots = bots
         self.config = config
         self.thread_pool = QThreadPool()
+        self.count = 0
 
     def run(self):
         while True:
@@ -54,7 +55,12 @@ class SpeechRecognitionThread(QThread):
             print("Recognizing...")
             text = recognizer.recognize_google(audio)
             print(f"You said: {text}")
+            self.count = 0
             return text
         except Exception as e:
+            self.count += 1
+            if self.count >= 5:
+                if (random.randint(0, 10) < 5):
+                    self.bots.remove_random_bot()
             print("Error recognizing speech:", e)
             return ""

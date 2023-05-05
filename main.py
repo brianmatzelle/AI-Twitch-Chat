@@ -16,7 +16,7 @@ config = {
     'max_num_of_responding_bots': 5, # Max number of bots that can respond to a message at once
 
     # Chat window configuration
-    'chat_font_size': '18px',
+    'chat_font_size': '16px',
     'chat_text_color': 'white',
     'chat_border_color': 'gray',
     'chat_font_weight': '500',
@@ -46,8 +46,8 @@ config = {
             "angry italian american from new jersey",
             "chad",
             "rocket leageue",
-            "copium",
             "drunk russian but in broken english",
+            "copium",
             "frat",
             "weeb",
             "furry",
