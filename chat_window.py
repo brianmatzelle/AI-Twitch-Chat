@@ -1,7 +1,7 @@
 # will be for the chat window
 from PyQt5.QtWidgets import QTextEdit, QVBoxLayout, QWidget, QHBoxLayout, QPushButton, QLabel
 from PyQt5.QtCore import Qt, QSize
-from chat_components import ResizeHandle, RemoveBorderButton, HeaderBar, ClearMemoryButton
+from chat_components import HeaderBar, FooterBar
 
 class ChatWindow(QWidget):
     def __init__(self, config, bots):
@@ -35,19 +35,24 @@ class ChatWindow(QWidget):
         self.resizingFlag = False
         self.resize_border_size = 40  # Increase this value to make the border larger
 
-        # Add resize handle
-        self.resize_handle = ResizeHandle()
-        layout.addWidget(self.resize_handle, 0, Qt.AlignBottom | Qt.AlignRight)
 
-        # Add remove border button
-        self.remove_border_button = RemoveBorderButton()
-        layout.addWidget(self.remove_border_button, 0, Qt.AlignBottom | Qt.AlignRight)
+        # Create footer bar
+        self.footer_bar = FooterBar(self)
+        layout.addWidget(self.footer_bar)
+        # # Add resize handle
+        # self.resize_handle = ResizeHandle()
+        # layout.addWidget(self.resize_handle, 0, Qt.AlignBottom | Qt.AlignRight)
 
-        # Add clear memory button
-        layout.addWidget(ClearMemoryButton(self.bots), 0, Qt.AlignBottom | Qt.AlignLeft)
+        # # Add remove border button
+        # self.remove_border_button = RemoveBorderButton()
+        # layout.addWidget(self.remove_border_button, 0, Qt.AlignBottom | Qt.AlignRight)
 
-        self.borderFlag = True  # Flag to keep track of whether the border is visible or not
-        self.setMinimumSize(300, 500)
+        # # Add clear memory button
+        # layout.addWidget(ClearMemoryButton(self.bots), 0, Qt.AlignBottom | Qt.AlignRight)
+
+        # self.borderFlag = True  # Flag to keep track of whether the border is visible or not
+        # self.setMinimumSize(300, 500)
+
 
 
 
