@@ -1,5 +1,5 @@
 from PyQt5.QtWidgets import QDialog, QVBoxLayout, QLabel, QLineEdit, QSpinBox, QComboBox, QPushButton, QFormLayout
-from PyQt5.QtWidgets import QCheckBox, QScrollArea, QFrame, QGridLayout
+from PyQt5.QtWidgets import QCheckBox, QScrollArea, QFrame, QGridLayout, QHBoxLayout
 from PyQt5.QtGui import QIcon
 from PyQt5.QtCore import QSettings
 
@@ -9,7 +9,7 @@ class ConfigWindow(QDialog):
         self.config = config
         self.setWindowTitle("Chat.tv Configuration")
         self.setWindowIcon(QIcon("./assets/blanc.png"))
-        self.resize(300, 750)
+        self.resize(500, 700)
         layout = QVBoxLayout()
 
         # Load saved settings
@@ -22,7 +22,8 @@ class ConfigWindow(QDialog):
         saved_slang_types = settings.value("slang_types", [])
         saved_streamer_current_action = settings.value("streamer_current_action", config['bot_config']['streamer_current_action'])
         saved_max_num_of_responding_bots = settings.value("max_num_of_responding_bots", config['max_num_of_responding_bots'], type=int)
-
+        saved_slang_types = settings.value("slang_types", config['bot_config']['slang_types'], type=str)
+        
         # OpenAI API Key input
         form_layout = QFormLayout()
         self.api_key_input = QLineEdit(saved_api_key)
@@ -72,7 +73,7 @@ class ConfigWindow(QDialog):
 
         self.slang_type_checkboxes = []
 
-        scroll_area = QScrollArea()
+        self.scroll_area = QScrollArea()
         slang_types_frame = QFrame()
         grid_layout = QGridLayout()
         row = 0
@@ -93,12 +94,21 @@ class ConfigWindow(QDialog):
                 row += 1
 
         slang_types_frame.setLayout(grid_layout)
-        scroll_area.setWidget(slang_types_frame)
-        scroll_area.setWidgetResizable(True)
+        self.scroll_area.setWidget(slang_types_frame)
+        self.scroll_area.setWidgetResizable(True)
 
         # Slang types
-        layout.addWidget(QLabel("Slang Types:"))
-        layout.addWidget(scroll_area)
+        layout.addWidget(QLabel("Personality Types:"))
+        layout.addWidget(self.scroll_area)
+
+        # Add custom slang type input and button
+        custom_slang_layout = QHBoxLayout()
+        self.custom_slang_input = QLineEdit()
+        custom_slang_layout.addWidget(self.custom_slang_input)
+        self.add_custom_slang_button = QPushButton("Add Personality")
+        self.add_custom_slang_button.clicked.connect(self.add_custom_slang_type)
+        custom_slang_layout.addWidget(self.add_custom_slang_button)
+        layout.addLayout(custom_slang_layout)
         
         # Clear All Settings button
         clear_settings_button = QPushButton("Clear All Settings")
@@ -162,3 +172,19 @@ class ConfigWindow(QDialog):
 
         for checkbox in self.slang_type_checkboxes:
             checkbox.setChecked(False)
+
+    def add_custom_slang_type(self):
+        new_slang_type = self.custom_slang_input.text().strip()
+        if new_slang_type and new_slang_type not in [checkbox.text() for checkbox in self.slang_type_checkboxes]:
+            checkbox = QCheckBox(new_slang_type)
+            self.slang_type_checkboxes.append(checkbox)
+            row, col = divmod(len(self.slang_type_checkboxes) - 1, 3)  # Assumes a grid with 3 columns
+            grid_layout = self.scroll_area.widget().layout()
+            grid_layout.addWidget(checkbox, row, col)
+            self.custom_slang_input.clear()
+
+            # Save new custom slang type immediately to local storage
+            settings = QSettings("blanc_savant", "Chat.tv")
+            saved_slang_types = settings.value("slang_types", [], type=str)
+            saved_slang_types.append(new_slang_type)
+            settings.setValue("slang_types", saved_slang_types)
