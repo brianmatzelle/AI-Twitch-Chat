@@ -39,9 +39,3 @@ class ClearMemoryButton(QPushButton):
         self.setStyleSheet("QPushButton {font-weight: bold; font-size: 18px; background-color: white; border: none;} QPushButton:hover {background-color: lightgray;}")
         self.setContentsMargins(0, 0, 0, 0)
         self.clicked.connect(self.bots.clear_memory)
-
-
-    # clear_memory_button.clicked.connect(bots.clear_memory)
-    # clear_memory_button.setStyleSheet("QPushButton {font-weight: bold; font-size: 18px; background-color: white; border: none;} QPushButton:hover {background-color: lightgray;}")
-    # clear_memory_button.setContentsMargins(0, 0, 0, 0)
-    # return clear_memory_button

@@ -43,7 +43,7 @@ class ConfigWindow(QDialog):
         # Number of bots input
         self.num_bots_input = QSpinBox()
         self.num_bots_input.setMinimum(1)
-        self.num_bots_input.setMaximum(99999)  # Allow up to four digits for the number of bots
+        self.num_bots_input.setMaximum(99)  # Allow up to four digits for the number of bots
         self.num_bots_input.setValue(config['num_bots'])
         layout.addWidget(QLabel("Number of Bots:"))
         layout.addWidget(self.num_bots_input)
