@@ -46,8 +46,6 @@ config = {
 }
 
 # Load environment variables
-# load_dotenv()
-# openai.api_key = os.environ['OPENAI_API_KEY']
 openai.api_key = config['openai_api_key']
 
 def user_interface(config, app):

@@ -64,13 +64,26 @@ class ConfigWindow(QDialog):
         layout.addWidget(QLabel("Max Number of Responding Bots (per interval):"))
         layout.addWidget(self.max_num_of_responding_bots_input)
 
-        # Bot configuration
+        # Select Tone
+        saved_tones = settings.value("tones", ["casual", "witty", "formal", "funny", "stupid", "random"], type=str)
         self.tone_input = QComboBox()
-        self.tone_input.addItems(["casual", "witty", "formal", "funny", "stupid", "random"])
+        self.tone_input.addItems(saved_tones)
         self.tone_input.setCurrentText(config['bot_config']['tone'])
         layout.addWidget(QLabel("Tone:"))
         layout.addWidget(self.tone_input)
 
+
+        # Add custom tone input and button
+        custom_tone_layout = QHBoxLayout()
+        self.custom_tone_input = QLineEdit()
+        custom_tone_layout.addWidget(self.custom_tone_input)
+        self.add_custom_tone_button = QPushButton("Add Tone")
+        self.add_custom_tone_button.clicked.connect(self.add_custom_tone)
+        custom_tone_layout.addWidget(self.add_custom_tone_button)
+        layout.addLayout(custom_tone_layout)
+
+
+        # Select slang types/personality types
         self.slang_type_checkboxes = []
 
         self.scroll_area = QScrollArea()
@@ -177,6 +190,7 @@ class ConfigWindow(QDialog):
         new_slang_type = self.custom_slang_input.text().strip()
         if new_slang_type and new_slang_type not in [checkbox.text() for checkbox in self.slang_type_checkboxes]:
             checkbox = QCheckBox(new_slang_type)
+            checkbox.setChecked(True)  # Toggle on the new checkbox
             self.slang_type_checkboxes.append(checkbox)
             row, col = divmod(len(self.slang_type_checkboxes) - 1, 3)  # Assumes a grid with 3 columns
             grid_layout = self.scroll_area.widget().layout()
@@ -188,3 +202,16 @@ class ConfigWindow(QDialog):
             saved_slang_types = settings.value("slang_types", [], type=str)
             saved_slang_types.append(new_slang_type)
             settings.setValue("slang_types", saved_slang_types)
+
+
+    def add_custom_tone(self):
+        new_tone = self.custom_tone_input.text().strip()
+        if new_tone and new_tone not in [self.tone_input.itemText(i) for i in range(self.tone_input.count())]:
+            self.tone_input.addItem(new_tone)
+            self.custom_tone_input.clear()
+
+            # Save new custom tone immediately to local storage
+            settings = QSettings("blanc_savant", "Chat.tv")
+            saved_tones = settings.value("tones", ["casual", "witty", "formal", "funny", "stupid", "random"], type=str)
+            saved_tones.append(new_tone)
+            settings.setValue("tones", saved_tones)
