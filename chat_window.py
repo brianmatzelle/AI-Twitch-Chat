@@ -58,7 +58,7 @@ class ChatWindow(QWidget):
         # Add debug toggle button to the header bar
         self.debug_toggle_button = QPushButton("Toggle Debug", self)
         self.debug_toggle_button.setStyleSheet("QPushButton { background-color: rgba(255, 255, 255, 0.8); color: black; border: 1px solid black; border-radius: 5px; } QPushButton:hover { background-color: rgba(255, 255, 255, 0.9); }")
-        self.header_bar.layout.addWidget(self.debug_toggle_button)
+        self.header_bar.left_layout.addWidget(self.debug_toggle_button)
         self.debug_toggle_button.clicked.connect(self.toggle_debug)
         # Automatically scroll to the bottom of the debug window when new text is added
         self.debug_window.textChanged.connect(lambda: self.debug_window.verticalScrollBar().setValue(self.debug_window.verticalScrollBar().maximum()))
@@ -67,7 +67,7 @@ class ChatWindow(QWidget):
         layout.addWidget(self.debug_window)
 
         # Add clear memory button
-        layout.addWidget(ClearMemoryButton(self.bots, self), 0, Qt.AlignBottom | Qt.AlignRight)
+        self.header_bar.left_layout.addWidget(ClearMemoryButton(self), 0, Qt.AlignBottom | Qt.AlignRight)
 
     def assign_bots(self, bots):
         self.bots = bots

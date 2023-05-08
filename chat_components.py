@@ -63,9 +63,9 @@ class RemoveBorderButton(QWidget):
         painter.setBrush(Qt.gray)
         painter.drawRect(0, 0, self.width(), self.height())
 
-def ClearMemoryButton(bots, parent):
+def ClearMemoryButton(parent):
     clear_memory_button = QPushButton('⟳')
-    clear_memory_button.clicked.connect(lambda: bots.clear_memory(parent))
+    clear_memory_button.clicked.connect(lambda: parent.bots.clear_memory(parent))
     clear_memory_button.setStyleSheet("QPushButton {font-weight: bold; font-size: 12px; background-color: white; border: none;} QPushButton:hover {background-color: lightgray;}")
     clear_memory_button.setContentsMargins(0, 0, 0, 0)
     return clear_memory_button

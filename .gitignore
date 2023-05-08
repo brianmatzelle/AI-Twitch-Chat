@@ -54,3 +54,5 @@ venv/
 .env
 .DS_Store
 main.spec
+
+Output/

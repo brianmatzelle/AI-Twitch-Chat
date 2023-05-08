@@ -64,5 +64,5 @@ class SpeechRecognitionThread(QThread):
             if self.count >= 5:
                 if (random.randint(0, 10) < 5):
                     self.bots.remove_random_bot()
-            self.debug_message.emit("Error recognizing speech...")
+            self.debug_message.emit(f"Error recognizing speech, {e}")
             return ""

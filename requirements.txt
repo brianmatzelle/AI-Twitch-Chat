@@ -3,4 +3,4 @@ PyAudio
 websocket-client
 openai
 PyQt5
-py-splash
+pyi-splash
