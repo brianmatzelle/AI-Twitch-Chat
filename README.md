@@ -1,6 +1,12 @@
-# Release Version (Easy Install):
+# Release Download:
 
-[- Windows Download](https://github.com/brianmatzelle/Chat.tv/releases/tag/alpha)
+Stable v0.1.0-alpha:
+
+* [Windows Download](https://github.com/brianmatzelle/Chat.tv/releases/tag/alpha)
+
+
+---
+
 
 
 #### **Source Code Install:**
