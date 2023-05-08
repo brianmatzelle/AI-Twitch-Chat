@@ -1,13 +1,13 @@
 # Releases:
 
+### Windows Install:
+
 Stable v0.1.0-alpha:
 
-* [Windows Download](https://github.com/brianmatzelle/Chat.tv/releases/tag/alpha)
+* [Download](https://github.com/brianmatzelle/Chat.tv/releases/tag/alpha)
 
 
 ---
-
-
 
 ### Mac/Linux Install:
 
