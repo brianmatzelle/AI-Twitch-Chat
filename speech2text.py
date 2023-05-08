@@ -4,25 +4,23 @@ from time import sleep
 import random
 
 class GenerateResponsesWorker(QRunnable):
-    debug_message = pyqtSignal(str)  # Add this line
-    def __init__(self, bots, input_text, new_response, chat_window, debug_signal):
+    def __init__(self, bots, input_text, new_response, chat_window, debug_message):
         super().__init__()
         self.bots = bots
         self.input_text = input_text
         self.new_response = new_response
         self.chat_window = chat_window
-        self.debug_signal = debug_signal  # Add this line
+        self.debug_message = debug_message
 
     def run(self):
-        bot_responses = self.bots.generate_bot_responses(self.input_text)
+        bot_responses = self.bots.generate_bot_responses(self.input_text, self.debug_message)
         for bot, response in bot_responses:
             self.new_response.emit((bot, response))
             sleep(random.uniform(0.25, 3))
-        self.debug_signal.emit("GenerateResponsesWorker finished.")  # Replace the update_debug call
 
 class SpeechRecognitionThread(QThread):
     new_response = pyqtSignal(object)
-    debug_message = pyqtSignal(str)  # Add this line
+    debug_message = pyqtSignal(str)
     
     def __init__(self, bots, config, chat_window):
         super().__init__()
@@ -52,7 +50,7 @@ class SpeechRecognitionThread(QThread):
             try:
                 audio = recognizer.listen(source, timeout=self.config["bot_update_interval"], phrase_time_limit=self.config["bot_update_interval"])
             except sr.WaitTimeoutError:
-                self.debug_message.emit("Listening...")  # Replace the update_debug call
+                self.debug_message.emit("Listening...")
                 return ""
 
         try:

@@ -1,5 +1,6 @@
 from bot import Bot
 import random
+from PyQt5.QtCore import pyqtSignal
 
 class Bots:
     def __init__(self, config):
@@ -17,10 +18,10 @@ class Bots:
         return self.arr[index]
 
     # Generate bot responses
-    def generate_bot_responses(self, input_text):
+    def generate_bot_responses(self, input_text, debug_message):
         # Determine the number of bots to respond
         num_responding_bots = random.randrange(1, self.config["max_num_of_responding_bots"]+1)
-        print(f"Number of bots responding: {num_responding_bots}")
+        debug_message.emit(f"Number of bots responding: {num_responding_bots}")
         
         # Randomly select a quarter of the bots
         responding_bots = random.sample(self.arr, num_responding_bots)

@@ -46,7 +46,6 @@ usernames = [
 class Bot:
 
     def __init__(self, bot_config):
-        # generate random name
         # self.name = generate_username(1)[0]
         self.name = random.choice(usernames)
         self.context = f"You are a Twitch.tv chat user, chatting with a livestreamer, currently {bot_config['streamer_current_action']}. You are aware that there are other viewers watching the streamer as well, so speak {bot_config['slang_level']} with {random.sample(bot_config['slang_types'], 1)} slang. You always have an idea what is asked. Less than a sentence. {bot_config['any_other_notes']}"
@@ -61,7 +60,7 @@ class Bot:
 
     def clear_memory(self):
         self.memory = [{"role": "system", "content": self.context}]
-        print(f"{self.name}'s memory has been cleared.")
+        self.debug_message.emit(f"{self.name}'s memory has been cleared.")
         
     def chatgpt_query(self, input_text, streamer_name, max_tokens=25, temperature=1, top_p=1):
         self.createNewMemory("user", input_text, streamer_name)
