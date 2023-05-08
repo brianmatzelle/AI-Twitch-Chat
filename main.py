@@ -31,18 +31,18 @@ config = {
     'bot_config': {
         # Bot configuration
         'streamer_current_action': '', # What you're currently doing (chatting, playing Rocket League, etc.)
-        "tone": "witty", # The attitude the bots will have (witty, casual, formal)
+        "tone": "casual", # The attitude the bots will have (witty, casual, formal)
         "any_other_notes": "", # Any other notes you want to add to the context
         # Each bot will have a random slang type from this list
         'slang_types': [
             "zoomer", "boomer", "millenial that is trying to be a zoomer",
-            "gen-x", "gen-z", "leftist that dog whistles a lot",
+            "gen-x", "millenial", "leftist that dog whistles a lot",
             "internet", "4chan", "twitch chat enthusiast",
             "tiktok", "incel", "angry italian american from new jersey",
-            "chad", "rocket leageue", "drunk russian but in broken english",
+            "chad", "rocket league", "drunk russian but in broken english",
             "frat", "weeb", "furry that is trying to hide it",
             "gamer", "programmer", "entrepreneur who is trying to sell you something",
-            "basketball", "football", "hockey player that just got out of a fight",
+            "basketball", "football", "girlfriend who wants you to get off the computer",
             "New York", "Los Angeles", "Atlanta rapper who never made it big",
         ]
     }
@@ -56,7 +56,9 @@ def user_interface(config, app):
     app_icon = QIcon("./assets/blanc.png")
     app.setWindowIcon(app_icon)
 
-    config['bot_config']['slang_types'].append('internet') # This line fixes a bug, making sure there is always an element in the list (otherwise random() doesn't work)
+    # Add an internet slang type if there isn't one
+    if len(config['bot_config']['slang_types']) == 0:
+        config['bot_config']['slang_types'].append('internet') # This line fixes a bug, making sure there is always an element in the list (otherwise random() doesn't work)
 
     chat_window = ChatWindow(config)
     chat_window.show()
