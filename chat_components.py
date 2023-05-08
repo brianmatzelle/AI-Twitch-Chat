@@ -17,7 +17,6 @@ class HeaderBar(QWidget):
         self.layout.addLayout(self.left_layout)
         self.layout.addStretch(1)
         self.layout.addWidget(MinimizeButton(self))
-        # self.layout.addWidget(MaximizeButton(self))
         self.layout.addWidget(ExitButton(self))
         self.layout.setContentsMargins(0, 0, 0, 0)
         self.setLayout(self.layout)
@@ -64,9 +63,9 @@ class RemoveBorderButton(QWidget):
         painter.setBrush(Qt.gray)
         painter.drawRect(0, 0, self.width(), self.height())
 
-def ClearMemoryButton(bots):
+def ClearMemoryButton(bots, parent):
     clear_memory_button = QPushButton('⟳')
-    clear_memory_button.clicked.connect(bots.clear_memory)
-    clear_memory_button.setStyleSheet("QPushButton {font-weight: bold; font-size: 18px; background-color: white; border: none;} QPushButton:hover {background-color: lightgray;}")
+    clear_memory_button.clicked.connect(lambda: bots.clear_memory(parent))
+    clear_memory_button.setStyleSheet("QPushButton {font-weight: bold; font-size: 12px; background-color: white; border: none;} QPushButton:hover {background-color: lightgray;}")
     clear_memory_button.setContentsMargins(0, 0, 0, 0)
     return clear_memory_button

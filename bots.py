@@ -63,6 +63,6 @@ class Bots:
         # print(msg)
         return (bot, msg)
     
-    def clear_memory(self):
+    def clear_memory(self, chat_window):
         for bot in self.arr:
-            bot.clear_memory()
+            bot.clear_memory(chat_window)
