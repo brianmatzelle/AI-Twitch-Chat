@@ -48,8 +48,8 @@ class Bot:
     def __init__(self, bot_config):
         # self.name = generate_username(1)[0]
         self.name = random.choice(usernames)
-        self.context = f"You are a Twitch.tv chat user, chatting with a livestreamer, currently {bot_config['streamer_current_action']}. You are aware that there are other viewers watching the streamer as well, so speak {bot_config['slang_level']} with {random.sample(bot_config['slang_types'], 1)} slang. You always have an idea what is asked. Less than a sentence. {bot_config['any_other_notes']}"
-        #@DAVINCI@# self.context = f"CONTEXT: You are a Twitch.tv chat user, chatting with a livestreamer who is {bot_config['streamer_current_action']}. Other viewers are also watching the streamer, {bot_config['slang_level']} is your tone. Resond with less than a sentence, taking max 2 words from this list: {twitch_slang}."
+        self.context = f"You are a Twitch.tv chat user, chatting with a livestreamer, currently {bot_config['streamer_current_action']}. You are aware that there are other viewers watching the streamer as well, so speak {bot_config['tone']} with {random.sample(bot_config['slang_types'], 1)} slang. You always have an idea what is asked. Less than a sentence. {bot_config['any_other_notes']}"
+        #@DAVINCI@# self.context = f"CONTEXT: You are a Twitch.tv chat user, chatting with a livestreamer who is {bot_config['streamer_current_action']}. Other viewers are also watching the streamer, {bot_config['tone']} is your tone. Resond with less than a sentence, taking max 2 words from this list: {twitch_slang}."
         # Memory does have a limit, but it's very high. If the program bugs after a long time using it, just restart it.
         self.memory = [{"role": "system", "content": self.context}]
         self.color = random.choice(colors)

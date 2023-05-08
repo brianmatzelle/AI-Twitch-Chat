@@ -18,7 +18,7 @@ class ConfigWindow(QDialog):
         saved_streamer_name = settings.value("streamer_name", config['streamer_name'])
         saved_num_bots = settings.value("num_bots", config['num_bots'], type=int)
         saved_bot_update_interval = settings.value("bot_update_interval", config['bot_update_interval'], type=int)
-        saved_slang_level = settings.value("slang_level", config['bot_config']['slang_level'])
+        saved_tone = settings.value("tone", config['bot_config']['tone'])
         saved_slang_types = settings.value("slang_types", [])
         saved_streamer_current_action = settings.value("streamer_current_action", config['bot_config']['streamer_current_action'])
         saved_max_num_of_responding_bots = settings.value("max_num_of_responding_bots", config['max_num_of_responding_bots'], type=int)
@@ -65,11 +65,11 @@ class ConfigWindow(QDialog):
         layout.addWidget(self.max_num_of_responding_bots_input)
 
         # Bot configuration
-        self.slang_level_input = QComboBox()
-        self.slang_level_input.addItems(["witty", "casual", "formal", "funny", "stupid", "random"])
-        self.slang_level_input.setCurrentText(config['bot_config']['slang_level'])
+        self.tone_input = QComboBox()
+        self.tone_input.addItems(["casual", "witty", "formal", "funny", "stupid", "random"])
+        self.tone_input.setCurrentText(config['bot_config']['tone'])
         layout.addWidget(QLabel("Tone:"))
-        layout.addWidget(self.slang_level_input)
+        layout.addWidget(self.tone_input)
 
         self.slang_type_checkboxes = []
 
@@ -125,7 +125,7 @@ class ConfigWindow(QDialog):
         self.streamer_name_input.setText(saved_streamer_name)
         self.num_bots_input.setValue(saved_num_bots)
         self.bot_update_interval_input.setValue(saved_bot_update_interval)
-        self.slang_level_input.setCurrentText(saved_slang_level)
+        self.tone_input.setCurrentText(saved_tone)
         self.streamer_current_action_input.setText(saved_streamer_current_action)
         self.max_num_of_responding_bots_input.setValue(saved_max_num_of_responding_bots)
 
@@ -136,7 +136,7 @@ class ConfigWindow(QDialog):
         settings.setValue("streamer_name", self.streamer_name_input.text())
         settings.setValue("num_bots", self.num_bots_input.value())
         settings.setValue("bot_update_interval", self.bot_update_interval_input.value())
-        settings.setValue("slang_level", self.slang_level_input.currentText())
+        settings.setValue("tone", self.tone_input.currentText())
         settings.setValue("slang_types", [checkbox.text() for checkbox in self.slang_type_checkboxes if checkbox.isChecked()])
         settings.setValue("streamer_current_action", self.streamer_current_action_input.text())
         settings.setValue("max_num_of_responding_bots", self.max_num_of_responding_bots_input.value())
@@ -145,7 +145,7 @@ class ConfigWindow(QDialog):
         self.config['streamer_name'] = self.streamer_name_input.text()
         self.config['num_bots'] = self.num_bots_input.value()
         self.config['bot_update_interval'] = self.bot_update_interval_input.value()
-        self.config['bot_config']['slang_level'] = self.slang_level_input.currentText()
+        self.config['bot_config']['tone'] = self.tone_input.currentText()
         self.config['bot_config']['slang_types'] = [checkbox.text() for checkbox in self.slang_type_checkboxes if checkbox.isChecked()]
         self.config['bot_config']['streamer_current_action'] = self.streamer_current_action_input.text()
         self.config['max_num_of_responding_bots'] = self.max_num_of_responding_bots_input.value()
@@ -164,7 +164,7 @@ class ConfigWindow(QDialog):
         self.streamer_name_input.setText(self.config['streamer_name'])
         self.num_bots_input.setValue(self.config['num_bots'])
         self.bot_update_interval_input.setValue(self.config['bot_update_interval'])
-        self.slang_level_input.setCurrentText(self.config['bot_config']['slang_level'])
+        self.tone_input.setCurrentText(self.config['bot_config']['tone'])
         self.max_num_of_responding_bots_input.setValue(self.config['max_num_of_responding_bots'])
 
         for checkbox in self.slang_type_checkboxes:
