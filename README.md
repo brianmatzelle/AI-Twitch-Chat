@@ -9,7 +9,7 @@ Stable v0.1.0-alpha:
 
 
 
-#### **Source Code Install:**
+### Mac/Linux Install:
 
 1. [Install the latest version of Python](https://www.python.org/downloads/)
 2. In your terminal (in the directory programs root directory) run ``pip install -r requirements.txt`` or ``pip3 install -r requirements.txt`` if on mac/linux
