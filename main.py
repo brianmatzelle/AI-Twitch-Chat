@@ -6,6 +6,9 @@ from PyQt5.QtCore import QSettings
 from speech2text import SpeechRecognitionThread
 from bots import Bots
 from config_window import ConfigWindow
+import sys
+if getattr(sys, 'frozen', False):
+    import pyi_splash
 
 # Default configuration
 config = {
@@ -56,9 +59,9 @@ def user_interface(config, app):
     config['bot_config']['slang_types'].append('internet') # This line fixes a bug, making sure there is always an element in the list (otherwise random() doesn't work)
 
     chat_window = ChatWindow(config)
+    chat_window.show()
     bots = Bots(config, chat_window)
     chat_window.assign_bots(bots)
-    chat_window.show()
     chat_window.update_debug("\nClick Toggle Debug to close this menu.\n\nChat.tv started. Start talking!")
     speech_recognition_thread = SpeechRecognitionThread(bots, config, chat_window)
     speech_recognition_thread.new_response.connect(lambda response: chat_window.update_chat(response[0].name, response[1], response[0].color))
@@ -67,6 +70,9 @@ def user_interface(config, app):
     return app.exec()
 
 def main():
+    # Close the splash screen if this is executed as a frozen app (e.g. pyinstaller)
+    if getattr(sys, 'frozen', False):
+        pyi_splash.close()  
     # Create the application
     app = QApplication([])
 
