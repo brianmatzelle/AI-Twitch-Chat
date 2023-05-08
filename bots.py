@@ -20,7 +20,11 @@ class Bots:
     # Generate bot responses
     def generate_bot_responses(self, input_text, debug_message):
         # Determine the number of bots to respond
-        num_responding_bots = random.randrange(1, self.config["max_num_of_responding_bots"]+1)
+        if len(self.arr) == 1:
+            num_responding_bots = 1
+        else:
+            num_responding_bots = random.randrange(1, self.config["max_num_of_responding_bots"])
+            
         debug_message.emit(f"Number of bots responding: {num_responding_bots}")
         
         # Randomly select a quarter of the bots
