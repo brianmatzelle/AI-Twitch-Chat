@@ -3,14 +3,14 @@ import random
 from PyQt5.QtCore import pyqtSignal
 
 class Bots:
-    def __init__(self, config):
+    def __init__(self, config, chat_window):
         self.config = config
 
         # Array of bots
         self.arr = []
         for i in range(config['num_bots']):
             bot = Bot(config['bot_config'])
-            print(f"{bot.name} has joined the chat!")
+            chat_window.update_debug(f"{bot.name} has joined the chat!")
             self.arr.append(bot)
 
     # So bots[i] can be used to access the ith bot in bots.arr

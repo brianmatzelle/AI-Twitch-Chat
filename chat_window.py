@@ -4,10 +4,10 @@ from PyQt5.QtCore import Qt, QSize
 from chat_components import ResizeHandle, RemoveBorderButton, HeaderBar, ClearMemoryButton
 
 class ChatWindow(QWidget):
-    def __init__(self, config, bots):
+    def __init__(self, config):
         super().__init__()
         self.config = config
-        self.bots = bots
+        self.bots = None
 
         self.chat_label = QTextEdit(self)
         self.chat_label.setReadOnly(True)
@@ -25,7 +25,7 @@ class ChatWindow(QWidget):
 
         self.setAttribute(Qt.WA_TranslucentBackground, True)
         self.setWindowFlags(Qt.FramelessWindowHint | Qt.WindowStaysOnTopHint)
-        self.setStyleSheet(f"padding: 5px; color: black; border: 3px solid {self.config['chat_border_color']}; border-top: 5px solid {self.config['chat_border_color']}; border-radius: 5px;")
+        self.setStyleSheet(f"padding: 5px; color: black; border: 3px solid {self.config['chat_border_color']}; border-radius: 5px;")
         self.setWindowTitle(self.config['streamer_name'] + "'s Chat")
         self.setGeometry(100, 100, 400, 600)
 
@@ -53,19 +53,24 @@ class ChatWindow(QWidget):
         self.debug_window.setReadOnly(True)
         self.debug_window.setFrameStyle(0)
         self.debug_window.setStyleSheet("background-color: rgba(255, 255, 255, 0.8); color: black; border: 1px solid black; border-radius: 5px;")
-        self.debug_window.setHidden(True)
+        self.debug_window.setHidden(False)
 
         # Add debug toggle button to the header bar
         self.debug_toggle_button = QPushButton("Toggle Debug", self)
         self.debug_toggle_button.setStyleSheet("QPushButton { background-color: rgba(255, 255, 255, 0.8); color: black; border: 1px solid black; border-radius: 5px; } QPushButton:hover { background-color: rgba(255, 255, 255, 0.9); }")
         self.header_bar.layout.addWidget(self.debug_toggle_button)
         self.debug_toggle_button.clicked.connect(self.toggle_debug)
+        # Automatically scroll to the bottom of the debug window when new text is added
+        self.debug_window.textChanged.connect(lambda: self.debug_window.verticalScrollBar().setValue(self.debug_window.verticalScrollBar().maximum()))
 
         # Update main layout
         layout.addWidget(self.debug_window)
 
         # Add clear memory button
         layout.addWidget(ClearMemoryButton(self.bots, self), 0, Qt.AlignBottom | Qt.AlignRight)
+
+    def assign_bots(self, bots):
+        self.bots = bots
 
     def mousePressEvent(self, event):
         if event.button() == Qt.LeftButton:
@@ -77,7 +82,7 @@ class ChatWindow(QWidget):
                     self.setStyleSheet("padding: 5px; background-color: transparent; border: none; border-radius: 5px")
                     self.header_bar.hide()
                 else:
-                    self.setStyleSheet(f"padding: 5px; color: black; border: 3px solid {self.config['chat_border_color']}; border-top: 5px solid {self.config['chat_border_color']}; border-radius: 5px;")
+                    self.setStyleSheet(f"padding: 5px; color: black; border: 3px solid {self.config['chat_border_color']}; border-radius: 5px;")
                     self.header_bar.show()
                 self.borderFlag = not self.borderFlag
     
