@@ -5,7 +5,7 @@ def LogoIcon():
     label.setFixedSize(32, 32)  # You can adjust the size of the icon
     label.setOpenExternalLinks(True)
     label.setStyleSheet("border: none; padding: 0px; margin: 0px;")
-    label.setText('<a href="https://brianmatzelle.com"><img src="assets/blanc32x32.png" /></a>')
+    label.setText('<a href="https://brianmatzelle.com"><img src="blanc32x32.png"/></a>')
     label.setContentsMargins(0, 0, 0, 0)
     return label
 
