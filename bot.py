@@ -40,7 +40,9 @@ usernames = [
     "BeanrBoi3", "LilPeepPhan", "gamerGurl420", "sickoMode23", "savageSzn75", "wtwOnGod",
     "littyLion5", "extraAF69", "memeMachine43", "cheechinator69", "chillChimp64", "sickSnek87"
     "zaddyQuazar", "KweenKaddyKop", "Po-poPapi", "fudgePacker", "daddyDong", "daddyDonger", "daddyDongest",
-    "b1gPapiC", "homeboi_latto", "chulaChinga14", "wackazzShifta"
+    "b1gPapiC", "homeboi_latto", "chulaChinga14", "wackazzShifta", "dull.pnk", "electric",
+    "lego_boyf19", "rubenwarrior38", "bnug242", "baseball_1219", "Fluofy", "@drove", "HIV aids",
+    "ashleybda", "ZERUSSIANGUY", "whettaM", "swagamuffin", "mercury", "cheeky_nandos20",
 ]
 
 class Bot:
