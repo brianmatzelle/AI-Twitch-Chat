@@ -15,8 +15,9 @@ options = {
         "packages": [
             "speech_recognition",
             "PyQt5",
-            "websockets",
+            "six",
             "websocket",
+            "websocket_client",
             "pyaudio",
             "openai",
         ],       # Add any additional Python packages needed

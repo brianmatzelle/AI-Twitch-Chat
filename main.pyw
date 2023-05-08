@@ -46,7 +46,7 @@ config = {
 }
 
 # Load environment variables
-openai.api_key = config['openai_api_key']
+openai.api_key = config['openai_api_key'].strip()
 
 def user_interface(config, app):
     # Set the application icon
@@ -55,10 +55,11 @@ def user_interface(config, app):
 
     config['bot_config']['slang_types'].append('internet') # This line fixes a bug, making sure there is always an element in the list (otherwise random() doesn't work)
 
-    bots = Bots(config)
-    chat_window = ChatWindow(config, bots)
+    chat_window = ChatWindow(config)
+    bots = Bots(config, chat_window)
+    chat_window.assign_bots(bots)
     chat_window.show()
-    chat_window.update_debug("Chat.tv started. Start talking!")
+    chat_window.update_debug("\nClick Toggle Debug to close this menu.\n\nChat.tv started. Start talking!")
     speech_recognition_thread = SpeechRecognitionThread(bots, config, chat_window)
     speech_recognition_thread.new_response.connect(lambda response: chat_window.update_chat(response[0].name, response[1], response[0].color))
     speech_recognition_thread.debug_message.connect(chat_window.update_debug)
