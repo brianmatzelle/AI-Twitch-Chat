@@ -1,4 +1,4 @@
-# Release Download:
+# Releases:
 
 Stable v0.1.0-alpha:
 
