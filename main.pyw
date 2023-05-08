@@ -32,16 +32,15 @@ config = {
         "any_other_notes": "", # Any other notes you want to add to the context
         # Each bot will have a random slang type from this list
         'slang_types': [
-            "zoomer", "boomer", "overwatch",
-            "gen-x", "gen-z", "leftist",
-            "internet", "4chan", "twitch",
+            "zoomer", "boomer", "millenial that is trying to be a zoomer",
+            "gen-x", "gen-z", "leftist that dog whistles a lot",
+            "internet", "4chan", "twitch chat enthusiast",
             "tiktok", "incel", "angry italian american from new jersey",
             "chad", "rocket leageue", "drunk russian but in broken english",
-            "frat", "weeb", "furry",
-            "gamer", "programmer", "entrepreneur",
-            "basketball", "football", "soccer",
-            "baseball", "hockey", "golf",
-            "New York", "Los Angeles", "Atlanta",
+            "frat", "weeb", "furry that is trying to hide it",
+            "gamer", "programmer", "entrepreneur who is trying to sell you something",
+            "basketball", "football", "hockey player that just got out of a fight",
+            "New York", "Los Angeles", "Atlanta rapper who never made it big",
         ]
     }
 }

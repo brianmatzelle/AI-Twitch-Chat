@@ -49,6 +49,22 @@ class ChatWindow(QWidget):
         self.borderFlag = True  # Flag to keep track of whether the border is visible or not
         self.setMinimumSize(300, 500)
 
+        ### DEBUG WINDOW ###
+        self.debug_window = QTextEdit(self)
+        self.debug_window.setReadOnly(True)
+        self.debug_window.setFrameStyle(0)
+        self.debug_window.setStyleSheet("background-color: rgba(255, 255, 255, 0.8); color: black; border: 1px solid black; border-radius: 5px;")
+        self.debug_window.setHidden(True)
+
+        # Add debug toggle button to the header bar
+        self.debug_toggle_button = QPushButton("Toggle Debug", self)
+        self.debug_toggle_button.setStyleSheet("QPushButton { background-color: rgba(255, 255, 255, 0.8); color: black; border: 1px solid black; border-radius: 5px; } QPushButton:hover { background-color: rgba(255, 255, 255, 0.9); }")
+        self.header_bar.layout.addWidget(self.debug_toggle_button)
+        self.debug_toggle_button.clicked.connect(self.toggle_debug)
+
+        # Update main layout
+        layout.addWidget(self.debug_window)
+
 
 
     def mousePressEvent(self, event):
@@ -104,3 +120,13 @@ class ChatWindow(QWidget):
             self.chat_label.insertHtml(colored_name + colored_message)  # Add the padding here
             self.chat_label.ensureCursorVisible()
             return
+
+    def toggle_debug(self):
+        if self.debug_window.isHidden():
+            self.debug_window.show()
+        else:
+            self.debug_window.hide()
+
+    # Add this method to update the debug window with messages
+    def update_debug(self, message):
+        self.debug_window.append(message)

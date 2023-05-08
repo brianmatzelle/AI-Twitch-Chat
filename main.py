@@ -57,13 +57,13 @@ def user_interface(config, app):
 
     config['bot_config']['slang_types'].append('internet') # This line fixes a bug, making sure there is always an element in the list (otherwise random() doesn't work)
 
-    print("Chat.tv started. Start talking or type 'exit' to quit.")
     bots = Bots(config)
     chat_window = ChatWindow(config, bots)
     chat_window.show()
-
-    speech_recognition_thread = SpeechRecognitionThread(bots, config)
+    chat_window.update_debug("Chat.tv started. Start talking!")
+    speech_recognition_thread = SpeechRecognitionThread(bots, config, chat_window)
     speech_recognition_thread.new_response.connect(lambda response: chat_window.update_chat(response[0].name, response[1], response[0].color))
+    speech_recognition_thread.debug_message.connect(chat_window.update_debug)  # Add this line
     speech_recognition_thread.start()
     return app.exec()
 

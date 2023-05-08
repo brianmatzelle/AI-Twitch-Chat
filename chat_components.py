@@ -17,7 +17,7 @@ class HeaderBar(QWidget):
         self.layout.addLayout(self.left_layout)
         self.layout.addStretch(1)
         self.layout.addWidget(MinimizeButton(self))
-        self.layout.addWidget(MaximizeButton(self))
+        # self.layout.addWidget(MaximizeButton(self))
         self.layout.addWidget(ExitButton(self))
         self.layout.setContentsMargins(0, 0, 0, 0)
         self.setLayout(self.layout)

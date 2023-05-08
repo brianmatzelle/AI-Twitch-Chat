@@ -4,28 +4,33 @@ from time import sleep
 import random
 
 class GenerateResponsesWorker(QRunnable):
-    def __init__(self, bots, input_text, new_response):
+    debug_message = pyqtSignal(str)  # Add this line
+    def __init__(self, bots, input_text, new_response, chat_window, debug_signal):
         super().__init__()
         self.bots = bots
         self.input_text = input_text
         self.new_response = new_response
+        self.chat_window = chat_window
+        self.debug_signal = debug_signal  # Add this line
 
     def run(self):
         bot_responses = self.bots.generate_bot_responses(self.input_text)
         for bot, response in bot_responses:
             self.new_response.emit((bot, response))
             sleep(random.uniform(0.25, 3))
-
+        self.debug_signal.emit("GenerateResponsesWorker finished.")  # Replace the update_debug call
 
 class SpeechRecognitionThread(QThread):
     new_response = pyqtSignal(object)
-
-    def __init__(self, bots, config):
+    debug_message = pyqtSignal(str)  # Add this line
+    
+    def __init__(self, bots, config, chat_window):
         super().__init__()
         self.bots = bots
         self.config = config
         self.thread_pool = QThreadPool()
         self.count = 0
+        self.chat_window = chat_window
 
     def run(self):
         while True:
@@ -34,7 +39,7 @@ class SpeechRecognitionThread(QThread):
                 break
 
             if input_text.strip():
-                worker = GenerateResponsesWorker(self.bots, input_text, self.new_response)
+                worker = GenerateResponsesWorker(self.bots, input_text, self.new_response, self.chat_window, self.debug_message)
                 self.thread_pool.start(worker)
 
             sleep(.25)
@@ -43,17 +48,17 @@ class SpeechRecognitionThread(QThread):
     def speech_to_text(self):
         recognizer = sr.Recognizer()
         with sr.Microphone() as source:
-            print("Listening...")
+            self.debug_message.emit("Listening...")
             try:
                 audio = recognizer.listen(source, timeout=self.config["bot_update_interval"], phrase_time_limit=self.config["bot_update_interval"])
             except sr.WaitTimeoutError:
-                print("Timeout while waiting for user input. Listening again...")
+                self.debug_message.emit("Listening...")  # Replace the update_debug call
                 return ""
 
         try:
-            print("Recognizing...")
+            self.debug_message.emit("Recognizing...")
             text = recognizer.recognize_google(audio)
-            print(f"You said: {text}")
+            self.debug_message.emit(f"You said: {text}")
             self.count = 0
             return text
         except Exception as e:
@@ -61,5 +66,5 @@ class SpeechRecognitionThread(QThread):
             if self.count >= 5:
                 if (random.randint(0, 10) < 5):
                     self.bots.remove_random_bot()
-            print("Error recognizing speech:", e)
+            self.debug_message.emit("Error recognizing speech...")
             return ""
