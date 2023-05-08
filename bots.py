@@ -44,7 +44,7 @@ class Bots:
     # Remove a random bot from the array
     def remove_random_bot(self):
         # Remove a random bot
-        index = random.randrange(0, len(self.arr))
+        index = random.randrange(0, len(self.arr)-1)
         bot = self.arr.pop(index)
         msg = f"has left the chat!"
         # print(msg)
