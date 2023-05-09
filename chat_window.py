@@ -132,6 +132,11 @@ class ChatWindow(QWidget):
         else:
             self.debug_window.hide()
 
-    # Add this method to update the debug window with messages
     def update_debug(self, message):
         self.debug_window.append(message)
+
+    def clear_debug(self):
+        self.debug_window.clear()
+
+    def clear_chat(self):
+        self.chat_label.clear()
