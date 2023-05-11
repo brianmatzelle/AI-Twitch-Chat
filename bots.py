@@ -9,7 +9,7 @@ class Bots:
         # Array of bots
         self.arr = []
         for i in range(config['num_bots']):
-            bot = Bot(config['bot_config'])
+            bot = Bot(config['bot_config'], config['streamer_name'])
             chat_window.update_debug(f"{bot.name} has joined the chat!")
             self.arr.append(bot)
 
@@ -22,8 +22,10 @@ class Bots:
         # Determine the number of bots to respond
         if len(self.arr) == 1:
             num_responding_bots = 1
+        elif len(self.arr) < self.config["max_num_of_responding_bots"]:
+            num_responding_bots = random.randrange(1, len(self.arr)//2)
         else:
-            num_responding_bots = random.randrange(1, self.config["max_num_of_responding_bots"]-1)
+            num_responding_bots = random.randrange(1, self.config["max_num_of_responding_bots"])
             
         debug_message.emit(f"Number of bots responding: {num_responding_bots}")
         
@@ -48,7 +50,7 @@ class Bots:
     # Remove a random bot from the array
     def remove_random_bot(self):
         # Remove a random bot
-        index = random.randrange(0, len(self.arr)-1)
+        index = random.randrange(0, len(self.arr))
         bot = self.arr.pop(index)
         msg = f"has left the chat!"
         # print(msg)
@@ -57,7 +59,7 @@ class Bots:
     # Add a random bot to the array
     def add_random_bot(self):
         # Add a random bot
-        bot = Bot(self.config['bot_config'])
+        bot = Bot(self.config['bot_config'], self.config['streamer_name'])
         self.arr.append(bot)
         msg = f"has entered the chat!"
         # print(msg)

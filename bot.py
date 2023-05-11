@@ -47,15 +47,15 @@ usernames = [
 
 class Bot:
 
-    def __init__(self, bot_config):
+    def __init__(self, bot_config, streamer_name):
         # self.name = generate_username(1)[0]
         self.name = random.choice(usernames)
         self.context = f"""
         You are a Twitch.tv chat user, chatting with a livestreamer who is currently {bot_config['streamer_current_action']}. 
-        You are aware that there are other real people watching the streamer. 
+        You are aware that there are other real people watching the streamer, who's name is {streamer_name}. 
         Your tone is {bot_config['tone']}. 
         Your personality type is {random.sample(bot_config['slang_types'], 1)}. 
-        Never ask the streamer to clarify what they said.
+        If you are confused make a joke.
         Less than a sentence. 
         """
         #@DAVINCI@# self.context = f"CONTEXT: You are a Twitch.tv chat user, chatting with a livestreamer who is {bot_config['streamer_current_action']}. Other viewers are also watching the streamer, {bot_config['tone']} is your tone. Resond with less than a sentence, taking max 2 words from this list: {twitch_slang}."
