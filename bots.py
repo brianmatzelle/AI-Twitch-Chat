@@ -23,7 +23,10 @@ class Bots:
         if len(self.arr) == 1:
             num_responding_bots = 1
         elif len(self.arr) < self.config["max_num_of_responding_bots"]:
-            num_responding_bots = random.randrange(1, len(self.arr)//2)
+            if len(self.arr) > 5:
+                num_responding_bots = random.randrange(1, len(self.arr)//2)
+            else:
+                num_responding_bots = random.randrange(1, len(self.arr))
         else:
             num_responding_bots = random.randrange(1, self.config["max_num_of_responding_bots"])
             
@@ -50,7 +53,10 @@ class Bots:
     # Remove a random bot from the array
     def remove_random_bot(self):
         # Remove a random bot
-        index = random.randrange(0, len(self.arr))
+        if len(self.arr) == 1:
+            index = 0
+        else:
+            index = random.randrange(0, len(self.arr))
         bot = self.arr.pop(index)
         msg = f"has left the chat!"
         # print(msg)
