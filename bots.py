@@ -23,7 +23,7 @@ class Bots:
         if len(self.arr) == 1:
             num_responding_bots = 1
         else:
-            num_responding_bots = random.randrange(1, self.config["max_num_of_responding_bots"])
+            num_responding_bots = random.randrange(1, self.config["max_num_of_responding_bots"]-1)
             
         debug_message.emit(f"Number of bots responding: {num_responding_bots}")
         
