@@ -67,6 +67,6 @@ def ClearMemoryButton(parent):
     clear_memory_button = QPushButton('⟳')
     clear_memory_button.clicked.connect(lambda: parent.bots.clear_memory(parent))
     clear_memory_button.clicked.connect(lambda: parent.clear_chat())
-    clear_memory_button.setStyleSheet("QPushButton {font-weight: bold; font-size: 12px; background-color: white; border: none;} QPushButton:hover {background-color: lightgray;}")
+    clear_memory_button.setStyleSheet("QPushButton {font-weight: bold; font-size: 12px; background-color: rgba(255, 255, 255, 0.8); border: none;} QPushButton:hover {background-color: lightgray;}")
     clear_memory_button.setContentsMargins(0, 0, 0, 0)
     return clear_memory_button

@@ -56,7 +56,7 @@ class ChatWindow(QWidget):
         self.debug_window.setHidden(False)
 
         # Add debug toggle button to the header bar
-        self.debug_toggle_button = QPushButton("Toggle Debug", self)
+        self.debug_toggle_button = QPushButton("🐞", self)
         self.debug_toggle_button.setStyleSheet("QPushButton { background-color: rgba(255, 255, 255, 0.8); color: black; border: 1px solid black; border-radius: 5px; } QPushButton:hover { background-color: rgba(255, 255, 255, 0.9); }")
         self.header_bar.left_layout.addWidget(self.debug_toggle_button)
         self.debug_toggle_button.clicked.connect(self.toggle_debug)
@@ -69,7 +69,8 @@ class ChatWindow(QWidget):
         # Add clear memory button
         self.header_bar.left_layout.addWidget(ClearMemoryButton(self), 0, Qt.AlignBottom | Qt.AlignRight)
 
-        self.toggle_background_button = QPushButton("Toggle Background", self)
+        # Taggle Background button
+        self.toggle_background_button = QPushButton("◾️", self)
         self.toggle_background_button.setStyleSheet("QPushButton { background-color: rgba(255, 255, 255, 0.8); color: black; border: 1px solid black; border-radius: 5px; } QPushButton:hover { background-color: rgba(255, 255, 255, 0.9); }")
         self.header_bar.left_layout.addWidget(self.toggle_background_button)
         self.toggle_background_button.clicked.connect(self.toggle_chat_background)

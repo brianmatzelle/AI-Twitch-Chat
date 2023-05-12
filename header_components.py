@@ -1,4 +1,33 @@
-from PyQt5.QtWidgets import QWidget, QLabel, QPushButton, QHBoxLayout
+from PyQt5.QtWidgets import QWidget, QLabel, QPushButton, QHBoxLayout, QApplication
+from PyQt5.QtCore import pyqtProperty, QPropertyAnimation, QRect, Qt
+from PyQt5.QtGui import QPainter
+
+class TickerLabel(QLabel):
+    def __init__(self, parent=None):
+        super(TickerLabel, self).__init__(parent)
+        self._text_x = 0
+
+    @pyqtProperty(int)
+    def text_x(self):
+        return self._text_x
+
+    @text_x.setter
+    def text_x(self, val):
+        self._text_x = val
+        self.update()
+
+    def paintEvent(self, event):
+        painter = QPainter(self)
+        fm = painter.fontMetrics()
+        text_height = fm.height()
+        text_width = fm.width(self.text())
+        y = (self.height() - text_height) // 2  # vertical center
+        painter.drawText(self._text_x, y, text_width, self.height(), Qt.AlignVCenter | Qt.TextSingleLine, self.text())
+
+
+    def reset(self, text):
+        self.setText(text)
+        self._text_x = self.width()
 
 def LogoIcon():
     label = QLabel()
@@ -10,13 +39,21 @@ def LogoIcon():
     return label
 
 def ChatTvLabel(config):
-    label = QLabel()
+    label = TickerLabel()
     label.setOpenExternalLinks(True)
-    label.setText(f"CHAT.TV: {config['streamer_name']}'s chat")
+    label.reset(f"CHAT.TV: {config['streamer_name']}'s chat")
     label.setStyleSheet("background-color: #243049; padding-left: 5px; color: lightgray; font-size: 12px; font-weight: bold; border: none; border-radius: 0px; margin: 0px;")
     label.setContentsMargins(0, 0, 0, 0)
-    return label
 
+    # create animation
+    animation = QPropertyAnimation(label, b'text_x', label)
+    animation.setDuration(10000)  # adjust for speed
+    animation.setStartValue(label.width())
+    animation.setEndValue(-label.fontMetrics().width(label.text()))
+    animation.setLoopCount(-1)  # loop indefinitely
+    animation.start()
+
+    return label
 
 # Buttons call parent.parent because these are in the HeaderBar class, which is in the ChatWindow class
 def MinimizeButton(parent):
