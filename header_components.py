@@ -46,12 +46,14 @@ def ChatTvLabel(config):
     # create animation
     animation = QPropertyAnimation(label, b'text_x', label)
     animation.setDuration(10000)  # adjust for speed
-    animation.setStartValue(label.width())
-    animation.setEndValue(-label.fontMetrics().width(label.text()))
+    animation.setStartValue(label.width())  # Start the animation from the right edge of the label
+    # print(-label.fontMetrics().width(label.text()))
+    animation.setEndValue(-label.fontMetrics().width(label.text())- (label.fontMetrics().width(label.text()) / 4.666))  # Set the end value to move the text out of the label
     animation.setLoopCount(-1)  # loop indefinitely
     animation.start()
 
     return label
+
 
 # Buttons call parent.parent because these are in the HeaderBar class, which is in the ChatWindow class
 def MinimizeButton(parent):

@@ -2,7 +2,11 @@
 import openai
 import random
 from PyQt5.QtWidgets import QMessageBox, QApplication
+import time
 # from random_username.generate import generate_username
+
+MAX_RETRIES = 3
+RETRY_DELAY = 1
 
 #@DAVINCI@# twitch_slang = "GOOD = [W, 5head, gas, Wmans, KEKW, im a munch, pog, uwu, monkaS], BAD = [L, copium, malding, soy, L, inbred, OMEGALUL, wtf, sus, L, smol, munch, smh, F]"
 # # All possible names for bots
@@ -73,29 +77,52 @@ class Bot:
         
     def chatgpt_query(self, input_text, streamer_name, max_tokens=25, temperature=1, top_p=1):
         self.createNewMemory("user", input_text, streamer_name)
-        try:
-            response = openai.ChatCompletion.create(
-                model="gpt-3.5-turbo",
-                # model="gpt-4",
-                messages=self.memory,
-                max_tokens=max_tokens,
-                # temperature=temperature,
-                top_p=top_p,
-            )
-        except openai.error.AuthenticationError as e:
-            error_dialog = QMessageBox()
-            error_dialog.setIcon(QMessageBox.Critical)
-            error_dialog.setWindowTitle("Error")
-            error_dialog.setText("Error: Invalid API Key")
-            error_dialog.setInformativeText("Your API key is incorrect, or you didn't provide one. You can obtain an API key from https://platform.openai.com/account/api-keys.")
-            error_dialog.setStandardButtons(QMessageBox.Ok)
-            error_dialog.exec_()
-            QApplication.instance().quit()
-            return
+        for _ in range(MAX_RETRIES):  # You need to define MAX_RETRIES
+            try:
+                response = openai.ChatCompletion.create(
+                    model="gpt-3.5-turbo",
+                    # model="gpt-4",
+                    messages=self.memory,
+                    max_tokens=max_tokens,
+                    # temperature=temperature,
+                    top_p=top_p,
+                )
+                self.createNewMemory("assistant", response.choices[0].message.content, self.name)
+                generated_text = response.choices[0].message.content
+                return generated_text
 
-        self.createNewMemory("assistant", response.choices[0].message.content, self.name)
-        generated_text = response.choices[0].message.content
-        return generated_text
+            except openai.error.AuthenticationError as e:
+                error_dialog = QMessageBox()
+                error_dialog.setIcon(QMessageBox.Critical)
+                error_dialog.setWindowTitle("Error")
+                error_dialog.setText("Error: Invalid API Key")
+                error_dialog.setInformativeText("Your API key is incorrect, or you didn't provide one. You can obtain an API key from https://platform.openai.com/account/api-keys.")
+                error_dialog.setStandardButtons(QMessageBox.Ok)
+                error_dialog.exec_()
+                QApplication.instance().quit()
+                return
+
+            except openai.error.RateLimitError:
+                error_dialog = QMessageBox()
+                error_dialog.setIcon(QMessageBox.Warning)
+                error_dialog.setWindowTitle("Warning")
+                error_dialog.setText("Warning: Rate Limit Exceeded")
+                error_dialog.setInformativeText("The rate limit for API requests has been exceeded. The program will wait for some time and retry.")
+                error_dialog.setStandardButtons(QMessageBox.Ok)
+                error_dialog.exec_()
+                time.sleep(RETRY_DELAY)  # You need to define RETRY_DELAY
+
+        # If the code reaches this point, it means all retries failed.
+        error_dialog = QMessageBox()
+        error_dialog.setIcon(QMessageBox.Critical)
+        error_dialog.setWindowTitle("Error")
+        error_dialog.setText("Error: All retries failed")
+        error_dialog.setInformativeText("All retries to connect to the OpenAI API failed due to rate limit exceeding. Please try again later.")
+        error_dialog.setStandardButtons(QMessageBox.Ok)
+        error_dialog.exec_()
+        QApplication.instance().quit()
+        return
+
 
     #@DAVINCI@#
     # def chatgpt_query(self, input_text, streamer_name, max_tokens=15, temperature=1, top_p=1):
