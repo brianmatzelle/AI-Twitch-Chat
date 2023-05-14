@@ -18,12 +18,10 @@ class TickerLabel(QLabel):
 
     def paintEvent(self, event):
         painter = QPainter(self)
-        fm = painter.fontMetrics()
-        text_height = fm.height()
-        text_width = fm.width(self.text())
-        y = (self.height() - text_height) // 2  # vertical center
-        painter.drawText(self._text_x, y, text_width, self.height(), Qt.AlignVCenter | Qt.TextSingleLine, self.text())
-
+        font_metrics = painter.fontMetrics()
+        text_height = font_metrics.height()
+        painter.drawText(self._text_x, (self.height() + text_height) // 2, self.text())
+        painter.end()
 
     def reset(self, text):
         self.setText(text)
