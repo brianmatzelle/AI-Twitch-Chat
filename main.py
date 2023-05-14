@@ -21,7 +21,7 @@ config = {
     # Chat window configuration
     'chat_font_size': '16px',
     'chat_text_color': 'white',
-    'chat_border_color': 'gray',
+    'chat_border_color': 'rgba(26, 26, 26, 0.9)',
     'chat_font_weight': '500',
 
     # OpenAI API configuration
