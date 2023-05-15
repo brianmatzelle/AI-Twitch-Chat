@@ -42,14 +42,12 @@ def ChatTvLabel(config):
     label.reset(f"CHAT.TV: {config['streamer_name']}'s chat")
     label.setStyleSheet("background-color: #243049; padding-left: 5px; color: lightgray; font-size: 12px; font-weight: bold; border: none; border-radius: 0px; margin: 0px;")
     label.setContentsMargins(0, 0, 0, 0)
+    label.setMaximumSize(175, 32)  # Adjust the size of the label to fit the text
 
     # create animation
     animation = QPropertyAnimation(label, b'text_x', label)
     animation.setDuration(10000)  # adjust for speed
-    # make the animation start value dynamic, relative to the screen width
-    # animation.setStartValue(label.width())
-    screen_width = QApplication.desktop().screenGeometry().width()
-    animation.setStartValue(label.fontMetrics().width(label.text()) + int(label.fontMetrics().width(label.text()) / 3))  # Start the animation from the right edge of the label
+    animation.setStartValue(label.width())  # Start the animation from the right edge of the label
     animation.setEndValue(-label.fontMetrics().width(label.text()) - int(label.fontMetrics().width(label.text()) / 3))  # Set the end value to move the text out of the label
     animation.setLoopCount(-1)  # loop indefinitely
     animation.start()
