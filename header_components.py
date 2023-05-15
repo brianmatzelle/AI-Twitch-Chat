@@ -49,8 +49,8 @@ def ChatTvLabel(config):
     # make the animation start value dynamic, relative to the screen width
     # animation.setStartValue(label.width())
     screen_width = QApplication.desktop().screenGeometry().width()
-    animation.setStartValue(label.width())  # Start the animation from the right edge of the label
-    animation.setEndValue(-label.fontMetrics().width(label.text()) - 50)  # Set the end value to move the text out of the label
+    animation.setStartValue(label.fontMetrics().width(label.text()) + int(label.fontMetrics().width(label.text()) / 3))  # Start the animation from the right edge of the label
+    animation.setEndValue(-label.fontMetrics().width(label.text()) - int(label.fontMetrics().width(label.text()) / 3))  # Set the end value to move the text out of the label
     animation.setLoopCount(-1)  # loop indefinitely
     animation.start()
 
