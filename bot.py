@@ -6,7 +6,7 @@ import time
 # from random_username.generate import generate_username
 
 MAX_RETRIES = 3
-RETRY_DELAY = 1
+RETRY_DELAY = 2
 
 #@DAVINCI@# twitch_slang = "GOOD = [W, 5head, gas, Wmans, KEKW, im a munch, pog, uwu, monkaS], BAD = [L, copium, malding, soy, L, inbred, OMEGALUL, wtf, sus, L, smol, munch, smh, F]"
 # # All possible names for bots
@@ -44,7 +44,7 @@ usernames = [
     "BeanrBoi3", "LilPeepPhan", "gamerGurl420", "sickoMode23", "savageSzn75", "wtwOnGod",
     "littyLion5", "extraAF69", "memeMachine43", "cheechinator69", "chillChimp64", "sickSnek87"
     "zaddyQuazar", "KweenKaddyKop", "Po-poPapi", "fudgePacker", "daddyDong", "daddyDonger", "daddyDongest",
-    "b1gPapiC", "homeboi_latto", "chulaChinga14", "wackazzShifta", "dull.pnk", "electric",
+    "b1gPapiC", "homeboi_latto", "chulaChinga14", "wackazzShifta", "dull_pnk", "electric",
     "lego_boyf19", "rubenwarrior38", "bnug242", "baseball_1219", "Fluofy", "@drove", "HIV aids",
     "ashleybda", "ZERUSSIANGUY", "whettaM", "swagamuffin", "mercury", "cheeky_nandos20",
 ]
@@ -75,7 +75,7 @@ class Bot:
         self.memory = [{"role": "system", "content": self.context}]
         chat_window.update_debug(f"{self.name}'s memory has been cleared.")
         
-    def chatgpt_query(self, input_text, streamer_name, max_tokens=25, temperature=1, top_p=1):
+    def chatgpt_query(self, input_text, streamer_name, debug_signal, max_tokens=25, temperature=1, top_p=1):
         self.createNewMemory("user", input_text, streamer_name)
         for _ in range(MAX_RETRIES):  # You need to define MAX_RETRIES
             try:
@@ -103,14 +103,26 @@ class Bot:
                 return
 
             except openai.error.RateLimitError:
-                error_dialog = QMessageBox()
-                error_dialog.setIcon(QMessageBox.Warning)
-                error_dialog.setWindowTitle("Warning")
-                error_dialog.setText("Warning: Rate Limit Exceeded")
-                error_dialog.setInformativeText("The rate limit for API requests has been exceeded. The program will wait for some time and retry.")
-                error_dialog.setStandardButtons(QMessageBox.Ok)
-                error_dialog.exec_()
+                # error_dialog = QMessageBox()
+                # error_dialog.setIcon(QMessageBox.Warning)
+                # error_dialog.setWindowTitle("Warning")
+                # error_dialog.setText("Warning: Rate Limit Exceeded")
+                # error_dialog.setInformativeText("The rate limit for API requests has been exceeded. The program will wait for some time and retry.")
+                # error_dialog.setStandardButtons(QMessageBox.Ok)
+                # error_dialog.exec_()
+                debug_signal.emit("The rate limit for API requests has been exceeded. The program will wait for some time and retry.")
                 time.sleep(RETRY_DELAY)  # You need to define RETRY_DELAY
+            
+            except openai.error.APIError:
+                # error_dialog = QMessageBox()
+                # error_dialog.setIcon(QMessageBox.Warning)
+                # error_dialog.setWindowTitle("Warning")
+                # error_dialog.setText("Warning: API Error")
+                # error_dialog.setInformativeText("An error occurred with the OpenAI API. The program will wait for some time and retry.")
+                # error_dialog.setStandardButtons(QMessageBox.Ok)
+                # error_dialog.exec_()
+                debug_signal.emit("The rate limit for API requests has been exceeded. The program will wait for some time and retry.")
+                time.sleep(RETRY_DELAY)
 
         # If the code reaches this point, it means all retries failed.
         error_dialog = QMessageBox()

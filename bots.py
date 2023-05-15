@@ -38,7 +38,7 @@ class Bots:
         responses = []
         for bot in responding_bots:
             prompt = f"{input_text}"
-            response = bot.chatgpt_query(prompt, self.config["streamer_name"].replace(" ", "_"))
+            response = bot.chatgpt_query(prompt, self.config["streamer_name"].replace(" ", "_"), debug_message)
             responses.append((bot, response))
         
         # Add/remove bots randomly
