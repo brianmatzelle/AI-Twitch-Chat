@@ -64,7 +64,7 @@ def user_interface(config, app):
     chat_window.show()
     bots = Bots(config, chat_window)
     chat_window.assign_bots(bots)
-    chat_window.update_debug("\nClick Toggle Debug to close this menu.\n\nChat.tv started. Start talking!")
+    chat_window.update_debug("\nClick 🐞 to close this menu (debug menu).\n\nChat.tv started. Start talking!")
     speech_recognition_thread = SpeechRecognitionThread(bots, config, chat_window)
     speech_recognition_thread.new_response.connect(lambda response: chat_window.update_chat(response[0].name, response[1], response[0].color))
     speech_recognition_thread.debug_message.connect(chat_window.update_debug)
