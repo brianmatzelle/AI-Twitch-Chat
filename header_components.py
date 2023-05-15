@@ -20,7 +20,7 @@ class TickerLabel(QLabel):
         painter = QPainter(self)
         font_metrics = painter.fontMetrics()
         text_height = font_metrics.height()
-        painter.drawText(self._text_x, (self.height() + text_height) // 2, self.text())
+        painter.drawText(self._text_x, ((self.height() + text_height) // 2)-1, self.text())
         painter.end()
 
     def reset(self, text):
@@ -46,9 +46,8 @@ def ChatTvLabel(config):
     # create animation
     animation = QPropertyAnimation(label, b'text_x', label)
     animation.setDuration(10000)  # adjust for speed
-    animation.setStartValue(label.width())  # Start the animation from the right edge of the label
-    # print(-label.fontMetrics().width(label.text()))
-    animation.setEndValue(-label.fontMetrics().width(label.text())- (label.fontMetrics().width(label.text()) / 4.666))  # Set the end value to move the text out of the label
+    animation.setStartValue(120)  # Start the animation from the right edge of the label
+    animation.setEndValue(-label.fontMetrics().width(label.text()))  # Set the end value to move the text out of the label
     animation.setLoopCount(-1)  # loop indefinitely
     animation.start()
 
