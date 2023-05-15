@@ -45,7 +45,7 @@ usernames = [
     "littyLion5", "extraAF69", "memeMachine43", "cheechinator69", "chillChimp64", "sickSnek87"
     "zaddyQuazar", "KweenKaddyKop", "Po-poPapi", "fudgePacker", "daddyDong", "daddyDonger", "daddyDongest",
     "b1gPapiC", "homeboi_latto", "chulaChinga14", "wackazzShifta", "dull_pnk", "electric",
-    "lego_boyf19", "rubenwarrior38", "bnug242", "baseball_1219", "Fluofy", "@drove", "HIV aids",
+    "lego_boyf19", "rubenwarrior38", "bnug242", "baseball_1219", "Fluofy", "@drove", "HIVaids",
     "ashleybda", "ZERUSSIANGUY", "whettaM", "swagamuffin", "mercury", "cheeky_nandos20",
 ]
 

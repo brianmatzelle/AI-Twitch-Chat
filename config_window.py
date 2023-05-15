@@ -202,7 +202,7 @@ class ConfigWindow(QDialog):
             saved_slang_types = settings.value("slang_types", [], type=str)
             saved_slang_types.append(new_slang_type)
             settings.setValue("slang_types", saved_slang_types)
-
+            settings.sync()  # Force an immediate write of changes
 
     def add_custom_tone(self):
         new_tone = self.custom_tone_input.text().strip()
