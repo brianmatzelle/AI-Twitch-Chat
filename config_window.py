@@ -9,7 +9,7 @@ class ConfigWindow(QDialog):
         self.config = config
         self.setWindowTitle("Chat.tv Configuration")
         self.setWindowIcon(QIcon("./assets/blanc.png"))
-        self.resize(500, 700)
+        self.resize(500, 750)
         layout = QVBoxLayout()
 
         # Load saved settings
@@ -23,6 +23,7 @@ class ConfigWindow(QDialog):
         saved_streamer_current_action = settings.value("streamer_current_action", config['bot_config']['streamer_current_action'])
         saved_max_num_of_responding_bots = settings.value("max_num_of_responding_bots", config['max_num_of_responding_bots'], type=int)
         saved_slang_types = settings.value("slang_types", config['bot_config']['slang_types'], type=str)
+        saved_model = settings.value("model", config['bot_config']['model'], type=str)
         
         # OpenAI API Key input
         form_layout = QFormLayout()
@@ -40,6 +41,14 @@ class ConfigWindow(QDialog):
         self.streamer_current_action_input = QLineEdit(config['bot_config']['streamer_current_action'])
         layout.addWidget(QLabel("Streamer's Current Action:"))
         layout.addWidget(self.streamer_current_action_input)
+
+        # Select Model
+        saved_models = settings.value("models", ["text-davinci-002", "gpt-3.5-turbo", "gpt-4"], type=str)
+        self.model_input = QComboBox()
+        self.model_input.addItems(saved_models)
+        self.model_input.setCurrentText(config['bot_config']['model'])
+        layout.addWidget(QLabel("Model:"))
+        layout.addWidget(self.model_input)
 
         # Number of bots input
         self.num_bots_input = QSpinBox()
@@ -141,6 +150,7 @@ class ConfigWindow(QDialog):
         self.tone_input.setCurrentText(saved_tone)
         self.streamer_current_action_input.setText(saved_streamer_current_action)
         self.max_num_of_responding_bots_input.setValue(saved_max_num_of_responding_bots)
+        self.model_input.setCurrentText(saved_model)
 
     def save_and_close(self):
         # Save to QSettings (saves settings to local storage)
@@ -153,6 +163,7 @@ class ConfigWindow(QDialog):
         settings.setValue("slang_types", [checkbox.text() for checkbox in self.slang_type_checkboxes if checkbox.isChecked()])
         settings.setValue("streamer_current_action", self.streamer_current_action_input.text())
         settings.setValue("max_num_of_responding_bots", self.max_num_of_responding_bots_input.value())
+        settings.setValue("model", self.model_input.currentText())
 
         # Save to config (for use in main.py)
         self.config['streamer_name'] = self.streamer_name_input.text()
@@ -162,6 +173,7 @@ class ConfigWindow(QDialog):
         self.config['bot_config']['slang_types'] = [checkbox.text() for checkbox in self.slang_type_checkboxes if checkbox.isChecked()]
         self.config['bot_config']['streamer_current_action'] = self.streamer_current_action_input.text()
         self.config['max_num_of_responding_bots'] = self.max_num_of_responding_bots_input.value()
+        self.config['bot_config']['model'] = self.model_input.currentText()
 
         self.accept()
 

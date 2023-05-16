@@ -38,14 +38,16 @@ config = {
         'slang_types': [
             "zoomer", "boomer", "twitch chat enthusiast",
             "gen-x", "millenial", "over 40 year old Disney mom",
-            "internet", "4chan", "3 year old learning english (uses the wrong words and misspells)",
+            "internet", "4chan", "3 year old learning english (mispells words)",
             "tiktok", "incel", "angry italian american from new jersey",
             "chad", "rocket league", "drunk russian but in broken english",
             "frat", "weeb", "furry that is trying to hide it",
             "gamer", "programmer", "unfortunate Hasan Piker fan",
             "deadbeat dad", "Joe Rogan fanboy", "QAnon victim",
             "New York", "Los Angeles", "Atlanta rapper who never made it big",
-        ]
+        ],
+
+        'model': 'text-davinci-002'
     }
 }
 
