@@ -2,10 +2,9 @@
 
 ### Windows Install:
 
-Stable v0.1.0-alpha:
+Stable v0.1.3-alpha:
 
-* [Download](https://github.com/brianmatzelle/Chat.tv/releases/tag/alpha)
-
+* [Download](https://github.com/brianmatzelle/Chat.tv/releases)
 
 ---
 
