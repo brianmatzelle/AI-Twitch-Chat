@@ -31,18 +31,19 @@ config = {
     'bot_config': {
         # Bot configuration
         'streamer_current_action': '', # What you're currently doing (chatting, playing Rocket League, etc.)
-        "tone": "casual", # The attitude the bots will have (witty, casual, formal)
+        "tone": "nasty", # The attitude the bots will have (witty, casual, etc.)
         "any_other_notes": "", # Any other notes you want to add to the context
         # Each bot will have a random slang type from this list
+        
         'slang_types': [
-            "zoomer", "boomer", "3 year old learning english (uses the wrong words and misspells)",
+            "zoomer", "boomer", "twitch chat enthusiast",
             "gen-x", "millenial", "over 40 year old Disney mom",
-            "internet", "4chan", "twitch chat enthusiast",
+            "internet", "4chan", "3 year old learning english (uses the wrong words and misspells)",
             "tiktok", "incel", "angry italian american from new jersey",
             "chad", "rocket league", "drunk russian but in broken english",
             "frat", "weeb", "furry that is trying to hide it",
-            "gamer", "programmer", "deadbeat dad",
-            "basketball", "football", "girlfriend who wants you to get off the computer",
+            "gamer", "programmer", "unfortunate Hasan Piker fan",
+            "deadbeat dad", "Joe Rogan fanboy", "QAnon victim",
             "New York", "Los Angeles", "Atlanta rapper who never made it big",
         ]
     }
@@ -64,7 +65,7 @@ def user_interface(config, app):
     chat_window.show()
     bots = Bots(config, chat_window)
     chat_window.assign_bots(bots)
-    chat_window.update_debug("\nClick 🐞 to close this menu (debug menu).\n\n")
+    chat_window.update_debug("\nClick 🐞 to close this menu (debug menu).\n")
     chat_window.update_debug("👂🏼 means the program is listening for your voice.")
     chat_window.update_debug("🤔 means the program is understanding your speech.")
     chat_window.update_debug("🤖💭 means the program is generating a response.\n")

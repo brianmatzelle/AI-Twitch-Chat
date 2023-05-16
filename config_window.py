@@ -65,7 +65,7 @@ class ConfigWindow(QDialog):
         layout.addWidget(self.max_num_of_responding_bots_input)
 
         # Select Tone
-        saved_tones = settings.value("tones", ["casual", "witty", "formal", "funny", "stupid", "random"], type=str)
+        saved_tones = settings.value("tones", ["casual", "witty", "nasty", "funny", "random", "Dumb & Dumber levels of stupid"], type=str)
         self.tone_input = QComboBox()
         self.tone_input.addItems(saved_tones)
         self.tone_input.setCurrentText(config['bot_config']['tone'])
@@ -212,6 +212,6 @@ class ConfigWindow(QDialog):
 
             # Save new custom tone immediately to local storage
             settings = QSettings("blanc_savant", "Chat.tv")
-            saved_tones = settings.value("tones", ["casual", "witty", "formal", "funny", "stupid", "random"], type=str)
+            saved_tones = settings.value("tones", ["casual", "witty", "nasty", "funny", "random", "Dumb & Dumber levels of stupid"], type=str)
             saved_tones.append(new_tone)
             settings.setValue("tones", saved_tones)

@@ -8,6 +8,14 @@ import time
 MAX_RETRIES = 3
 RETRY_DELAY = 2
 
+# # Twitch slang
+twitch_slang = [
+    'pog', 'KEKW', 'kappa', 'pogchamp', 'pogU', 'LUL', 'monkaS', 
+    'poggers', 'slatt', 'jebaited', 'F', 'PepeLaugh',
+    'L', 'L', 'L', 'L', 'W', 'W', 'W', 'W', 
+    'gas', 'hype', 'mald', 'FeelsBadMan', 'sadge'
+]
+
 #@DAVINCI@# twitch_slang = "GOOD = [W, 5head, gas, Wmans, KEKW, im a munch, pog, uwu, monkaS], BAD = [L, copium, malding, soy, L, inbred, OMEGALUL, wtf, sus, L, smol, munch, smh, F]"
 # # All possible names for bots
 usernames = [
@@ -55,12 +63,14 @@ class Bot:
         # self.name = generate_username(1)[0]
         self.name = random.choice(usernames)
         self.context = f"""
-        You are a Twitch.tv chat user, chatting with a livestreamer who is currently {bot_config['streamer_current_action']}. 
-        You are aware that there are other real people watching the streamer, who's name is {streamer_name}. 
+        CONTEXT:
+        You're a Twitch.tv chat user, chatting with a streamer who is {bot_config['streamer_current_action']}. 
+        You're aware that there are other real people watching the streamer, whos name is {streamer_name}. 
         Your tone is {bot_config['tone']}. 
         Your personality type is {random.sample(bot_config['slang_types'], 1)}. 
-        If you are confused make a joke.
+        If you're confused say {random.sample(twitch_slang, 1)}.
         Less than a sentence. 
+        END CONTEXT...
         """
         #@DAVINCI@# self.context = f"CONTEXT: You are a Twitch.tv chat user, chatting with a livestreamer who is {bot_config['streamer_current_action']}. Other viewers are also watching the streamer, {bot_config['tone']} is your tone. Resond with less than a sentence, taking max 2 words from this list: {twitch_slang}."
         # Memory does have a limit, but it's very high. If the program bugs after a long time using it, just restart it.
@@ -75,76 +85,63 @@ class Bot:
         self.memory = [{"role": "system", "content": self.context}]
         chat_window.update_debug(f"{self.name}'s memory has been cleared.")
         
-    def chatgpt_query(self, input_text, streamer_name, debug_signal, max_tokens=25, temperature=1, top_p=1):
-        self.createNewMemory("user", input_text, streamer_name)
-        for _ in range(MAX_RETRIES):  # You need to define MAX_RETRIES
-            try:
-                response = openai.ChatCompletion.create(
-                    model="gpt-3.5-turbo",
-                    # model="gpt-4",
-                    messages=self.memory,
-                    max_tokens=max_tokens,
-                    # temperature=temperature,
-                    top_p=top_p,
-                )
-                self.createNewMemory("assistant", response.choices[0].message.content, self.name)
-                generated_text = response.choices[0].message.content
-                return generated_text
+    # def chatgpt_query(self, input_text, streamer_name, debug_signal, max_tokens=25, temperature=1, top_p=1):
+    #     self.createNewMemory("user", input_text, streamer_name)
+    #     for _ in range(MAX_RETRIES):  # You need to define MAX_RETRIES
+    #         try:
+    #             response = openai.ChatCompletion.create(
+    #                 model="gpt-3.5-turbo",
+    #                 # model="gpt-4",
+    #                 messages=self.memory,
+    #                 max_tokens=max_tokens,
+    #                 # temperature=temperature,
+    #                 top_p=top_p,
+    #             )
+    #             self.createNewMemory("assistant", response.choices[0].message.content, self.name)
+    #             generated_text = response.choices[0].message.content
+    #             return generated_text
 
-            except openai.error.AuthenticationError as e:
-                error_dialog = QMessageBox()
-                error_dialog.setIcon(QMessageBox.Critical)
-                error_dialog.setWindowTitle("Error")
-                error_dialog.setText("Error: Invalid API Key")
-                error_dialog.setInformativeText("Your API key is incorrect, or you didn't provide one. You can obtain an API key from https://platform.openai.com/account/api-keys.")
-                error_dialog.setStandardButtons(QMessageBox.Ok)
-                error_dialog.exec_()
-                QApplication.instance().quit()
-                return
+    #         except openai.error.AuthenticationError as e:
+    #             error_dialog = QMessageBox()
+    #             error_dialog.setIcon(QMessageBox.Critical)
+    #             error_dialog.setWindowTitle("Error")
+    #             error_dialog.setText("Error: Invalid API Key")
+    #             error_dialog.setInformativeText("Your API key is incorrect, or you didn't provide one. You can obtain an API key from https://platform.openai.com/account/api-keys.")
+    #             error_dialog.setStandardButtons(QMessageBox.Ok)
+    #             error_dialog.exec_()
+    #             QApplication.instance().quit()
+    #             return
 
-            except openai.error.RateLimitError:
-                # error_dialog = QMessageBox()
-                # error_dialog.setIcon(QMessageBox.Warning)
-                # error_dialog.setWindowTitle("Warning")
-                # error_dialog.setText("Warning: Rate Limit Exceeded")
-                # error_dialog.setInformativeText("The rate limit for API requests has been exceeded. The program will wait for some time and retry.")
-                # error_dialog.setStandardButtons(QMessageBox.Ok)
-                # error_dialog.exec_()
-                debug_signal.emit("The rate limit for API requests has been exceeded. The program will wait for some time and retry.")
-                time.sleep(RETRY_DELAY)  # You need to define RETRY_DELAY
+    #         except openai.error.RateLimitError:
+    #             debug_signal.emit("The rate limit for API requests has been exceeded. The program will wait for some time and retry.")
+    #             time.sleep(RETRY_DELAY)  # You need to define RETRY_DELAY
             
-            except openai.error.APIError:
-                # error_dialog = QMessageBox()
-                # error_dialog.setIcon(QMessageBox.Warning)
-                # error_dialog.setWindowTitle("Warning")
-                # error_dialog.setText("Warning: API Error")
-                # error_dialog.setInformativeText("An error occurred with the OpenAI API. The program will wait for some time and retry.")
-                # error_dialog.setStandardButtons(QMessageBox.Ok)
-                # error_dialog.exec_()
-                debug_signal.emit("The rate limit for API requests has been exceeded. The program will wait for some time and retry.")
-                time.sleep(RETRY_DELAY)
+    #         except openai.error.APIError:
+    #             # error_dialog.exec_()
+    #             debug_signal.emit("The rate limit for API requests has been exceeded. The program will wait for some time and retry.")
+    #             time.sleep(RETRY_DELAY)
 
-        # If the code reaches this point, it means all retries failed.
-        error_dialog = QMessageBox()
-        error_dialog.setIcon(QMessageBox.Critical)
-        error_dialog.setWindowTitle("Error")
-        error_dialog.setText("Error: All retries failed")
-        error_dialog.setInformativeText("All retries to connect to the OpenAI API failed due to rate limit exceeding. Please try again later.")
-        error_dialog.setStandardButtons(QMessageBox.Ok)
-        error_dialog.exec_()
-        QApplication.instance().quit()
-        return
+    #     # If the code reaches this point, it means all retries failed.
+    #     error_dialog = QMessageBox()
+    #     error_dialog.setIcon(QMessageBox.Critical)
+    #     error_dialog.setWindowTitle("Error")
+    #     error_dialog.setText("Error: All retries failed")
+    #     error_dialog.setInformativeText("All retries to connect to the OpenAI API failed due to rate limit exceeding. Please try again later.")
+    #     error_dialog.setStandardButtons(QMessageBox.Ok)
+    #     error_dialog.exec_()
+    #     QApplication.instance().quit()
+    #     return
 
 
     #@DAVINCI@#
-    # def chatgpt_query(self, input_text, streamer_name, max_tokens=15, temperature=1, top_p=1):
-    #     response = openai.Completion.create(
-    #         engine="text-davinci-002",
-    #         prompt=self.context + "\n\Streamer: " + input_text + "\nAssistant:",
-    #         temperature=temperature,
-    #         max_tokens=25,
-    #     )
-    #     return response.choices[0].text
+    def chatgpt_query(self, input_text, streamer_name, max_tokens=15, temperature=1, top_p=1):
+        response = openai.Completion.create(
+            engine="text-davinci-002",
+            prompt=self.context + "\n\Streamer: " + input_text + "\nAssistant:",
+            temperature=temperature,
+            max_tokens=25,
+        )
+        return response.choices[0].text
     #@DAVINCI@#
 
 
