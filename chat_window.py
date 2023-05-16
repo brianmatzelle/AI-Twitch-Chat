@@ -86,6 +86,12 @@ class ChatWindow(QWidget):
         self.recognizing_label.setStyleSheet("color: white; font-size: 16px;")
         self.recognizing_label.setHidden(True)
         layout.addWidget(self.recognizing_label, 0, Qt.AlignBottom | Qt.AlignRight)
+
+        # Responding loading label
+        self.responding_label = QLabel("Responding...", self)
+        self.responding_label.setStyleSheet("color: white; font-size: 16px;")
+        self.responding_label.setHidden(True)
+        layout.addWidget(self.responding_label, 0, Qt.AlignBottom | Qt.AlignRight)
         
     def assign_bots(self, bots):
         self.bots = bots
@@ -176,3 +182,9 @@ class ChatWindow(QWidget):
             self.recognizing_label.setHidden(False)
         else:
             self.recognizing_label.setHidden(True)
+
+    def show_responding(self, isResponding):
+        if isResponding:
+            self.responding_label.setHidden(False)
+        else:
+            self.responding_label.setHidden(True)

@@ -70,6 +70,7 @@ def user_interface(config, app):
     speech_recognition_thread.debug_message.connect(chat_window.update_debug)
     speech_recognition_thread.listening_signal.connect(chat_window.show_listening)
     speech_recognition_thread.recognizing_signal.connect(chat_window.show_recognizing)
+    speech_recognition_thread.responding_signal.connect(chat_window.show_responding)
     speech_recognition_thread.start()
     return app.exec()
 

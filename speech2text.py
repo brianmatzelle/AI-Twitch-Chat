@@ -4,25 +4,29 @@ from time import sleep
 import random
 
 class GenerateResponsesWorker(QRunnable):
-    def __init__(self, bots, input_text, new_response, chat_window, debug_message):
+    def __init__(self, bots, input_text, new_response, chat_window, debug_message, responding_signal):
         super().__init__()
         self.bots = bots
         self.input_text = input_text
         self.new_response = new_response
         self.chat_window = chat_window
         self.debug_message = debug_message
+        self.responding_signal = responding_signal
 
     def run(self):
+        self.responding_signal.emit(True)
         bot_responses = self.bots.generate_bot_responses(self.input_text, self.debug_message)
         for bot, response in bot_responses:
             self.new_response.emit((bot, response))
             sleep(random.uniform(0.25, 3))
+        self.responding_signal.emit(False)
 
 class SpeechRecognitionThread(QThread):
     new_response = pyqtSignal(object)
     debug_message = pyqtSignal(str)
     listening_signal = pyqtSignal(bool)
     recognizing_signal = pyqtSignal(bool)
+    responding_signal = pyqtSignal(bool)
     
     def __init__(self, bots, config, chat_window):
         super().__init__()
@@ -39,7 +43,7 @@ class SpeechRecognitionThread(QThread):
                 break
 
             if input_text.strip():
-                worker = GenerateResponsesWorker(self.bots, input_text, self.new_response, self.chat_window, self.debug_message)
+                worker = GenerateResponsesWorker(self.bots, input_text, self.new_response, self.chat_window, self.debug_message, self.responding_signal)
                 self.thread_pool.start(worker)
 
             sleep(.25)
