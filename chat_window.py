@@ -57,7 +57,7 @@ class ChatWindow(QWidget):
 
         # Add footer bar
         self.footer_bar = FooterBar(self)
-        layout.addWidget(self.footer_bar)
+        layout.addWidget(self.footer_bar) 
 
         ### DEBUG WINDOW ###
         self.debug_window = QTextEdit(self)
@@ -80,40 +80,40 @@ class ChatWindow(QWidget):
     def assign_bots(self, bots):
         self.bots = bots
 
-    def mousePressEvent(self, event):
-        if event.button() == Qt.LeftButton:
-            self.oldPos = event.globalPos()
-            if self.resize_handle.geometry().contains(event.pos()):
-                self.resizingFlag = True
-            if self.remove_border_button.geometry().contains(event.pos()):
-                if self.borderFlag:
-                    self.setStyleSheet("padding: 5px; background-color: transparent; border: none; border-radius: 5px")
-                    self.header_bar.hide()
-                else:
-                    self.setStyleSheet(f"padding: 5px; color: black; border: 3px solid {self.config['chat_border_color']}; border-radius: 5px;")
-                    self.header_bar.show()
-                self.borderFlag = not self.borderFlag
+    # def mousePressEvent(self, event):
+    #     if event.button() == Qt.LeftButton:
+    #         self.oldPos = event.globalPos()
+    #         if self.resize_handle.geometry().contains(event.pos()):
+    #             self.resizingFlag = True
+    #         if self.remove_border_button.geometry().contains(event.pos()):
+    #             if self.borderFlag:
+    #                 self.setStyleSheet("padding: 5px; background-color: transparent; border: none; border-radius: 5px")
+    #                 self.header_bar.hide()
+    #             else:
+    #                 self.setStyleSheet(f"padding: 5px; color: black; border: 3px solid {self.config['chat_border_color']}; border-radius: 5px;")
+    #                 self.header_bar.show()
+    #             self.borderFlag = not self.borderFlag
     
-    def mouseMoveEvent(self, event):
-        if event.buttons() == Qt.LeftButton and self.oldPos:
-            if not self.resizingFlag:
-                delta = event.globalPos() - self.oldPos
-                self.move(self.x() + delta.x(), self.y() + delta.y())
-                self.oldPos = event.globalPos()
-            else:
-                new_size = QSize(event.pos().x(), event.pos().y())
-                self.resize(new_size)
+    # def mouseMoveEvent(self, event):
+    #     if event.buttons() == Qt.LeftButton and self.oldPos:
+    #         if not self.resizingFlag:
+    #             delta = event.globalPos() - self.oldPos
+    #             self.move(self.x() + delta.x(), self.y() + delta.y())
+    #             self.oldPos = event.globalPos()
+    #         else:
+    #             new_size = QSize(event.pos().x(), event.pos().y())
+    #             self.resize(new_size)
 
-    def mouseReleaseEvent(self, event):
-        if event.button() == Qt.LeftButton:
-            self.oldPos = None
-            self.resizingFlag = False
+    # def mouseReleaseEvent(self, event):
+    #     if event.button() == Qt.LeftButton:
+    #         self.oldPos = None
+    #         self.resizingFlag = False
 
-    def toggleMaximized(self):
-        if self.isMaximized():
-            self.showNormal()
-        else:
-            self.showMaximized()
+    # def toggleMaximized(self):
+    #     if self.isMaximized():
+    #         self.showNormal()
+    #     else:
+    #         self.showMaximized()
 
     def update_chat(self, bot_name, bot_message, bot_color):
         if "has left the chat!" in bot_message:
