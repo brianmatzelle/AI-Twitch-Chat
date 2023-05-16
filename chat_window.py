@@ -48,24 +48,6 @@ class ChatWindow(QWidget):
         self.borderFlag = True  # Flag to keep track of whether the border is visible or not
         self.setMinimumSize(300, 500)
 
-        ### DEBUG WINDOW ###
-        self.debug_window = QTextEdit(self)
-        self.debug_window.setReadOnly(True)
-        self.debug_window.setFrameStyle(0)
-        self.debug_window.setStyleSheet("background-color: rgba(255, 255, 255, 0.8); color: black; border: 1px solid black; border-radius: 5px;")
-        self.debug_window.setHidden(False)
-
-        # Add debug toggle button to the header bar
-        self.debug_toggle_button = QPushButton("🐞", self)
-        self.debug_toggle_button.setStyleSheet("QPushButton { background-color: rgba(255, 255, 255, 0.8); color: black; border: 1px solid black; border-radius: 5px; } QPushButton:hover { background-color: rgba(255, 255, 255, 0.9); }")
-        self.header_bar.left_layout.addWidget(self.debug_toggle_button)
-        self.debug_toggle_button.clicked.connect(self.toggle_debug)
-        # Automatically scroll to the bottom of the debug window when new text is added
-        self.debug_window.textChanged.connect(lambda: self.debug_window.verticalScrollBar().setValue(self.debug_window.verticalScrollBar().maximum()))
-
-        # Update main layout
-        layout.addWidget(self.debug_window)
-
         # Add clear memory button
         self.header_bar.left_layout.addWidget(ClearMemoryButton(self), 0, Qt.AlignBottom | Qt.AlignRight)
 
@@ -92,6 +74,24 @@ class ChatWindow(QWidget):
         self.responding_label.setStyleSheet("color: white; font-size: 16px;")
         self.responding_label.setHidden(True)
         layout.addWidget(self.responding_label, 0, Qt.AlignBottom | Qt.AlignRight)
+
+        ### DEBUG WINDOW ###
+        self.debug_window = QTextEdit(self)
+        self.debug_window.setReadOnly(True)
+        self.debug_window.setFrameStyle(0)
+        self.debug_window.setStyleSheet("background-color: rgba(255, 255, 255, 0.8); color: black; border: 1px solid black; border-radius: 5px;")
+        self.debug_window.setHidden(False)
+
+        # Add debug toggle button to the header bar
+        self.debug_toggle_button = QPushButton("🐞", self)
+        self.debug_toggle_button.setStyleSheet("QPushButton { background-color: rgba(255, 255, 255, 0.8); color: black; border: 1px solid black; border-radius: 5px; } QPushButton:hover { background-color: rgba(255, 255, 255, 0.9); }")
+        self.header_bar.left_layout.addWidget(self.debug_toggle_button)
+        self.debug_toggle_button.clicked.connect(self.toggle_debug)
+        # Automatically scroll to the bottom of the debug window when new text is added
+        self.debug_window.textChanged.connect(lambda: self.debug_window.verticalScrollBar().setValue(self.debug_window.verticalScrollBar().maximum()))
+
+        # Update main layout
+        layout.addWidget(self.debug_window)
         
     def assign_bots(self, bots):
         self.bots = bots
