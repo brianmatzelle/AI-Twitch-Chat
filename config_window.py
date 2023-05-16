@@ -43,7 +43,7 @@ class ConfigWindow(QDialog):
         layout.addWidget(self.streamer_current_action_input)
 
         # Select Model
-        saved_models = settings.value("models", ["text-davinci-002", "gpt-3.5-turbo", "gpt-4"], type=str)
+        saved_models = settings.value("models", ["text-davinci-002", "gpt-3.5-turbo","text-davinci-001", "text-davinci-003", "text-curie-001", "text-babbage-001"], type=str)
         self.model_input = QComboBox()
         self.model_input.addItems(saved_models)
         self.model_input.setCurrentText(config['bot_config']['model'])
@@ -187,10 +187,12 @@ class ConfigWindow(QDialog):
     def reset_config_window(self):
         self.api_key_input.clear()
         self.streamer_name_input.setText(self.config['streamer_name'])
+        self.streamer_current_action_input.setText(self.config['bot_config']['streamer_current_action'])
         self.num_bots_input.setValue(self.config['num_bots'])
         self.bot_update_interval_input.setValue(self.config['bot_update_interval'])
         self.tone_input.setCurrentText(self.config['bot_config']['tone'])
         self.max_num_of_responding_bots_input.setValue(self.config['max_num_of_responding_bots'])
+        self.model_input.setCurrentText(self.config['bot_config']['model'])
 
         for checkbox in self.slang_type_checkboxes:
             checkbox.setChecked(False)

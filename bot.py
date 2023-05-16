@@ -87,6 +87,7 @@ class Bot:
         chat_window.update_debug(f"{self.name}'s memory has been cleared.")
         
     def chatgpt_query(self, input_text, streamer_name, debug_signal, max_tokens=25, temperature=1, top_p=1):
+        #@ CHAT GPT @#
         if self.bot_config['model'] == 'gpt-3.5-turbo' or self.bot_config['model'] == 'gpt-4':
             self.createNewMemory("user", input_text, streamer_name)
             for _ in range(MAX_RETRIES):  # You need to define MAX_RETRIES
@@ -132,13 +133,15 @@ class Bot:
             error_dialog.exec_()
             QApplication.instance().quit()
             return
-            
-        elif self.bot_config['model'] == 'text-davinci-002':
+        #@ END CHAT GPT @#
+        
+        #@ DAVINCI @#
+        else:
             for _ in range(MAX_RETRIES):
                 try:
                     response = openai.Completion.create(
-                    engine="text-davinci-002",
-                    prompt=f'{self.context} \n{streamer_name}: {input_text} \nAssistant:',
+                    engine=self.bot_config['model'],
+                    prompt=f'{self.context}\n{streamer_name}: {input_text}\nYou:',
                     temperature=temperature,
                     max_tokens=25,
                     )
@@ -163,19 +166,7 @@ class Bot:
                     # error_dialog.exec_()
                     debug_signal.emit("The rate limit for API requests has been exceeded. The program will wait for some time and retry.")
                     time.sleep(RETRY_DELAY)
-
-
-    #@DAVINCI@#
-    # def chatgpt_query(self, input_text, streamer_name, max_tokens=15, temperature=1, top_p=1):
-    #     response = openai.Completion.create(
-    #         engine="text-davinci-002",
-    #         prompt=self.context + "\n\Streamer: " + input_text + "\nAssistant:",
-    #         temperature=temperature,
-    #         max_tokens=25,
-    #     )
-    #     return response.choices[0].text
-    #@DAVINCI@#
-
+        #@ DAVINCI @#
 
 colors = [
     'red',
