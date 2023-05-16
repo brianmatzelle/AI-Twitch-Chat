@@ -54,7 +54,6 @@ def ChatTvLabel(config):
 
     return label
 
-
 # Buttons call parent.parent because these are in the HeaderBar class, which is in the ChatWindow class
 def MinimizeButton(parent):
     minimize_button = QPushButton("_")

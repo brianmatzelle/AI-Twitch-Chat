@@ -2,6 +2,7 @@ from PyQt5.QtWidgets import QWidget, QSizePolicy, QHBoxLayout, QPushButton, QLab
 from PyQt5.QtCore import QSize, Qt
 from PyQt5.QtGui import QPainter, QIcon
 from header_components import LogoIcon, ChatTvLabel, MinimizeButton, MaximizeButton, ExitButton
+from footer_components import RemoveBorderButton
 
 class HeaderBar(QWidget):
     def __init__(self, parent):
@@ -34,34 +35,6 @@ class HeaderBar(QWidget):
     def mouseReleaseEvent(self, event):
         if event.button() == Qt.LeftButton:
             self.parent.oldPos = None
-
-class ResizeHandle(QWidget):
-    def __init__(self):
-        super().__init__()
-        self.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
-
-    def sizeHint(self):
-        return QSize(12, 12)
-
-    def paintEvent(self, event):
-        painter = QPainter(self)
-        painter.setRenderHint(QPainter.Antialiasing)
-        painter.setBrush(Qt.white)
-        painter.drawRect(0, 0, self.width(), self.height())
-
-class RemoveBorderButton(QWidget):
-    def __init__(self):
-        super().__init__()
-        self.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
-    
-    def sizeHint(self):
-        return QSize(12, 12)
-
-    def paintEvent(self, event):
-        painter = QPainter(self)
-        painter.setRenderHint(QPainter.Antialiasing)
-        painter.setBrush(Qt.gray)
-        painter.drawRect(0, 0, self.width(), self.height())
 
 def ClearMemoryButton(parent):
     clear_memory_button = QPushButton('⟳')
@@ -97,11 +70,15 @@ class FooterBar(QWidget):
         self.responding_label.setStyleSheet("color: white; font-size: 16px; background-color: transparent; border: none;")
         self.responding_label.setHidden(True)
         self.left_layout.addWidget(self.responding_label)
-        
+
+        # set left layout
         self.layout.addLayout(self.left_layout)
         self.layout.addStretch(1)
-        # self.layout.addWidget(self.parent.resize_handle)
-        # self.layout.addWidget(self.parent.remove_border_button)
+
+        # Remove Border Button
+        self.remove_border_button = RemoveBorderButton(parent)
+        self.layout.addWidget(self.remove_border_button)
+
         self.layout.setContentsMargins(0, 0, 0, 0)
         self.setLayout(self.layout)
 
@@ -123,3 +100,6 @@ class FooterBar(QWidget):
             self.responding_label.setHidden(False)
         else:
             self.responding_label.setHidden(True)
+
+    def toggleBorderText(self):
+        self.remove_border_button.setText('show' if self.parent.borderFlag else 'hide')

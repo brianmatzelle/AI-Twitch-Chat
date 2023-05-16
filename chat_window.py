@@ -1,7 +1,7 @@
-# will be for the chat window
 from PyQt5.QtWidgets import QTextEdit, QVBoxLayout, QWidget, QHBoxLayout, QPushButton, QLabel
 from PyQt5.QtCore import Qt, QSize
-from chat_components import ResizeHandle, RemoveBorderButton, HeaderBar, ClearMemoryButton, FooterBar
+from chat_components import  HeaderBar, ClearMemoryButton, FooterBar
+from PyQt5.QtGui import QCursor
 
 class ChatWindow(QWidget):
     def __init__(self, config):
@@ -25,7 +25,7 @@ class ChatWindow(QWidget):
 
         self.setAttribute(Qt.WA_TranslucentBackground, True)
         self.setWindowFlags(Qt.FramelessWindowHint | Qt.WindowStaysOnTopHint)
-        self.setStyleSheet(f"padding: 5px; color: black; border: 3px solid {self.config['chat_border_color']}; border-radius: 5px;")
+        self.setStyleSheet(f"padding: 5px; color: black; border: 4px solid {self.config['chat_border_color']}; border-radius: 5px;")
         self.setWindowTitle(self.config['streamer_name'] + "'s Chat")
         self.setGeometry(100, 100, 400, 600)
 
@@ -33,15 +33,8 @@ class ChatWindow(QWidget):
 
         self.setMouseTracking(True)
         self.resizingFlag = False
-        self.resize_border_size = 40  # Increase this value to make the border larger
-
-        # # Add resize handle
-        self.resize_handle = ResizeHandle()
-        layout.addWidget(self.resize_handle, 0, Qt.AlignBottom | Qt.AlignRight)
-
-        # # Add remove border button
-        self.remove_border_button = RemoveBorderButton()
-        layout.addWidget(self.remove_border_button, 0, Qt.AlignBottom | Qt.AlignRight)
+        self.resize_border_size = 1000  # Pixels of border that trigger resizing
+        self.setCursor(Qt.ArrowCursor)
 
         self.borderFlag = True  # Flag to keep track of whether the border is visible or not
         self.setMinimumSize(300, 500)
@@ -49,7 +42,7 @@ class ChatWindow(QWidget):
         # Add clear memory button
         self.header_bar.left_layout.addWidget(ClearMemoryButton(self))
 
-        # Taggle Background button
+        # Toggle Background button
         self.toggle_background_button = QPushButton("◾️", self)
         self.toggle_background_button.setStyleSheet("QPushButton { background-color: rgba(255, 255, 255, 0.8); color: black; border: 1px solid black; border-radius: 5px; } QPushButton:hover { background-color: rgba(255, 255, 255, 0.9); }")
         self.header_bar.left_layout.addWidget(self.toggle_background_button)
@@ -80,40 +73,80 @@ class ChatWindow(QWidget):
     def assign_bots(self, bots):
         self.bots = bots
 
-    # def mousePressEvent(self, event):
-    #     if event.button() == Qt.LeftButton:
-    #         self.oldPos = event.globalPos()
-    #         if self.resize_handle.geometry().contains(event.pos()):
-    #             self.resizingFlag = True
-    #         if self.remove_border_button.geometry().contains(event.pos()):
-    #             if self.borderFlag:
-    #                 self.setStyleSheet("padding: 5px; background-color: transparent; border: none; border-radius: 5px")
-    #                 self.header_bar.hide()
-    #             else:
-    #                 self.setStyleSheet(f"padding: 5px; color: black; border: 3px solid {self.config['chat_border_color']}; border-radius: 5px;")
-    #                 self.header_bar.show()
-    #             self.borderFlag = not self.borderFlag
-    
-    # def mouseMoveEvent(self, event):
-    #     if event.buttons() == Qt.LeftButton and self.oldPos:
-    #         if not self.resizingFlag:
-    #             delta = event.globalPos() - self.oldPos
-    #             self.move(self.x() + delta.x(), self.y() + delta.y())
-    #             self.oldPos = event.globalPos()
-    #         else:
-    #             new_size = QSize(event.pos().x(), event.pos().y())
-    #             self.resize(new_size)
+    def mousePressEvent(self, event):
+        if event.button() == Qt.LeftButton:
+            self.oldPos = event.globalPos()
+            # Check if mouse is near the border
+            if (
+                abs(event.y() - self.geometry().y()) <= self.resize_border_size or
+                abs(event.y() - (self.geometry().y() + self.geometry().height())) <= self.resize_border_size or
+                abs(event.x() - self.geometry().x()) <= self.resize_border_size or
+                abs(event.x() - (self.geometry().x() + self.geometry().width())) <= self.resize_border_size
+            ):
+                self.resizingFlag = True
 
-    # def mouseReleaseEvent(self, event):
-    #     if event.button() == Qt.LeftButton:
-    #         self.oldPos = None
-    #         self.resizingFlag = False
+    def mouseMoveEvent(self, event):
+        if event.buttons() == Qt.LeftButton and self.oldPos:
+            if not self.resizingFlag:
+                delta = event.globalPos() - self.oldPos
+                self.move(self.x() + delta.x(), self.y() + delta.y())
+                self.oldPos = event.globalPos()
+            else:
+                diff = event.globalPos() - self.oldPos
+                new_width = self.width() + diff.x()
+                new_height = self.height() + diff.y()
+                self.resize(QSize(new_width, new_height))
+                self.oldPos = event.globalPos()
+            
+            # Check if the mouse is near the border and set the cursor accordingly
+            if (
+                abs(event.y() - self.geometry().y()) <= self.resize_border_size or
+                abs(event.y() - (self.geometry().y() + self.geometry().height())) <= self.resize_border_size
+            ):
+                self.setCursor(Qt.SizeVerCursor)  # Vertical resize cursor
+            elif (
+                abs(event.x() - self.geometry().x()) <= self.resize_border_size or
+                abs(event.x() - (self.geometry().x() + self.geometry().width())) <= self.resize_border_size
+            ):
+                self.setCursor(Qt.SizeHorCursor)  # Horizontal resize cursor
+        else:
+            # Check if the mouse is near the border and set the cursor accordingly
+            if (
+                abs(event.y() - self.geometry().y()) <= self.resize_border_size or
+                abs(event.y() - (self.geometry().y() + self.geometry().height())) <= self.resize_border_size
+            ):
+                self.setCursor(Qt.SizeVerCursor)  # Vertical resize cursor
+            elif (
+                abs(event.x() - self.geometry().x()) <= self.resize_border_size or
+                abs(event.x() - (self.geometry().x() + self.geometry().width())) <= self.resize_border_size
+            ):
+                self.setCursor(Qt.SizeHorCursor)  # Horizontal resize cursor
+            else:
+                self.setCursor(Qt.ArrowCursor)  # Default cursor
 
-    # def toggleMaximized(self):
-    #     if self.isMaximized():
-    #         self.showNormal()
-    #     else:
-    #         self.showMaximized()
+    def leaveEvent(self, event):
+        self.setCursor(Qt.ArrowCursor)  # Default cursor when the mouse leaves the widget
+
+    def mouseReleaseEvent(self, event):
+        if event.button() == Qt.LeftButton:
+            self.oldPos = None
+            self.resizingFlag = False
+
+    def toggleBorder(self):
+        self.footer_bar.toggleBorderText()
+        if self.borderFlag:
+            self.setStyleSheet("padding: 5px; background-color: transparent; border: none; border-radius: 5px")
+            self.header_bar.hide()
+        else:
+            self.setStyleSheet(f"padding: 5px; color: black; border: 3px solid {self.config['chat_border_color']}; border-radius: 5px;")
+            self.header_bar.show()
+        self.borderFlag = not self.borderFlag
+
+    def toggleMaximized(self):
+        if self.isMaximized():
+            self.showNormal()
+        else:
+            self.showMaximized()
 
     def update_chat(self, bot_name, bot_message, bot_color):
         if "has left the chat!" in bot_message:
