@@ -81,23 +81,23 @@ class FooterBar(QWidget):
         self.left_layout = QHBoxLayout()
 
         # listening label
-        self.listening_label = QLabel("Listening...", self)
-        self.listening_label.setStyleSheet("color: white; font-size: 16px;")
+        self.listening_label = QLabel("👂🏼", self)
+        self.listening_label.setStyleSheet("color: white; font-size: 16px; background-color: transparent; border: none;")
         self.listening_label.setHidden(True)
         self.left_layout.addWidget(self.listening_label)
 
         # recognizing label
-        self.recognizing_label = QLabel("Recognizing...", self)
-        self.recognizing_label.setStyleSheet("color: white; font-size: 16px;")
+        self.recognizing_label = QLabel("🤔", self)
+        self.recognizing_label.setStyleSheet("color: white; font-size: 16px; background-color: transparent; border: none;")
         self.recognizing_label.setHidden(True)
         self.left_layout.addWidget(self.recognizing_label)
 
         # Responding loading label
-        self.responding_label = QLabel("Responding...", self)
-        self.responding_label.setStyleSheet("color: white; font-size: 16px;")
+        self.responding_label = QLabel("🤖💭", self)
+        self.responding_label.setStyleSheet("color: white; font-size: 16px; background-color: transparent; border: none;")
         self.responding_label.setHidden(True)
         self.left_layout.addWidget(self.responding_label)
-
+        
         self.layout.addLayout(self.left_layout)
         self.layout.addStretch(1)
         # self.layout.addWidget(self.parent.resize_handle)
