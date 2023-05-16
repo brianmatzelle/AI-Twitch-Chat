@@ -68,9 +68,9 @@ def user_interface(config, app):
     speech_recognition_thread = SpeechRecognitionThread(bots, config, chat_window)
     speech_recognition_thread.new_response.connect(lambda response: chat_window.update_chat(response[0].name, response[1], response[0].color))
     speech_recognition_thread.debug_message.connect(chat_window.update_debug)
-    speech_recognition_thread.listening_signal.connect(chat_window.show_listening)
-    speech_recognition_thread.recognizing_signal.connect(chat_window.show_recognizing)
-    speech_recognition_thread.responding_signal.connect(chat_window.show_responding)
+    speech_recognition_thread.listening_signal.connect(chat_window.footer_bar.show_listening)
+    speech_recognition_thread.recognizing_signal.connect(chat_window.footer_bar.show_recognizing)
+    speech_recognition_thread.responding_signal.connect(chat_window.footer_bar.show_responding)
     speech_recognition_thread.start()
     return app.exec()
 

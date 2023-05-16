@@ -1,7 +1,7 @@
 # will be for the chat window
 from PyQt5.QtWidgets import QTextEdit, QVBoxLayout, QWidget, QHBoxLayout, QPushButton, QLabel
 from PyQt5.QtCore import Qt, QSize
-from chat_components import ResizeHandle, RemoveBorderButton, HeaderBar, ClearMemoryButton
+from chat_components import ResizeHandle, RemoveBorderButton, HeaderBar, ClearMemoryButton, FooterBar
 
 class ChatWindow(QWidget):
     def __init__(self, config):
@@ -35,13 +35,11 @@ class ChatWindow(QWidget):
         self.resizingFlag = False
         self.resize_border_size = 40  # Increase this value to make the border larger
 
-
-
-        # Add resize handle
+        # # Add resize handle
         self.resize_handle = ResizeHandle()
         layout.addWidget(self.resize_handle, 0, Qt.AlignBottom | Qt.AlignRight)
 
-        # Add remove border button
+        # # Add remove border button
         self.remove_border_button = RemoveBorderButton()
         layout.addWidget(self.remove_border_button, 0, Qt.AlignBottom | Qt.AlignRight)
 
@@ -49,7 +47,7 @@ class ChatWindow(QWidget):
         self.setMinimumSize(300, 500)
 
         # Add clear memory button
-        self.header_bar.left_layout.addWidget(ClearMemoryButton(self), 0, Qt.AlignBottom | Qt.AlignRight)
+        self.header_bar.left_layout.addWidget(ClearMemoryButton(self))
 
         # Taggle Background button
         self.toggle_background_button = QPushButton("◾️", self)
@@ -57,23 +55,9 @@ class ChatWindow(QWidget):
         self.header_bar.left_layout.addWidget(self.toggle_background_button)
         self.toggle_background_button.clicked.connect(self.toggle_chat_background)
 
-        # Listening label
-        self.listening_label = QLabel("Listening...", self)
-        self.listening_label.setStyleSheet("color: white; font-size: 16px;")
-        self.listening_label.setHidden(True)
-        layout.addWidget(self.listening_label, 0, Qt.AlignBottom | Qt.AlignRight)
-
-        # Recognizing label
-        self.recognizing_label = QLabel("Recognizing...", self)
-        self.recognizing_label.setStyleSheet("color: white; font-size: 16px;")
-        self.recognizing_label.setHidden(True)
-        layout.addWidget(self.recognizing_label, 0, Qt.AlignBottom | Qt.AlignRight)
-
-        # Responding loading label
-        self.responding_label = QLabel("Responding...", self)
-        self.responding_label.setStyleSheet("color: white; font-size: 16px;")
-        self.responding_label.setHidden(True)
-        layout.addWidget(self.responding_label, 0, Qt.AlignBottom | Qt.AlignRight)
+        # Add footer bar
+        self.footer_bar = FooterBar(self)
+        layout.addWidget(self.footer_bar)
 
         ### DEBUG WINDOW ###
         self.debug_window = QTextEdit(self)
@@ -171,20 +155,4 @@ class ChatWindow(QWidget):
         else:
             self.chat_label.setStyleSheet(f"background-color: transparent; font-weight: {self.config['chat_font_weight']}; color: {self.config['chat_text_color']}; font-size: {self.config['chat_font_size']};")
 
-    def show_listening(self, isListening):
-        if isListening:
-            self.listening_label.setHidden(False)
-        else:
-            self.listening_label.setHidden(True)
-
-    def show_recognizing(self, isRecognizing):
-        if isRecognizing:
-            self.recognizing_label.setHidden(False)
-        else:
-            self.recognizing_label.setHidden(True)
-
-    def show_responding(self, isResponding):
-        if isResponding:
-            self.responding_label.setHidden(False)
-        else:
-            self.responding_label.setHidden(True)
+    
