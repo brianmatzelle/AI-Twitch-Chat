@@ -21,6 +21,8 @@ class GenerateResponsesWorker(QRunnable):
 class SpeechRecognitionThread(QThread):
     new_response = pyqtSignal(object)
     debug_message = pyqtSignal(str)
+    listening_signal = pyqtSignal(bool)
+    recognizing_signal = pyqtSignal(bool)
     
     def __init__(self, bots, config, chat_window):
         super().__init__()
@@ -46,7 +48,10 @@ class SpeechRecognitionThread(QThread):
     def speech_to_text(self):
         recognizer = sr.Recognizer()
         with sr.Microphone() as source:
+            # recognizer.adjust_for_ambient_noise(source)
+            self.recognizing_signal.emit(False)
             self.debug_message.emit("Listening...")
+            self.listening_signal.emit(True)
             try:
                 audio = recognizer.listen(source, timeout=self.config["bot_update_interval"], phrase_time_limit=self.config["bot_update_interval"])
             except sr.WaitTimeoutError:
@@ -54,7 +59,9 @@ class SpeechRecognitionThread(QThread):
                 return ""
 
         try:
+            self.listening_signal.emit(False)
             self.debug_message.emit("Recognizing...")
+            self.recognizing_signal.emit(True)
             text = recognizer.recognize_google(audio)
             self.debug_message.emit(f"You said: {text}")
             # self.count = 0
@@ -69,5 +76,7 @@ class SpeechRecognitionThread(QThread):
             if self.count >= 5:
                 if (random.randint(0, 10) < 5) and (len(self.bots.arr) > 1):
                     self.bots.remove_random_bot()
-            self.debug_message.emit(f"Error recognizing speech, {e}")
+            self.recognizing_signal.emit(False)
+            self.debug_message.emit(f"Error recognizing speech {e}")
+            self.listening_signal.emit(True)
             return ""

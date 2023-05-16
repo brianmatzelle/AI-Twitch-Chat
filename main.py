@@ -53,7 +53,7 @@ openai.api_key = config['openai_api_key'].strip()
 
 def user_interface(config, app):
     # Set the application icon
-    app_icon = QIcon("./assets/blanc.png")
+    app_icon = QIcon("./blanc.png")
     app.setWindowIcon(app_icon)
 
     # Add an internet slang type if there isn't one
@@ -68,6 +68,8 @@ def user_interface(config, app):
     speech_recognition_thread = SpeechRecognitionThread(bots, config, chat_window)
     speech_recognition_thread.new_response.connect(lambda response: chat_window.update_chat(response[0].name, response[1], response[0].color))
     speech_recognition_thread.debug_message.connect(chat_window.update_debug)
+    speech_recognition_thread.listening_signal.connect(chat_window.show_listening)
+    speech_recognition_thread.recognizing_signal.connect(chat_window.show_recognizing)
     speech_recognition_thread.start()
     return app.exec()
 
@@ -79,6 +81,7 @@ def main():
     app = QApplication([])
 
     config_window = ConfigWindow(config)
+    config_window.setWindowIcon(QIcon("./blanc.png"))
     if config_window.exec() == QDialog.Accepted:
         settings = QSettings("blanc_savant", "Chat.tv")
         openai.api_key = settings.value("openai_api_key", "")

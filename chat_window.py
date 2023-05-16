@@ -74,6 +74,18 @@ class ChatWindow(QWidget):
         self.toggle_background_button.setStyleSheet("QPushButton { background-color: rgba(255, 255, 255, 0.8); color: black; border: 1px solid black; border-radius: 5px; } QPushButton:hover { background-color: rgba(255, 255, 255, 0.9); }")
         self.header_bar.left_layout.addWidget(self.toggle_background_button)
         self.toggle_background_button.clicked.connect(self.toggle_chat_background)
+
+        # Listening label
+        self.listening_label = QLabel("Listening...", self)
+        self.listening_label.setStyleSheet("color: white; font-size: 16px;")
+        self.listening_label.setHidden(True)
+        layout.addWidget(self.listening_label, 0, Qt.AlignBottom | Qt.AlignRight)
+
+        # Recognizing label
+        self.recognizing_label = QLabel("Recognizing...", self)
+        self.recognizing_label.setStyleSheet("color: white; font-size: 16px;")
+        self.recognizing_label.setHidden(True)
+        layout.addWidget(self.recognizing_label, 0, Qt.AlignBottom | Qt.AlignRight)
         
     def assign_bots(self, bots):
         self.bots = bots
@@ -152,3 +164,15 @@ class ChatWindow(QWidget):
             self.chat_label.setStyleSheet(f"background-color: rgba(26, 26, 26, 0.9); font-weight: {self.config['chat_font_weight']}; color: {self.config['chat_text_color']}; font-size: {self.config['chat_font_size']};")
         else:
             self.chat_label.setStyleSheet(f"background-color: transparent; font-weight: {self.config['chat_font_weight']}; color: {self.config['chat_text_color']}; font-size: {self.config['chat_font_size']};")
+
+    def show_listening(self, isListening):
+        if isListening:
+            self.listening_label.setHidden(False)
+        else:
+            self.listening_label.setHidden(True)
+
+    def show_recognizing(self, isRecognizing):
+        if isRecognizing:
+            self.recognizing_label.setHidden(False)
+        else:
+            self.recognizing_label.setHidden(True)
