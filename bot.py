@@ -141,7 +141,7 @@ class Bot:
                 try:
                     response = openai.Completion.create(
                     engine=self.bot_config['model'],
-                    prompt=f'{self.context}\n{streamer_name}: {input_text}\nYou:',
+                    prompt=f'{self.context}\n{streamer_name}: {input_text}\n{self.name}:',
                     temperature=temperature,
                     max_tokens=25,
                     )
