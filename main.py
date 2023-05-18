@@ -37,7 +37,7 @@ config = {
         
         'slang_types': [
             "zoomer", "boomer", "twitch chat enthusiast",
-            "gen-x", "millenial", "passive aggressive",
+            "gen-x", "millenial", "iPad baby",
             "internet", "4chan", "3 year old learning english (mispells words)",
             "tiktok", "incel", "angry italian american from new jersey",
             "chad", "rocket league", "drunk russian but in broken english",
