@@ -12,7 +12,7 @@ class ChatWindow(QWidget):
         self.chat_label = QTextEdit(self)
         self.chat_label.setReadOnly(True)
         self.chat_label.setFrameStyle(0)
-        self.chat_label.setStyleSheet(f"background-color: transparent; font-weight: {self.config['chat_font_weight']}; color: {self.config['chat_text_color']}; font-size: {self.config['chat_font_size']};")
+        self.chat_label.setStyleSheet(f"background-color: rgba(26, 26, 26, 0.9); font-weight: {self.config['chat_font_weight']}; color: {self.config['chat_text_color']}; font-size: {self.config['chat_font_size']};")
         
         # Create header bar
         self.header_bar = HeaderBar(self)
