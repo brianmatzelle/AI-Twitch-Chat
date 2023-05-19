@@ -72,6 +72,7 @@ class ChatWindow(QWidget):
         
     def assign_bots(self, bots):
         self.bots = bots
+        self.footer_bar.updateBotCount()
 
     def mousePressEvent(self, event):
         if event.button() == Qt.LeftButton:
@@ -150,11 +151,13 @@ class ChatWindow(QWidget):
 
     def update_chat(self, bot_name, bot_message, bot_color):
         if "has left the chat!" in bot_message:
+            self.footer_bar.updateBotCount()
             colored_message = f'<span style="color: {bot_color};">{bot_name} {bot_message}</span><br>'
             self.chat_label.insertHtml(colored_message)
             self.chat_label.ensureCursorVisible()
             return
         elif 'has entered the chat!' in bot_message:
+            self.footer_bar.updateBotCount()
             colored_message = f'<span style="color: {bot_color};">{bot_name} {bot_message}</span><br>'
             self.chat_label.insertHtml(colored_message)
             self.chat_label.ensureCursorVisible()

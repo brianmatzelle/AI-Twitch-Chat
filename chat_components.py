@@ -2,7 +2,7 @@ from PyQt5.QtWidgets import QWidget, QSizePolicy, QHBoxLayout, QPushButton, QLab
 from PyQt5.QtCore import QSize, Qt
 from PyQt5.QtGui import QPainter, QIcon
 from header_components import LogoIcon, ChatTvLabel, MinimizeButton, MaximizeButton, ExitButton
-from footer_components import RemoveBorderButton
+from footer_components import RemoveBorderButton, BotCountWidget
 
 class HeaderBar(QWidget):
     def __init__(self, parent):
@@ -52,6 +52,10 @@ class FooterBar(QWidget):
 
         self.layout = QHBoxLayout()
         self.left_layout = QHBoxLayout()
+
+        # bot count label
+        self.bot_count_label = BotCountWidget(0)
+        self.left_layout.addWidget(self.bot_count_label)
 
         # listening label
         self.listening_label = QLabel("👂🏼", self)
@@ -103,3 +107,7 @@ class FooterBar(QWidget):
 
     def toggleBorderText(self):
         self.remove_border_button.setText('show' if self.parent.borderFlag else 'hide')
+
+    def updateBotCount(self):
+        botsCount = len(self.parent.bots.arr)
+        self.bot_count_label.setText(f"🧍🏼 {botsCount}")

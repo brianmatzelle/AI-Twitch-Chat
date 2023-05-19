@@ -1,4 +1,4 @@
-from PyQt5.QtWidgets import QWidget, QSizePolicy, QPushButton
+from PyQt5.QtWidgets import QWidget, QSizePolicy, QPushButton, QLabel
 from PyQt5.QtGui import QPainter
 from PyQt5.QtCore import QSize, Qt
 
@@ -12,12 +12,9 @@ class RemoveBorderButton(QPushButton):
         self.setContentsMargins(0, 0, 0, 0)
         self.clicked.connect(self.parent.toggleBorder)
 
-class ClearMemoryButton(QPushButton):
-    def __init__(self, bots):
+class BotCountWidget(QLabel):
+    def __init__(self, botsCount):
         super().__init__()
-        self.bots = bots
-        self.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
-        self.setText('⟳')
-        self.setStyleSheet("QPushButton {font-weight: bold; font-size: 18px; background-color: white; border: none;} QPushButton:hover {background-color: lightgray;}")
+        self.setText(f"🧍🏼 {botsCount}")
+        self.setStyleSheet("color: rgb(54, 69, 79); font-weight: bold; font-size: 12px; background-color: rgba(26, 26, 26, 0.4); border: none;")
         self.setContentsMargins(0, 0, 0, 0)
-        self.clicked.connect(self.bots.clear_memory)
