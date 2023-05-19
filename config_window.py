@@ -223,6 +223,7 @@ class ConfigWindow(QDialog):
         if new_tone and new_tone not in [self.tone_input.itemText(i) for i in range(self.tone_input.count())]:
             self.tone_input.addItem(new_tone)
             self.custom_tone_input.clear()
+            self.tone_input.setCurrentText(new_tone) # Set the new tone as the current tone
 
             # Save new custom tone immediately to local storage
             settings = QSettings("blanc_savant", "Chat.tv")
