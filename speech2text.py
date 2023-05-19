@@ -69,8 +69,7 @@ class SpeechRecognitionThread(QThread):
             text = recognizer.recognize_google(audio)
             self.debug_message.emit(f"You said: {text}")
             # self.count = 0
-            if self.count > 0:
-                self.count -= 1
+            for _ in range(3):
                 if self.count > 0:
                     self.count -= 1
             
