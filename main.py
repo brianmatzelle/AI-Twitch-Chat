@@ -42,7 +42,7 @@ config = {
             "tiktok", "incel", "angry italian american from new jersey",
             "chad", "rocket league", "drunk russian but in broken english",
             "frat", "weeb", "furry that is trying to hide it",
-            "Borat", "programmer", "unfortunate Hasan Piker fan",
+            "Borat", "programmer", "mormon",
             "deadbeat dad", "Joe Rogan fanboy", "QAnon victim",
             "New York", "Los Angeles", "Atlanta rapper who never made it big",
         ],
