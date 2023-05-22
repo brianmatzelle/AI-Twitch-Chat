@@ -6,9 +6,9 @@ from PyQt5.QtCore import QSettings
 from speech2text import SpeechRecognitionThread
 from bots import Bots
 from config_window import ConfigWindow
-import sys
-if getattr(sys, 'frozen', False):
-    import pyi_splash
+# import sys
+# if getattr(sys, 'frozen', False):
+#     import pyi_splash
 
 # Default configuration
 config = {
@@ -38,7 +38,7 @@ config = {
         'slang_types': [
             "zoomer", "boomer", "twitch chat enthusiast",
             "gen-x", "millenial", "iPad baby",
-            "internet", "4chan", "3 year old learning english (mispells words)",
+            "internet", "4chan", "vape fiend",
             "tiktok", "incel", "angry italian american from new jersey",
             "chad", "rocket league", "drunk russian but in broken english",
             "frat", "weeb", "furry that is trying to hide it",
@@ -82,9 +82,9 @@ def user_interface(config, app):
     return app.exec()
 
 def main():
-    # Close the splash screen if this is executed as a frozen app (e.g. pyinstaller)
-    if getattr(sys, 'frozen', False):
-        pyi_splash.close()  
+    # # Close the splash screen if this is executed as a frozen app (e.g. pyinstaller)
+    # if getattr(sys, 'frozen', False):
+    #     pyi_splash.close()  
     # Create the application
     app = QApplication([])
 

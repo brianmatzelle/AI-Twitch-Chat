@@ -10,23 +10,18 @@ executables = [Executable(r"S:\Code May 2023\Chat.tv\main.py",
 options = {
     "build_exe": {
         "include_files": [
+            # any additional files, like images, databases, etc.
             r"S:\Code May 2023\Chat.tv\blanc32x32.png",
-        ],  # Add any additional files, like images, databases, etc.
-        "packages": [
-            "speech_recognition",
-            "PyQt5",
-            "six",
-            "websocket",
-            "websocket_client",
-            "pyaudio",
-            "openai",
-        ],       # Add any additional Python packages needed
+            r"S:\Code May 2023\Chat.tv\blanc.png",
+            r"S:\Code May 2023\Chat.tv\blanc.ico",
+        ], 
+        "packages": ["os"], "excludes": ["tkinter"]
     }
 }
 
 setup(
     name="Chat.tv",
-    version="1.0",
+    version="0.1.4",
     description="Chat.tv, a fake Live Chat for Twitch.tv streamers",
     options=options,
     executables=executables,
