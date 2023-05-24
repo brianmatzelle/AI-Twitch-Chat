@@ -53,6 +53,6 @@ docs/_build/
 venv/
 .env
 .DS_Store
-main.spec
-
+Chat.tv.spec
 Output/
+.idea/
