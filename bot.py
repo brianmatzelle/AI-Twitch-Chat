@@ -16,7 +16,6 @@ twitch_slang = [
     'gas', 'hype', 'mald', 'FeelsBadMan', 'sadge'
 ]
 
-#@DAVINCI@# twitch_slang = "GOOD = [W, 5head, gas, Wmans, KEKW, im a munch, pog, uwu, monkaS], BAD = [L, copium, malding, soy, L, inbred, OMEGALUL, wtf, sus, L, smol, munch, smh, F]"
 # # All possible names for bots
 usernames = [
     'Yeetmaster42', 'VibinCool7', 'LitFam2022', 'SavageSquirrel99', 'KawaiiPenguin24', 'SlayinDragon10',
@@ -96,8 +95,8 @@ class Bot:
                         model=self.bot_config['model'],
                         messages=self.memory,
                         max_tokens=max_tokens,
-                        # temperature=temperature,
-                        top_p=top_p,
+                        temperature=temperature,
+                        # top_p=top_p,
                     )
                     self.createNewMemory("assistant", response.choices[0].message.content, self.name)
                     generated_text = response.choices[0].message.content
