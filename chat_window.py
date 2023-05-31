@@ -57,7 +57,7 @@ class ChatWindow(QWidget):
         self.debug_window.setReadOnly(True)
         self.debug_window.setFrameStyle(0)
         self.debug_window.setStyleSheet("background-color: rgba(255, 255, 255, 0.8); color: black; border: 1px solid black; border-radius: 5px;")
-        self.debug_window.setHidden(False)
+        self.debug_window.setHidden(True)
 
         # Add debug toggle button to the header bar
         self.debug_toggle_button = QPushButton("🐞", self)

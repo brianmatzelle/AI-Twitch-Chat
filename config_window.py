@@ -43,7 +43,7 @@ class ConfigWindow(QDialog):
         layout.addWidget(self.streamer_current_action_input)
 
         # Select Model
-        saved_models = settings.value("models", ["text-davinci-002", "gpt-3.5-turbo","text-davinci-001", "text-davinci-003", "text-curie-001", "text-babbage-001"], type=str)
+        saved_models = settings.value("models", ["text-davinci-002", "gpt-3.5-turbo"], type=str)
         self.model_input = QComboBox()
         self.model_input.addItems(saved_models)
         self.model_input.setCurrentText(config['bot_config']['model'])

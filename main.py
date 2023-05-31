@@ -47,7 +47,7 @@ config = {
             "New York", "Los Angeles", "Atlanta rapper who never made it big",
         ],
 
-        'model': 'text-davinci-002'
+        'model': "gpt-3.5-turbo"
     }
 }
 
