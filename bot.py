@@ -4,7 +4,7 @@ import random
 from PyQt5.QtWidgets import QMessageBox, QApplication
 import time
 import requests
-# from random_username.generate import generate_username
+from random_username.generate import generate_username
 
 MAX_RETRIES = 3
 RETRY_DELAY = 2
@@ -89,101 +89,26 @@ class Bot:
     def chatgpt_query(self, input_text, streamer_name, debug_signal):
         if self.bot_config['model'] == 'gpt-3.5-turbo' or self.bot_config['model'] == 'gpt-4':
             self.createNewMemory("user", input_text, streamer_name)
-        try:
-            response = requests.get(f'https://chat-tv-api.herokuapp.com/api/v1/generate?model={self.bot_config["model"]}&bot_name={self.name}&input_text={input_text}&streamer_name={streamer_name}&context={self.context}&memory={self.memory}')
-        except:
-            debug_signal.emit("An error occurred")
-            return None
 
-        if response.status_code == 200:
-            return response.json()
-        else:
-            debug_signal.emit(f"Error: received status code {response.status_code}")
-            debug_signal.emit(f"Response body: {response.text}")
-            return None
+        for _ in range(MAX_RETRIES):
+            try:
+                response = requests.get(f'https://chat-tv-api.herokuapp.com/api/v1/generate?model={self.bot_config["model"]}&bot_name={self.name}&input_text={input_text}&streamer_name={streamer_name}&context={self.context}&memory={self.memory}')
+            except:
+                debug_signal.emit("An error with the API occurred, returning None.")
+                return None
 
-        
-    # def chatgpt_query(self, input_text, streamer_name, debug_signal, max_tokens=25, temperature=1, top_p=1):
-    #     #@ CHAT GPT @#
-    #     if self.bot_config['model'] == 'gpt-3.5-turbo' or self.bot_config['model'] == 'gpt-4':
-    #         self.createNewMemory("user", input_text, streamer_name)
-    #         for _ in range(MAX_RETRIES):  # You need to define MAX_RETRIES
-    #             try:
-    #                 response = openai.ChatCompletion.create(
-    #                     model=self.bot_config['model'],
-    #                     messages=self.memory,
-    #                     max_tokens=max_tokens,
-    #                     temperature=temperature,
-    #                     # top_p=top_p,
-    #                 )
-    #                 self.createNewMemory("assistant", response.choices[0].message.content, self.name)
-    #                 generated_text = response.choices[0].message.content
-    #                 return generated_text
-
-    #             except openai.error.AuthenticationError as e:
-    #                 error_dialog = QMessageBox()
-    #                 error_dialog.setIcon(QMessageBox.Critical)
-    #                 error_dialog.setWindowTitle("Error")
-    #                 error_dialog.setText("Error: Invalid API Key")
-    #                 error_dialog.setInformativeText("Your API key is incorrect, or you didn't provide one. You can obtain an API key from https://platform.openai.com/account/api-keys.")
-    #                 error_dialog.setStandardButtons(QMessageBox.Ok)
-    #                 error_dialog.exec_()
-    #                 QApplication.instance().quit()
-    #                 return
-
-    #             except openai.error.RateLimitError:
-    #                 debug_signal.emit("The rate limit for API requests has been exceeded. The program will wait for some time and retry.")
-    #                 time.sleep(RETRY_DELAY)  # You need to define RETRY_DELAY
-                
-    #             except openai.error.APIError:
-    #                 # error_dialog.exec_()
-    #                 debug_signal.emit("The rate limit for API requests has been exceeded. The program will wait for some time and retry.")
-    #                 time.sleep(RETRY_DELAY)
-
-    #         # If the code reaches this point, it means all retries failed.
-    #         error_dialog = QMessageBox()
-    #         error_dialog.setIcon(QMessageBox.Critical)
-    #         error_dialog.setWindowTitle("Error")
-    #         error_dialog.setText("Error: All retries failed")
-    #         error_dialog.setInformativeText("All retries to connect to the OpenAI API failed due to rate limit exceeding. Please try again later.")
-    #         error_dialog.setStandardButtons(QMessageBox.Ok)
-    #         error_dialog.exec_()
-    #         QApplication.instance().quit()
-    #         return
-    #     #@ END CHAT GPT @#
-        
-    #     #@ DAVINCI @#
-    #     else:
-    #         for _ in range(MAX_RETRIES):
-    #             try:
-    #                 response = openai.Completion.create(
-    #                 engine=self.bot_config['model'],
-    #                 prompt=f'{self.context}\n{streamer_name}: {input_text}\n{self.name}:',
-    #                 temperature=temperature,
-    #                 max_tokens=25,
-    #                 )
-    #                 return response.choices[0].text
-
-    #             except openai.error.AuthenticationError as e:
-    #                 error_dialog = QMessageBox()
-    #                 error_dialog.setIcon(QMessageBox.Critical)
-    #                 error_dialog.setWindowTitle("Error")
-    #                 error_dialog.setText("Error: Invalid API Key")
-    #                 error_dialog.setInformativeText("Your API key is incorrect, or you didn't provide one. You can obtain an API key from https://platform.openai.com/account/api-keys.")
-    #                 error_dialog.setStandardButtons(QMessageBox.Ok)
-    #                 error_dialog.exec_()
-    #                 QApplication.instance().quit()
-    #                 return
-
-    #             except openai.error.RateLimitError:
-    #                 debug_signal.emit("The rate limit for API requests has been exceeded. The program will wait for some time and retry.")
-    #                 time.sleep(RETRY_DELAY)  # You need to define RETRY_DELAY
-                
-    #             except openai.error.APIError:
-    #                 # error_dialog.exec_()
-    #                 debug_signal.emit("The rate limit for API requests has been exceeded. The program will wait for some time and retry.")
-    #                 time.sleep(RETRY_DELAY)
-    #     #@ DAVINCI @#
+            if response.status_code == 200:
+                if "Error: Invalid API Key" in response.json():
+                    debug_signal.emit("Error: Invalid API Key")
+                    time.sleep(RETRY_DELAY)
+                if "The rate limit for API requests has been exceeded. The program will wait for some time and retry." in response.json():
+                    debug_signal.emit("The rate limit for API requests has been exceeded. The program will wait for some time and retry.")
+                    time.sleep(RETRY_DELAY)
+                return response.json()
+            else:
+                debug_signal.emit(f"Error: received status code {response.status_code}")
+                debug_signal.emit(f"Response body: {response.text}")
+                return None
 
 colors = [
     'red',
