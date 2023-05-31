@@ -8,6 +8,7 @@ class ChatWindow(QWidget):
         super().__init__()
         self.config = config
         self.bots = None
+        self.started = False
 
         self.chat_label = QTextEdit(self)
         self.chat_label.setReadOnly(True)
@@ -57,7 +58,7 @@ class ChatWindow(QWidget):
         self.debug_window.setReadOnly(True)
         self.debug_window.setFrameStyle(0)
         self.debug_window.setStyleSheet("background-color: rgba(255, 255, 255, 0.8); color: black; border: 1px solid black; border-radius: 5px;")
-        self.debug_window.setHidden(False)
+        self.debug_window.setHidden(True)
 
         # Add debug toggle button to the header bar
         self.debug_toggle_button = QPushButton("🐞", self)
@@ -162,8 +163,15 @@ class ChatWindow(QWidget):
             self.chat_label.insertHtml(colored_message)
             self.chat_label.ensureCursorVisible()
             return
-        
+        elif 'Chat.tv started and is listening 👂🏼. Start talking (clearly 😅)!' in bot_name:
+            colored_message = f'<span style="color: {bot_color};">{bot_name}</span><br>'
+            self.chat_label.insertHtml(colored_message)
+            self.chat_label.ensureCursorVisible()
+            return
         else:
+            if self.started == False:
+                self.started = True
+                self.chat_label.clear()
             colored_name = f'<span style="color: {bot_color};">{bot_name}: </span>'
             colored_message = f'<span>{bot_message}</span><br>'
             self.chat_label.insertHtml(colored_name + colored_message)  # Add the padding here
