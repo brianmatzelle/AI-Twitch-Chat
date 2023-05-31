@@ -163,7 +163,7 @@ class ChatWindow(QWidget):
             self.chat_label.insertHtml(colored_message)
             self.chat_label.ensureCursorVisible()
             return
-        elif 'Chat.tv started and is listening 👂🏼. Start talking!' in bot_name:
+        elif 'Chat.tv started and is listening 👂🏼. Start talking (clearly 😅)!' in bot_name:
             colored_message = f'<span style="color: {bot_color};">{bot_name}</span><br>'
             self.chat_label.insertHtml(colored_message)
             self.chat_label.ensureCursorVisible()

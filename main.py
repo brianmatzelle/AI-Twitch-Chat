@@ -71,7 +71,7 @@ def user_interface(config, app):
     chat_window.update_debug("👂🏼 means the program is listening for your voice.")
     chat_window.update_debug("🤔 means the program is understanding your speech.")
     chat_window.update_debug("🤖💭 means the program is generating a response.\n")
-    chat_window.update_chat("Chat.tv started and is listening 👂🏼. Start talking!", "", "gray")
+    chat_window.update_chat("Chat.tv started and is listening 👂🏼. Start talking (clearly 😅)!", "", "gray")
     speech_recognition_thread = SpeechRecognitionThread(bots, config, chat_window)
     speech_recognition_thread.new_response.connect(lambda response: chat_window.update_chat(response[0].name, response[1], response[0].color))
     speech_recognition_thread.debug_message.connect(chat_window.update_debug)
