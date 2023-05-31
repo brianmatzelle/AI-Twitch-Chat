@@ -31,7 +31,7 @@ config = {
     'bot_config': {
         # Bot configuration
         'streamer_current_action': '', # What you're currently doing (chatting, playing Rocket League, etc.)
-        "tone": "nasty", # The attitude the bots will have (witty, casual, etc.)
+        "tone": "witty", # The attitude the bots will have (witty, casual, etc.)
         "any_other_notes": "", # Any other notes you want to add to the context
         # Each bot will have a random slang type from this list
         

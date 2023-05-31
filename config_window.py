@@ -53,24 +53,25 @@ class ConfigWindow(QDialog):
         # Number of bots input
         self.num_bots_input = QSpinBox()
         self.num_bots_input.setMinimum(1)
-        self.num_bots_input.setMaximum(99)  # Allow up to four digits for the number of bots
+        # self.num_bots_input.setMaximum(99)  # Allow up to four digits for the number of bots
+        self.num_bots_input.setMaximum(9)
         self.num_bots_input.setValue(config['num_bots'])
         layout.addWidget(QLabel("Number of Bots:"))
         layout.addWidget(self.num_bots_input)
 
         # Bot update interval input
         self.bot_update_interval_input = QSpinBox()
-        self.bot_update_interval_input.setMinimum(1)
-        self.bot_update_interval_input.setValue(config['bot_update_interval'])
-        layout.addWidget(QLabel("Bot Update Interval (seconds):"))
-        layout.addWidget(self.bot_update_interval_input)
+        # self.bot_update_interval_input.setMinimum(1)
+        # self.bot_update_interval_input.setValue(config['bot_update_interval'])
+        # layout.addWidget(QLabel("Bot Update Interval (seconds):"))
+        # layout.addWidget(self.bot_update_interval_input)
 
         # Max number of responding bots input
         self.max_num_of_responding_bots_input = QSpinBox()
         self.max_num_of_responding_bots_input.setMinimum(1)
-        self.max_num_of_responding_bots_input.setMaximum(999)
+        self.max_num_of_responding_bots_input.setMaximum(9)
         self.max_num_of_responding_bots_input.setValue(config['max_num_of_responding_bots'])
-        layout.addWidget(QLabel("Max Number of Responding Bots (per interval):"))
+        layout.addWidget(QLabel("Max Responding Bots at a Time:"))
         layout.addWidget(self.max_num_of_responding_bots_input)
 
         # Select Tone
