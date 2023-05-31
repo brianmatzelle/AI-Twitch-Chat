@@ -8,6 +8,7 @@ class ChatWindow(QWidget):
         super().__init__()
         self.config = config
         self.bots = None
+        self.started = False
 
         self.chat_label = QTextEdit(self)
         self.chat_label.setReadOnly(True)
@@ -162,8 +163,15 @@ class ChatWindow(QWidget):
             self.chat_label.insertHtml(colored_message)
             self.chat_label.ensureCursorVisible()
             return
-        
+        elif 'Chat.tv started and is listening 👂🏼. Start talking!' in bot_name:
+            colored_message = f'<span style="color: {bot_color};">{bot_name}</span><br>'
+            self.chat_label.insertHtml(colored_message)
+            self.chat_label.ensureCursorVisible()
+            return
         else:
+            if self.started == False:
+                self.started = True
+                self.chat_label.clear()
             colored_name = f'<span style="color: {bot_color};">{bot_name}: </span>'
             colored_message = f'<span>{bot_message}</span><br>'
             self.chat_label.insertHtml(colored_name + colored_message)  # Add the padding here
