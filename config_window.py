@@ -14,7 +14,7 @@ class ConfigWindow(QDialog):
 
         # Load saved settings
         settings = QSettings("blanc_savant", "Chat.tv")
-        saved_api_key = settings.value("openai_api_key", "")
+        # saved_api_key = settings.value("openai_api_key", "")
         saved_streamer_name = settings.value("streamer_name", config['streamer_name'])
         saved_num_bots = settings.value("num_bots", config['num_bots'], type=int)
         saved_bot_update_interval = settings.value("bot_update_interval", config['bot_update_interval'], type=int)
@@ -27,9 +27,9 @@ class ConfigWindow(QDialog):
         
         # OpenAI API Key input
         form_layout = QFormLayout()
-        self.api_key_input = QLineEdit(saved_api_key)
-        self.api_key_input.setEchoMode(QLineEdit.Password)
-        form_layout.addRow("OpenAI API Key:", self.api_key_input)
+        # self.api_key_input = QLineEdit(saved_api_key)
+        # self.api_key_input.setEchoMode(QLineEdit.Password)
+        # form_layout.addRow("OpenAI API Key:", self.api_key_input)
         layout.addLayout(form_layout)
 
         # Streamer name input
@@ -156,7 +156,7 @@ class ConfigWindow(QDialog):
     def save_and_close(self):
         # Save to QSettings (saves settings to local storage)
         settings = QSettings("blanc_savant", "Chat.tv")
-        settings.setValue("openai_api_key", self.api_key_input.text())
+        # settings.setValue("openai_api_key", self.api_key_input.text())
         settings.setValue("streamer_name", self.streamer_name_input.text())
         settings.setValue("num_bots", self.num_bots_input.value())
         settings.setValue("bot_update_interval", self.bot_update_interval_input.value())
@@ -186,7 +186,7 @@ class ConfigWindow(QDialog):
         self.reset_config_window()
 
     def reset_config_window(self):
-        self.api_key_input.clear()
+        # self.api_key_input.clear()
         self.streamer_name_input.setText(self.config['streamer_name'])
         self.streamer_current_action_input.setText(self.config['bot_config']['streamer_current_action'])
         self.num_bots_input.setValue(self.config['num_bots'])
