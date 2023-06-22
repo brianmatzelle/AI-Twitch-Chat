@@ -2,7 +2,7 @@
 
 ### Windows Install:
 
-Stable v0.1.4-alpha:
+Stable v0.2.0-alpha:
 
 * [Download](https://github.com/brianmatzelle/Chat.tv/releases)
 
