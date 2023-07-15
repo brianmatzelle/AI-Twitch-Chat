@@ -18,4 +18,4 @@ Stable v0.2.0-alpha:
 
 ---
 ### Demo:
-<img src="demo/demo.gif" width=60% height=60%>
+<img src="demo/demo.gif" width=50% height=50%>
