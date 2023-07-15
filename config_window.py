@@ -14,7 +14,7 @@ class ConfigWindow(QDialog):
 
         # Load saved settings
         settings = QSettings("blanc_savant", "Chat.tv")
-        saved_api_key = settings.value("openai_api_key", "")
+        # saved_api_key = settings.value("openai_api_key", "")
         saved_streamer_name = settings.value("streamer_name", config['streamer_name'])
         saved_num_bots = settings.value("num_bots", config['num_bots'], type=int)
         saved_bot_update_interval = settings.value("bot_update_interval", config['bot_update_interval'], type=int)
@@ -23,13 +23,13 @@ class ConfigWindow(QDialog):
         saved_streamer_current_action = settings.value("streamer_current_action", config['bot_config']['streamer_current_action'])
         saved_max_num_of_responding_bots = settings.value("max_num_of_responding_bots", config['max_num_of_responding_bots'], type=int)
         saved_slang_types = settings.value("slang_types", config['bot_config']['slang_types'], type=str)
-        saved_model = settings.value("model", config['bot_config']['model'], type=str)
+        # saved_model = settings.value("model", config['bot_config']['model'], type=str)
         
         # OpenAI API Key input
         form_layout = QFormLayout()
-        self.api_key_input = QLineEdit(saved_api_key)
-        self.api_key_input.setEchoMode(QLineEdit.Password)
-        form_layout.addRow("OpenAI API Key:", self.api_key_input)
+        # self.api_key_input = QLineEdit(saved_api_key)
+        # self.api_key_input.setEchoMode(QLineEdit.Password)
+        # form_layout.addRow("OpenAI API Key:", self.api_key_input)
         layout.addLayout(form_layout)
 
         # Streamer name input
@@ -43,34 +43,35 @@ class ConfigWindow(QDialog):
         layout.addWidget(self.streamer_current_action_input)
 
         # Select Model
-        saved_models = settings.value("models", ["text-davinci-002", "gpt-3.5-turbo","text-davinci-001", "text-davinci-003", "text-curie-001", "text-babbage-001"], type=str)
-        self.model_input = QComboBox()
-        self.model_input.addItems(saved_models)
-        self.model_input.setCurrentText(config['bot_config']['model'])
-        layout.addWidget(QLabel("Model:"))
-        layout.addWidget(self.model_input)
+        # saved_models = settings.value("models", ["text-davinci-002", "gpt-3.5-turbo"], type=str)
+        # self.model_input = QComboBox()
+        # self.model_input.addItems(saved_models)
+        # self.model_input.setCurrentText(config['bot_config']['model'])
+        # layout.addWidget(QLabel("Model:"))
+        # layout.addWidget(self.model_input)
 
         # Number of bots input
         self.num_bots_input = QSpinBox()
         self.num_bots_input.setMinimum(1)
-        self.num_bots_input.setMaximum(99)  # Allow up to four digits for the number of bots
+        # self.num_bots_input.setMaximum(99)  # Allow up to four digits for the number of bots
+        self.num_bots_input.setMaximum(9)
         self.num_bots_input.setValue(config['num_bots'])
         layout.addWidget(QLabel("Number of Bots:"))
         layout.addWidget(self.num_bots_input)
 
         # Bot update interval input
         self.bot_update_interval_input = QSpinBox()
-        self.bot_update_interval_input.setMinimum(1)
-        self.bot_update_interval_input.setValue(config['bot_update_interval'])
-        layout.addWidget(QLabel("Bot Update Interval (seconds):"))
-        layout.addWidget(self.bot_update_interval_input)
+        # self.bot_update_interval_input.setMinimum(1)
+        # self.bot_update_interval_input.setValue(config['bot_update_interval'])
+        # layout.addWidget(QLabel("Bot Update Interval (seconds):"))
+        # layout.addWidget(self.bot_update_interval_input)
 
         # Max number of responding bots input
         self.max_num_of_responding_bots_input = QSpinBox()
         self.max_num_of_responding_bots_input.setMinimum(1)
-        self.max_num_of_responding_bots_input.setMaximum(999)
+        self.max_num_of_responding_bots_input.setMaximum(9)
         self.max_num_of_responding_bots_input.setValue(config['max_num_of_responding_bots'])
-        layout.addWidget(QLabel("Max Number of Responding Bots (per interval):"))
+        layout.addWidget(QLabel("Max Responding Bots at a Time:"))
         layout.addWidget(self.max_num_of_responding_bots_input)
 
         # Select Tone
@@ -150,12 +151,12 @@ class ConfigWindow(QDialog):
         self.tone_input.setCurrentText(saved_tone)
         self.streamer_current_action_input.setText(saved_streamer_current_action)
         self.max_num_of_responding_bots_input.setValue(saved_max_num_of_responding_bots)
-        self.model_input.setCurrentText(saved_model)
+        # self.model_input.setCurrentText(saved_model)
 
     def save_and_close(self):
         # Save to QSettings (saves settings to local storage)
         settings = QSettings("blanc_savant", "Chat.tv")
-        settings.setValue("openai_api_key", self.api_key_input.text())
+        # settings.setValue("openai_api_key", self.api_key_input.text())
         settings.setValue("streamer_name", self.streamer_name_input.text())
         settings.setValue("num_bots", self.num_bots_input.value())
         settings.setValue("bot_update_interval", self.bot_update_interval_input.value())
@@ -163,7 +164,7 @@ class ConfigWindow(QDialog):
         settings.setValue("slang_types", [checkbox.text() for checkbox in self.slang_type_checkboxes if checkbox.isChecked()])
         settings.setValue("streamer_current_action", self.streamer_current_action_input.text())
         settings.setValue("max_num_of_responding_bots", self.max_num_of_responding_bots_input.value())
-        settings.setValue("model", self.model_input.currentText())
+        # settings.setValue("model", self.model_input.currentText())
 
         # Save to config (for use in main.py)
         self.config['streamer_name'] = self.streamer_name_input.text()
@@ -173,7 +174,7 @@ class ConfigWindow(QDialog):
         self.config['bot_config']['slang_types'] = [checkbox.text() for checkbox in self.slang_type_checkboxes if checkbox.isChecked()]
         self.config['bot_config']['streamer_current_action'] = self.streamer_current_action_input.text()
         self.config['max_num_of_responding_bots'] = self.max_num_of_responding_bots_input.value()
-        self.config['bot_config']['model'] = self.model_input.currentText()
+        # self.config['bot_config']['model'] = self.model_input.currentText()
 
         self.accept()
 
@@ -185,14 +186,14 @@ class ConfigWindow(QDialog):
         self.reset_config_window()
 
     def reset_config_window(self):
-        self.api_key_input.clear()
+        # self.api_key_input.clear()
         self.streamer_name_input.setText(self.config['streamer_name'])
         self.streamer_current_action_input.setText(self.config['bot_config']['streamer_current_action'])
         self.num_bots_input.setValue(self.config['num_bots'])
         self.bot_update_interval_input.setValue(self.config['bot_update_interval'])
         self.tone_input.setCurrentText(self.config['bot_config']['tone'])
         self.max_num_of_responding_bots_input.setValue(self.config['max_num_of_responding_bots'])
-        self.model_input.setCurrentText(self.config['bot_config']['model'])
+        # self.model_input.setCurrentText(self.config['bot_config']['model'])
 
         for checkbox in self.slang_type_checkboxes:
             checkbox.setChecked(False)

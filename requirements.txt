@@ -4,3 +4,6 @@ websocket-client
 openai
 PyQt5
 guidance
+flask
+flask_restful
+gunicorn

@@ -31,7 +31,7 @@ config = {
     'bot_config': {
         # Bot configuration
         'streamer_current_action': '', # What you're currently doing (chatting, playing Rocket League, etc.)
-        "tone": "nasty", # The attitude the bots will have (witty, casual, etc.)
+        "tone": "witty", # The attitude the bots will have (witty, casual, etc.)
         "any_other_notes": "", # Any other notes you want to add to the context
         # Each bot will have a random slang type from this list
         
@@ -47,7 +47,7 @@ config = {
             "New York", "Los Angeles", "Atlanta rapper who never made it big",
         ],
 
-        'model': 'text-davinci-002'
+        'model': 'text-davinci-002', # The OpenAI model to use
     }
 }
 

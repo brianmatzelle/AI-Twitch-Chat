@@ -15,3 +15,7 @@ Stable v0.2.0-alpha:
    1. If you get an error, make sure Python is added to your PATH ([Windows Guide](https://builtin.com/software-engineering-perspectives/pip-command-not-found))
 3. In your terminal, run: ``python ./main.py``, or ``python3 ./main.py`` if on mac/linux (or find the file in Finder/File explorer and double click it)
 4. Choose options in the config window, then go!
+
+---
+### Demo:
+![](demo/demo.gif)
