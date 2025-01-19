@@ -20,6 +20,3 @@ go.work.sum
 
 # env file
 .env*
-
-# ollama
-ollama/
