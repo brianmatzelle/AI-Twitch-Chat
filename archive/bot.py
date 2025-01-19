@@ -5,6 +5,7 @@ from PyQt5.QtWidgets import QMessageBox, QApplication
 import time
 import requests
 from random_username.generate import generate_username
+import ollama
 
 MAX_RETRIES = 3
 RETRY_DELAY = 2
@@ -54,7 +55,8 @@ usernames = [
     "zaddyQuazar", "KweenKaddyKop", "Po-poPapi", "fudgePacker", "daddyDong", "daddyDonger", "daddyDongest",
     "b1gPapiC", "homeboi_latto", "chulaChinga14", "wackazzShifta", "dull_pnk", "electric",
     "lego_boyf19", "rubenwarrior38", "bnug242", "baseball_1219", "Fluofy", "@drove", "HIVaids",
-    "ashleybda", "ZERUSSIANGUY", "whettaM", "swagamuffin", "mercury", "cheeky_nandos20",
+    "ashleybda", "ZERUSSIANGUY", "whettaM", "swagamuffin", "mercury", "cheeky_nandos20", "gortington2001", "gortington2002",
+    "bigsteppurr", "passthegeekbar", "way2geekd"
 ]
 
 class Bot:

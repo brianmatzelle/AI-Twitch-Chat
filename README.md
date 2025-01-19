@@ -1,21 +1,23 @@
-# Releases:
+# About
 
-### Windows Install:
+## Development
 
-Stable v0.2.0-alpha:
+- Required to run Fyne on linux:
+`sudo apt-get install libxcursor-dev libxrandr-dev libxinerama-dev libxi-dev libgl1-mesa-dev xorg-dev`
 
-* [Download](https://github.com/brianmatzelle/Chat.tv/releases)
+- if you get an error like this after running `go run main.go`,
+```bash
+# go run main.go
+2025/01/19 13:45:19 Fyne error:  Error parsing user locale C
+2025/01/19 13:45:19   Cause: language: tag is not well-formed
+2025/01/19 13:45:19   At: /home/brian/go/pkg/mod/fyne.io/fyne/v2@v2.5.3/lang/locale.go:35
+```
 
----
-
-### Mac/Linux Install:
-
-1. [Install the latest version of Python](https://www.python.org/downloads/)
-2. In your terminal (in the directory programs root directory) run ``pip install -r requirements.txt`` or ``pip3 install -r requirements.txt`` if on mac/linux
-   1. If you get an error, make sure Python is added to your PATH ([Windows Guide](https://builtin.com/software-engineering-perspectives/pip-command-not-found))
-3. In your terminal, run: ``python ./main.py``, or ``python3 ./main.py`` if on mac/linux (or find the file in Finder/File explorer and double click it)
-4. Choose options in the config window, then go!
-
----
-### Demo:
-<img src="demo/demo.gif" width=50% height=50%>
+Set your local language, which in my case is English.
+To fix this, you can:
+Set a proper locale environment variable before running your application. For example:
+```bash
+export LANG=en_US.UTF-8
+go run main.go
+```
+Then it should run fine.

@@ -1,61 +1,25 @@
-# Byte-compiled / optimized / DLL files
-__pycache__/
-*.py[cod]
-
-# C extensions
+# Binaries for programs and plugins
+*.exe
+*.exe~
+*.dll
 *.so
+*.dylib
 
-# Distribution / packaging
-bin/
-build/
-develop-eggs/
-dist/
-eggs/
-lib/
-lib64/
-parts/
-sdist/
-var/
-*.egg-info/
-.installed.cfg
-*.egg
+# Test binary, built with `go test -c`
+*.test
 
-# Installer logs
-pip-log.txt
-pip-delete-this-directory.txt
+# Output of the go coverage tool, specifically when used with LiteIDE
+*.out
 
-# Unit test / coverage reports
-.tox/
-.coverage
-.cache
-nosetests.xml
-coverage.xml
+# Dependency directories (remove the comment below to include it)
+# vendor/
 
-# Translations
-*.mo
+# Go workspace file
+go.work
+go.work.sum
 
-# Mr Developer
-.mr.developer.cfg
-.project
-.pydevproject
+# env file
+.env*
 
-# Rope
-.ropeproject
-
-# Django stuff:
-*.log
-*.pot
-
-# Sphinx documentation
-docs/_build/
-
-# My additions
-venv/
-.env
-.DS_Store
-Chat.tv.spec
-Output/
-.idea/
-api/
-api.py
-heroku.py
+# ollama
+ollama/
